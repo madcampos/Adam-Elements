@@ -1,0 +1,15 @@
+{
+  "name": "adam-elements",
+  "version": "1.0.0",
+  "description": "Adam elements implemented as web components",
+  "main": "index.html",
+  "scripts": {},
+  "author": "madcampos",
+  "license": "MIT",
+  "devDependencies": {
+    "@typescript-eslint/parser": "^4.8.1",
+    "eslint": "^7.13.0",
+    "eslint-plugin-jsdoc": "^30.7.8",
+    "typescript": "^4.0.5"
+  }
+}

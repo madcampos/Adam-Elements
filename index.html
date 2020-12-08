@@ -8,22 +8,24 @@
 	<script src="./components/input/input.js" type="module"></script>
 </head>
 <body>
-	<adam-input label="Default">
-		<div slot="helper-text">
-			<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga libero, modi, perferendis amet, debitis iste earum voluptatem.</p>
-		</div>
-	</adam-input>
-	<adam-input label="Required" required></adam-input>
-	<adam-input label="Read only" readonly value="TEST"></adam-input>
-	<adam-input label="Disabled" disabled></adam-input>
-	<adam-input label="Invalid" type="email" value="wrong">
-		<div slot="helper-text">
-			Enter a valid email
-		</div>
-	</adam-input>
-	<adam-input label="Valid" type="email" value="right@email.com"></adam-input>
-	<adam-input label="Password" type="password"></adam-input>
-	<adam-input label="Tel" type="tel"></adam-input>
-	<adam-input label="URL" type="url"></adam-input>
+	<main>
+		<adam-input label="Default">
+			<div slot="helper-text">
+				<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga libero, modi, perferendis amet, debitis iste earum voluptatem.</p>
+			</div>
+		</adam-input>
+		<adam-input label="Required" required></adam-input>
+		<adam-input label="Read only" readonly value="TEST"></adam-input>
+		<adam-input label="Disabled" disabled></adam-input>
+		<adam-input label="Invalid" type="email" value="wrong">
+			<div slot="helper-text">
+				Enter a valid email
+			</div>
+		</adam-input>
+		<adam-input label="Valid" type="email" value="right@email.com"></adam-input>
+		<adam-input label="Password" type="password"></adam-input>
+		<adam-input label="Tel" type="tel"></adam-input>
+		<adam-input label="URL" type="url"></adam-input>
+	</main>
 </body>
 </html>

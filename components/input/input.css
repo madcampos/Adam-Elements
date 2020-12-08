@@ -1,5 +1,3 @@
-@import url('/css/fonts/oxanium.css');
-
 :host {
 	--adam-input-bg: rgba(0, 0, 0, 0.1);
 	--adam-input-text: rgba(255, 255, 255, 0.5);
@@ -159,6 +157,8 @@ input {
 
 	grid-area: input;
 }
+
+input[type="password"] { font-family: 'Password', var(--font-family); }
 
 input:is([type="tel"], [type="url"], [type="email"], [type="password"], [show-password]),
 input:is([type="tel"], [type="url"], [type="email"], [type="password"], [show-password]) ~ label {

@@ -146,22 +146,29 @@ input {
 	transition: inherit;
 }
 
-input:is([type="tel"], [type="url"], [type="email"], [type="password"]),
-input:is([type="tel"], [type="url"], [type="email"], [type="password"]) ~ label {
+input:is([type="tel"], [type="url"], [type="email"], [type="password"], [show-password]),
+input:is([type="tel"], [type="url"], [type="email"], [type="password"], [show-password]) ~ label {
 	--icon-spacing: calc(var(--font-size) * 1.5);
 }
 
-input:is([type="tel"], [type="url"], [type="email"], [type="password"]) ~ #outer-border::before {
+input:is([type="tel"], [type="url"], [type="email"], [type="password"], [show-password]) ~ #outer-border::before {
 	color: var(--border-inner-color);
 	content: var(--input-icon);
 	font-size: 100%;
 	line-height: 1;
 }
 
+input[type="text"][show-password] ~ #outer-border::before,
+input[type="password"] ~ #outer-border::before {
+	cursor: pointer;
+	pointer-events: all;
+}
+
 input[type="tel"] ~ #outer-border { --input-icon: '📞\FE0E'; }
 input[type="url"] ~ #outer-border { --input-icon: '🔗\FE0E'; }
 input[type="email"] ~ #outer-border { --input-icon: '📧\FE0E'; }
 input[type="password"] ~ #outer-border { --input-icon: '🔒\FE0E'; }
+input[type="text"][show-password] ~ #outer-border { --input-icon: '🔓\FE0E'; }
 
 input::placeholder { color: transparent; }
 input:focus { outline: none; }

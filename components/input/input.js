@@ -76,6 +76,20 @@ class AdamInput extends AdamElement {
 
 			this.root.querySelector('#error-text').innerText = evt.target.validationMessage;
 		});
+
+		if (this.#input.type === 'password') {
+			this.root.addEventListener('click', (evt) => {
+				if (evt.target.matches('#outer-border')) {
+					if (this.#input.hasAttribute('show-password')) {
+						this.#input.removeAttribute('show-password');
+						this.#input.type = 'password';
+					} else {
+						this.#input.setAttribute('show-password', true);
+						this.#input.type = 'text';
+					}
+				}
+			});
+		}
 	}
 }
 

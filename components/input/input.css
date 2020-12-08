@@ -1,4 +1,5 @@
-/* TODO: transform absolute positions/transform to logical properties */
+@import url('/css/fonts/oxanium.css');
+
 :host {
 	--adam-input-bg: rgba(0, 0, 0, 0.1);
 	--adam-input-text: rgba(255, 255, 255, 0.5);
@@ -52,42 +53,50 @@
 	--margin-inline: calc(var(--padding-inline) + var(--border-full));
 	--margin-block: calc(var(--padding-block) + var(--border-full));
 
-
 	--label-scale: 0.8;
 	--font-size: 1rem;
 
 	--icon-spacing: 0px;
 
 	--top-space: calc(var(--border-spacing) + (var(--label-scale) * var(--font-size)) + (var(--padding-block) * 2));
+
+	--font-family: 'Oxanium', sans-serif;
+
+	--font-normal: 500;
+	--font-bold: 900;
 }
 
 :host > div {
-	position: relative;
-	font-family: sans-serif;
+	font-family: var(--font-family);
 	font-size: var(--font-size);
 	color: var(--text-color);
-
-	margin-inline: var(--padding-block);
-	margin-block: var(--top-space) var(--padding-block);
-	display: inline-flex;
-	flex-direction: column;
-	box-sizing: border-box;
-	width: 15rem;
+	font-weight: var(--font-normal);
+	font-variant: proportional-nums slashed-zero;
+	letter-spacing: 0.04rem;
 
 	transition: all 0.2s ease-in-out;
 
 	border: solid transparent var(--border-width);
 
-	/* writing-mode: horizontal-tb;
-	direction: rtl; */
+	margin: var(--padding-block);
+	box-sizing: border-box;
+	width: 15rem;
+	display: grid;
+	grid-template-areas:
+		'label label label'
+		'. . marker'
+		'input input input'
+		'. message .';
+
+	grid-template-rows: var(--top-space) var(--border-full) auto auto;
+	grid-template-columns: var(--border-full) minmax(5rem, 15rem) var(--border-full);
+
+	align-content: start;
+	align-items: stretch;
+	justify-items: stretch;
 }
 
 #outer-border {
-	position: absolute;
-	left: calc(var(--border-width) * -1);
-	top: calc(var(--border-width) * -1);
-	right: calc(var(--border-width) * -1);
-	height: calc(var(--padding-block) * 2 + var(--border-spacing) * 2 + var(--border-width) * 3 + var(--font-size));
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
@@ -99,17 +108,18 @@
 
 	transition: inherit;
 	pointer-events: none;
+
+	grid-area: input;
 }
 
 label {
-	position: absolute;
-	left: calc(var(--margin-inline) + var(--icon-spacing));
-	max-width: calc(100% - (var(--margin-inline) + var(--border-width)));
-	top: var(--margin-block);
+	margin-inline-start: calc(var(--margin-inline) + var(--icon-spacing));
 
 	font-family: inherit;
 	color: var(--text-color);
 
+	/* TODO: rtl layout */
+	transform-origin: left top;
 	transform: none;
 	transition: inherit;
 
@@ -119,6 +129,9 @@ label {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
+
+	grid-area: input;
+	align-self: center;
 }
 
 input {
@@ -133,17 +146,18 @@ input {
 	display: block;
 	box-sizing: border-box;
 
-	margin: var(--border-spacing);
+	margin: var(--border-full);
 	padding-block: var(--padding-block);
 	padding-inline: var(--padding-inline);
 	padding-inline-start: calc(var(--padding-inline) + var(--icon-spacing));
 
 	border: dashed var(--border-inner-color) var(--border-width);
-	border-left-style: solid;
-	border-right-style: solid;
+	border-inline-style: solid;
 	border-radius: var(--border-inner-radius);
 
 	transition: inherit;
+
+	grid-area: input;
 }
 
 input:is([type="tel"], [type="url"], [type="email"], [type="password"], [show-password]),
@@ -180,6 +194,8 @@ input:focus { outline: none; }
 
 	transition: inherit;
 	z-index: -1;
+
+	grid-area: message;
 }
 
 #info-text, #error-text {
@@ -222,32 +238,30 @@ input:focus { outline: none; }
 }
 
 #attention-marker {
-	background-color: var(--border-outer-color);
+	border: solid var(--border-inner-color) var(--border-width);
+	z-index: 1;
 
-	position: absolute;
-	top: calc(var(--border-width) * -1);
-	right: calc(var(--border-width) * -1);
-
+	padding: calc(var(--border-spacing) * 0.5);
 	width: calc(var(--border-width) * 3);
 	height: calc(var(--border-width) * 3);
 
-	border-radius: calc(var(--border-width) * 4);
+	border-radius: calc(var(--border-width) * 6);
 
 	transition: inherit;
 
-	transform: scale(0);
+	transform: translate(-50%) scale(0);
 	opacity: 0;
+
+	grid-area: marker;
 }
 
 #attention-marker::before {
 	content: '';
-	position: absolute;
-	top: calc(var(--border-width) * -1.5);
-	right: calc(var(--border-width) * -1.5);
-	width: calc(var(--border-width) * 4);
-	height: calc(var(--border-width) * 4);
-	border: solid var(--border-inner-color) var(--border-width);
-	border-radius: calc(var(--border-width) * 6);
+	display: block;
+	width: 100%;
+	height: 100%;
+	border-radius: inherit;
+	background-color: var(--border-outer-color);
 	transition: inherit;
 }
 
@@ -263,8 +277,7 @@ input:focus { outline: none; }
 }
 
 :host(:hover) #outer-border {
-	border-left-style: dashed;
-	border-right-style: dashed;
+	border-inline-style: dashed;
 }
 
 :host(:not(:focus-within):hover) input:not(:disabled) ~ * {
@@ -280,16 +293,19 @@ input:focus ~ * {
 }
 
 input:focus ~ #outer-border {
-	border-left-style: dashed;
-	border-right-style: dashed;
+	border-inline-style: dashed;
 }
 
 input:focus ~ label,
 input:not(:placeholder-shown) ~ label {
+	/* TODO: rtl layout */
 	transform:
-		translateY(calc(-100% + (var(--top-space) * -0.5) + (var(--padding-block) * -1)))
-		translateX(calc((var(--icon-spacing) + var(--margin-inline)) * -1))
-		scale(var(--label-scale));
+		translateY(calc(-100% + (var(--margin-block) * -1)))
+		translateX(calc((var(--margin-inline) + var(--icon-spacing)) * -1))
+		scale(var(--label-scale))
+	;
+
+	font-weight: var(--font-bold);
 }
 
 input:focus ~ #info-box #info-text {
@@ -307,7 +323,7 @@ input:required ~ * {
 }
 
 input:required ~ #attention-marker {
-	transform: scale(1);
+	transform: translate(-50%) scale(1);
 	opacity: 1;
 }
 
@@ -352,7 +368,7 @@ input:not(:focus):not(:placeholder-shown):valid ~ #info-box #info-text {
 
 input:not(:focus):not(:placeholder-shown):invalid ~ #attention-marker,
 input:not(:focus):not(:placeholder-shown):valid ~ #attention-marker {
-	transform: scale(1);
+	transform: translate(-50%) scale(1);
 	opacity: 1;
 }
 

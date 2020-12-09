@@ -1,0 +1,107 @@
+:host {
+	/* Defaults */
+	--adam-border-inner-radius: 0.5rem;
+	--adam-border-outer-radius: 0.8rem;
+
+	--adam-padding-inline: 0.6rem;
+	--adam-padding-block: 0.2rem;
+
+	--adam-border-spacing: 0.2rem;
+	--adam-border-width: 0.15rem;
+	--adam-border-full: calc(var(--adam-border-width) + var(--adam-border-spacing));
+
+	--adam-margin-inline: calc(var(--adam-padding-inline) + var(--adam-border-full));
+	--adam-margin-block: calc(var(--adam-padding-block) + var(--adam-border-full));
+
+	--adam-label-top-space: calc(var(--adam-border-spacing) + (var(--adam-label-scale) * var(--adam-font-size)) + (var(--adam-padding-block) * 2));
+	--adam-icon-spacing: 0px;
+	--adam-info-box-max-size: 7rem;
+
+	--adam-font-family: 'Oxanium', sans-serif;
+	--adam-label-scale: 0.8;
+	--adam-font-size: 1rem;
+	--adam-font-normal: 500;
+	--adam-font-bold: 900;
+
+	/* Input base */
+	--adam-input-min-size: 7rem;
+	--adam-input-max-size: 15rem;
+
+	--adam-input-bg: rgba(0, 0, 0, 0.1);
+	--adam-input-text: rgba(255, 255, 255, 0.5);
+	--adam-input-inner-border: rgba(169, 169, 169, 0.6);
+	--adam-input-outer-border: white;
+
+	--adam-input-border-inner-inline-style: dashed;
+	--adam-input-border-inner-block-style: dashed;
+	--adam-input-border-outer-inline-style: solid;
+	--adam-input-border-outer-block-style: solid;
+
+	/* Input hover */
+	--adam-hover-bg: rgba(0, 0, 0, 0.2);
+	--adam-hover-text: white;
+	--adam-hover-inner-border: white;
+	--adam-hover-outer-border: rgba(169, 169, 169, 0.6);
+
+	/* Input focus */
+	--adam-focus-bg: rgba(0, 0, 0, 0.3);
+	--adam-focus-text: white;
+	--adam-focus-inner-border: #9aff00;
+	--adam-focus-outer-border: rgba(169, 169, 169, 0.4);
+
+	/* Input disabled */
+	--adam-disabled-bg: rgba(0, 0, 0, 0.2);
+	--adam-disabled-text: rgba(255, 255, 255, 0.4);
+	--adam-disabled-inner-border: rgba(169, 169, 169, 0.3);
+	--adam-disabled-outer-border: rgba(255, 255, 255, 0.2);
+
+	/* Input requried */
+	--adam-required-bg: rgba(0, 0, 0, 0.2);
+	--adam-required-text: rgba(255, 255, 255, 0.5);
+	--adam-required-inner-border: #E3FF00;
+	--adam-required-outer-border: rgba(169, 169, 169, 1);
+
+	/* Input invalid */
+	--adam-invalid-bg: rgba(0, 0, 0, 0.2);
+	--adam-invalid-text: tomato;
+	--adam-invalid-inner-border: crimson;
+	--adam-invalid-outer-border: sienna;
+
+	/* Input valid */
+	--adam-valid-bg: rgba(0, 0, 0, 0.2);
+	--adam-valid-text: lightskyblue;
+	--adam-valid-inner-border: dodgerblue;
+	--adam-valid-outer-border: white;
+
+	/* Text and background */
+	--adam-text-color: var(--adam-input-text);
+	--adam-bg-color: var(--adam-input-bg);
+
+	/* Borders */
+	--adam-border-inner-color: var(--adam-input-inner-border);
+	--adam-border-outer-color: var(--adam-input-outer-border);
+	--adam-border-inner-inline-style: var(--adam-input-border-inner-inline-style);
+	--adam-border-inner-block-style: var(--adam-input-border-inner-block-style);
+	--adam-border-outer-inline-style: var(--adam-input-border-outer-inline-style);
+	--adam-border-outer-block-style: var(--adam-input-border-outer-block-style);
+
+	/* Base styles */
+	font-family: var(--adam-font-family);
+	font-size: var(--adam-font-size);
+	color: var(--adam-text-color);
+	font-weight: var(--adam-font-normal);
+	font-variant: proportional-nums slashed-zero;
+	letter-spacing: 0.04rem;
+	line-height: 1;
+
+	transition: all 0.2s ease-in-out;
+	box-sizing: border-box;
+}
+
+:host *,
+:host *::before,
+:host *::after {
+	box-sizing: inherit;
+	transition: inherit;
+	font: inherit;
+}

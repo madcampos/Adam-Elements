@@ -18,6 +18,9 @@ export class AdamElement extends HTMLElement {
 		this.#bindProps = bindProps;
 		this.#watchedSlots = watchedSlots;
 
+
+		this.addStyle(import.meta.url);
+
 		if (style) {
 			this.addStyle(style);
 		}
@@ -115,10 +118,12 @@ export class AdamElement extends HTMLElement {
 				normalizedValue = JSON.stringify(value);
 			}
 
-			if (validate?.() ?? true) {
-				this.setAttribute(attr, normalizedValue);
-				this.root.querySelectorAll(this.#bindProps.join(', '))?.forEach((boundElement) => boundElement.setAttribute(attr, normalizedValue));
+			if (validate) {
+				normalizedValue = validate?.(value).toString();
 			}
+
+			this.setAttribute(attr, normalizedValue);
+			this.root.querySelectorAll(this.#bindProps.join(', '))?.forEach((boundElement) => boundElement.setAttribute(attr, normalizedValue));
 		}
 	}
 

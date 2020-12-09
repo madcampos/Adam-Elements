@@ -26,7 +26,16 @@ class AdamInput extends AdamElement {
 				{ prop: 'autocomplete' },
 				{ prop: 'pattern' },
 				{ prop: 'inputmode' },
-				{ prop: 'type', validate: (value) => ['text', 'email', 'url', 'search', 'password'].includes(value) }
+				{
+					prop: 'type',
+					validate: (value) => {
+						if (!['text', 'email', 'url', 'tel', 'search', 'password'].includes(value)) {
+							return 'text';
+						}
+
+						return value;
+					}
+				}
 			],
 			bindProps: ['input'],
 			style: import.meta.url,
@@ -86,6 +95,32 @@ class AdamInput extends AdamElement {
 					} else {
 						this.#input.setAttribute('show-password', true);
 						this.#input.type = 'text';
+					}
+				}
+			});
+		}
+
+		if (['tel', 'url', 'email'].includes(this.#input.type)) {
+			this.root.addEventListener('click', (evt) => {
+				if (evt.target.matches('#outer-border')) {
+					const hasValue = evt.target.parentElement.querySelector('input').value !== '';
+					const isValid = evt.target.parentElement.querySelector('input').checkValidity();
+
+					if (hasValue && isValid) {
+						let url = this.#input.value;
+
+						switch (this.#input.type) {
+							case 'tel':
+								url = `tel:${this.#input.value}`;
+								break;
+							case 'email':
+								url = `mailto:${this.#input.value}`;
+								break;
+							default:
+								url = this.#input.value;
+						}
+
+						window.open(url);
 					}
 				}
 			});

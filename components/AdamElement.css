@@ -94,7 +94,10 @@
 	letter-spacing: 0.04rem;
 	line-height: 1;
 
-	transition: all 0.2s ease-in-out;
+	--adam-transition-function: ease-in-out;
+	--adam-transition-time: 0.2s;
+
+	transition: all var(--adam-transition-time) var(--adam-transition-function);
 	box-sizing: border-box;
 }
 
@@ -104,4 +107,12 @@
 	box-sizing: inherit;
 	transition: inherit;
 	font: inherit;
+}
+
+@media (prefers-reduced-motion) {
+	:host { --adam-transition-time: 0; }
+}
+
+@media (prefers-color-scheme: light) {
+	/* TODO */
 }

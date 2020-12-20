@@ -23,7 +23,8 @@
 
 	padding-inline-start: var(--adam-padding-inline);
 
-	border: var(--adam-border-outer-block-style) var(--adam-border-width) var(--adam-border-outer-color);
+	border: var(--adam-outer-border-block-style) var(--adam-border-width) var(--adam-outer-border-color);
+	border-inline-style: var(--adam-inner-border-inline-style);
 	border-radius: var(--adam-border-outer-radius);
 
 	pointer-events: none;
@@ -65,8 +66,8 @@ input {
 	padding-inline: var(--adam-padding-inline);
 	padding-inline-start: calc(var(--adam-padding-inline) + var(--adam-icon-spacing));
 
-	border: var(--adam-border-inner-block-style) var(--adam-border-inner-color) var(--adam-border-width);
-	border-inline-style: var(--adam-border-inner-inline-style);
+	border: var(--adam-inner-border-block-style) var(--adam-inner-border-color) var(--adam-border-width);
+	border-inline-style: var(--adam-inner-border-inline-style);
 	border-radius: var(--adam-border-inner-radius);
 
 	height: calc(var(--adam-font-size) + var(--adam-padding-inline) + var(--adam-border-full) * 2);
@@ -78,11 +79,11 @@ input[type="password"]::-ms-reveal { display: none; }
 
 input:is([type="tel"], [type="url"], [type="email"], [type="search"], [type="password"], [show-password]),
 input:is([type="tel"], [type="url"], [type="email"], [type="search"], [type="password"], [show-password]) ~ label {
-	--adam-icon-spacing: calc(var(--adam-font-size) * 1.5);
+	--adam-icon-spacing: var(--adam-icon-size);
 }
 
 input:is([type="tel"], [type="url"], [type="email"], [type="search"], [type="password"], [show-password]) ~ #outer-border::before {
-	color: var(--adam-border-inner-color);
+	color: var(--adam-inner-border-color);
 	content: var(--adam-input-icon);
 	cursor: pointer;
 	pointer-events: all;
@@ -126,7 +127,7 @@ input:focus { outline: none; }
 	font-size: calc(var(--adam-label-scale) * 1rem);
 	color: var(--adam-text-color);
 
-	border: var(--adam-border-inner-block-style) var(--adam-border-width) var(--adam-border-outer-color);
+	border: var(--adam-inner-border-block-style) var(--adam-border-width) var(--adam-outer-border-color);
 	border-block-start-color: transparent;
 	border-radius: var(--adam-border-inner-radius);
 
@@ -149,7 +150,7 @@ input:focus { outline: none; }
 }
 
 #attention-marker {
-	border: var(--adam-border-outer-block-style) var(--adam-border-inner-color) var(--adam-border-width);
+	border: var(--adam-outer-border-block-style) var(--adam-inner-border-color) var(--adam-border-width);
 	z-index: 1;
 
 	padding: calc(var(--adam-border-spacing) * 0.5);
@@ -161,7 +162,7 @@ input:focus { outline: none; }
 	border-radius: calc(var(--adam-border-width) * 6);
 
 	transform-origin: center;
-	transform: scale(0);
+	scale: 0;
 	opacity: 0;
 
 	grid-area: marker;
@@ -173,38 +174,110 @@ input:focus { outline: none; }
 	width: 100%;
 	height: 100%;
 	border-radius: inherit;
-	background-color: var(--adam-border-outer-color);
+	background-color: var(--adam-outer-border-color);
 }
 
 #required-text {
 	color: var(--adam-required-inner-border);
 }
 
-:host(:hover) {
+/* Required */
+input:required,
+input:required ~ * {
+	--adam-bg-color: var(--adam-required-bg);
+	--adam-text-color: var(--adam-required-text);
+	--adam-inner-border-color: var(--adam-required-inner-border);
+	--adam-outer-border-color: var(--adam-required-outer-border);
+	--adam-inner-border-inline-style: var(--adam-required-inner-border-inline-style);
+	--adam-inner-border-block-style: var(--adam-required-inner-border-block-style);
+	--adam-outer-border-inline-style: var(--adam-required-outer-border-inline-style);
+	--adam-outer-border-block-style: var(--adam-required-outer-border-block-style);
+}
+
+input:required ~ #attention-marker {
+	scale: 1;
+	opacity: 1;
+}
+
+input:not(:placeholder-shown):not(:focus):required {
+	--adam-inner-border-color: var(--adam-input-inner-border);
+}
+
+input:not(:required) ~ label > #required-text {
+	display: none;
+}
+
+/* Invalid */
+input:not(:focus):not(:placeholder-shown):not(:hover):invalid,
+input:not(:focus):not(:placeholder-shown):not(:hover):invalid ~ * {
+	--adam-bg-color: var(--adam-invalid-bg);
+	--adam-text-color: var(--adam-invalid-text);
+	--adam-inner-border-color: var(--adam-invalid-inner-border);
+	--adam-outer-border-color: var(--adam-invalid-outer-border);
+	--adam-inner-border-inline-style: var(--adam-invalid-inner-border-inline-style);
+	--adam-inner-border-block-style: var(--adam-invalid-inner-border-block-style);
+	--adam-outer-border-inline-style: var(--adam-invalid-outer-border-inline-style);
+	--adam-outer-border-block-style: var(--adam-invalid-outer-border-block-style);
+}
+
+input:not(:focus):not(:placeholder-shown):invalid ~ #info-box #error-text {
+	transform: none;
+	opacity: 1;
+
+	border-color: var(--adam-inner-border-color);
+}
+
+input:not(:focus):not(:placeholder-shown):invalid ~ #info-box #info-text {
+	opacity: 0;
+}
+
+/* Valid */
+input:not(:focus):not(:placeholder-shown):not(:hover):valid,
+input:not(:focus):not(:placeholder-shown):not(:hover):valid ~ * {
+	--adam-bg-color: var(--adam-valid-bg);
+	--adam-text-color: var(--adam-valid-text);
+	--adam-inner-border-color: var(--adam-valid-inner-border);
+	--adam-outer-border-color: var(--adam-valid-outer-border);
+	--adam-inner-border-inline-style: var(--adam-valid-inner-border-inline-style);
+	--adam-inner-border-block-style: var(--adam-valid-inner-border-block-style);
+	--adam-outer-border-inline-style: var(--adam-valid-outer-border-inline-style);
+	--adam-outer-border-block-style: var(--adam-valid-outer-border-block-style);
+}
+
+input:not(:focus):not(:placeholder-shown):valid ~ #info-box #info-text {
+	opacity: 0;
+}
+
+input:not(:focus):not(:placeholder-shown):invalid ~ #attention-marker,
+input:not(:focus):not(:placeholder-shown):valid ~ #attention-marker {
+	scale: 1;
+	opacity: 1;
+}
+
+/* Hover */
+input:hover,
+input:hover ~ * {
 	--adam-bg-color: var(--adam-hover-bg);
 	--adam-text-color: var(--adam-hover-text);
-	--adam-border-inner-color: var(--adam-hover-inner-border);
-	--adam-border-outer-color: var(--adam-hover-outer-border);
+	--adam-inner-border-color: var(--adam-hover-inner-border);
+	--adam-outer-border-color: var(--adam-hover-outer-border);
+	--adam-inner-border-inline-style: var(--adam-hover-inner-border-inline-style);
+	--adam-inner-border-block-style: var(--adam-hover-inner-border-block-style);
+	--adam-outer-border-inline-style: var(--adam-hover-outer-border-inline-style);
+	--adam-outer-border-block-style: var(--adam-hover-outer-border-block-style);
 }
 
-:host(:hover) #outer-border {
-	border-inline-style: var(--adam-border-outer-inline-style);
-}
-
-:host(:not(:focus-within):hover) input:not(:disabled) ~ * {
-	--adam-border-outer-color: var(--adam-hover-outer-border);
-}
-
+/* Focus */
 input:focus,
 input:focus ~ * {
 	--adam-bg-color: var(--adam-focus-bg);
 	--adam-text-color: var(--adam-focus-text);
-	--adam-border-inner-color: var(--adam-focus-inner-border);
-	--adam-border-outer-color: var(--adam-focus-outer-border);
-}
-
-input:focus ~ #outer-border {
-	border-inline-style: var(--adam-border-outer-inline-style);
+	--adam-inner-border-color: var(--adam-focus-inner-border);
+	--adam-outer-border-color: var(--adam-focus-outer-border);
+	--adam-inner-border-inline-style: var(--adam-focus-inner-border-inline-style);
+	--adam-inner-border-block-style: var(--adam-focus-inner-border-block-style);
+	--adam-outer-border-inline-style: var(--adam-focus-outer-border-inline-style);
+	--adam-outer-border-block-style: var(--adam-focus-outer-border-block-style);
 }
 
 input:focus ~ label,
@@ -224,79 +297,23 @@ input:not(:placeholder-shown) ~ label {
 
 input:focus ~ #info-box #info-text {
 	opacity: 1;
-	transform: translateY(0);
+	transform: none;
 	pointer-events: all;
 }
 
-input:required,
-input:required ~ * {
-	--adam-bg-color: var(--adam-required-bg);
-	--adam-text-color: var(--adam-required-text);
-	--adam-border-inner-color: var(--adam-required-inner-border);
-	--adam-border-outer-color: var(--adam-required-outer-border);
-}
-
-input:required ~ #attention-marker {
-	transform: scale(1);
-	opacity: 1;
-}
-
-input:required input:not(:placeholder-shown):not(:focus) {
-	--adam-border-inner-color: var(--adam-input-inner-border);
-}
-
-input:not(:required) ~ label > #required-text {
-	display: none;
-}
-
-input:not(:focus):not(:placeholder-shown):invalid,
-input:not(:focus):not(:placeholder-shown):invalid ~ * {
-	--adam-bg-color: var(--adam-invalid-bg);
-	--adam-text-color: var(--adam-invalid-text);
-	--adam-border-inner-color: var(--adam-invalid-inner-border);
-	--adam-border-outer-color: var(--adam-invalid-outer-border);
-}
-
-input:not(:focus):not(:placeholder-shown):invalid ~ #info-box #error-text {
-	transform: none;
-	opacity: 1;
-
-	border-color: var(--adam-border-inner-color);
-}
-
-input:not(:focus):not(:placeholder-shown):invalid ~ #info-box #info-text {
-	opacity: 0;
-}
-
-input:not(:focus):not(:placeholder-shown):valid,
-input:not(:focus):not(:placeholder-shown):valid ~ * {
-	--adam-bg-color: var(--adam-valid-bg);
-	--adam-text-color: var(--adam-valid-text);
-	--adam-border-inner-color: var(--adam-valid-inner-border);
-	--adam-border-outer-color: var(--adam-valid-outer-border);
-}
-
-input:not(:focus):not(:placeholder-shown):valid ~ #info-box #info-text {
-	opacity: 0;
-}
-
-input:not(:focus):not(:placeholder-shown):invalid ~ #attention-marker,
-input:not(:focus):not(:placeholder-shown):valid ~ #attention-marker {
-	transform: scale(1);
-	opacity: 1;
-}
-
+/* Disabled */
 input:disabled,
 input:disabled ~ * {
 	--adam-bg-color: var(--adam-disabled-bg);
 	--adam-text-color: var(--adam-disabled-text);
-	--adam-border-inner-color: var(--adam-disabled-inner-border);
-	--adam-border-outer-color: var(--adam-disabled-outer-border);
+	--adam-inner-border-color: var(--adam-disabled-inner-border);
+	--adam-outer-border-color: var(--adam-disabled-outer-border);
+	--adam-inner-border-inline-style: var(--adam-disabled-inner-border-inline-style);
+	--adam-inner-border-block-style: var(--adam-disabled-inner-border-block-style);
+	--adam-outer-border-inline-style: var(--adam-disabled-outer-border-inline-style);
+	--adam-outer-border-block-style: var(--adam-disabled-outer-border-block-style);
 }
 
-input:read-only ~ #info-box,
-input:read-only ~ #attention-marker,
-input:disabled ~ #info-box,
-input:disabled ~ #attention-marker {
+:matches(input:read-only, input:disabled) ~ :matches(#info-box, #attention-marker) {
 	display: none;
 }

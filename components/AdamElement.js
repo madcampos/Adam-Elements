@@ -8,6 +8,9 @@ export class AdamElement extends HTMLElement {
 	/** @type {DocumentFragment} */
 	root;
 
+	/** @type {ElementInternals} */
+	internals;
+
 	constructor({ name, template, watchedSlots, watchedProps, bindProps, style } = { name: 'NO NAME', watchedSlots: {}, watchedProps: [], bindProps: [] }) {
 		super();
 
@@ -17,7 +20,6 @@ export class AdamElement extends HTMLElement {
 		this.#template = template;
 		this.#bindProps = bindProps;
 		this.#watchedSlots = watchedSlots;
-
 
 		this.addStyle(import.meta.url);
 
@@ -38,6 +40,9 @@ export class AdamElement extends HTMLElement {
 		for (const prop of watchedProps) {
 			this.watchProp(prop);
 		}
+
+		// Internals experimental API.
+		this.internals = this.attachInternals();
 	}
 
 	attributeChangedCallback(name, oldValue, newValue) {
@@ -74,7 +79,7 @@ export class AdamElement extends HTMLElement {
 		this.mounted?.();
 	}
 
-	static get uniqueID() {
+	get uniqueID() {
 		// eslint-disable-next-line no-magic-numbers
 		return `adam-${this.name?.replace('adam-', '')}-${Math.trunc(Math.random() * 10000000).toString(16)}`;
 	}

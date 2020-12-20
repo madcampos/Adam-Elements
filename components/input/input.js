@@ -1,6 +1,7 @@
 import { AdamElement } from '../AdamElement.js';
 
 class AdamInput extends AdamElement {
+	static get formAssociated() { return true; }
 	static get observedAttributes() { return ['label', 'required', 'readonly', 'disabled', 'value', 'autocomplete', 'pattern', 'maxlength', 'minlength', 'inputmode', 'type']; }
 	#input;
 
@@ -64,7 +65,7 @@ class AdamInput extends AdamElement {
 		});
 
 		if (!this.id) {
-			this.id = AdamElement.uniqueID;
+			this.id = this.uniqueID;
 		}
 	}
 
@@ -77,6 +78,9 @@ class AdamInput extends AdamElement {
 
 		this.#input.addEventListener('change', (evt) => {
 			evt.target.checkValidity();
+
+			this.internals.setFormValue(this.#input.value);
+			this.dispatchEvent(new CustomEvent('change', { bubbles: true, composed: true }));
 		});
 
 		this.#input.addEventListener('invalid', (evt) => {
@@ -84,6 +88,9 @@ class AdamInput extends AdamElement {
 			evt.stopPropagation();
 
 			this.root.querySelector('#error-text').innerText = evt.target.validationMessage;
+
+			this.internals.setValidity(this.#input.validity);
+			this.dispatchEvent(new CustomEvent('invalid', { bubbles: true, composed: true }));
 		});
 
 		if (this.#input.type === 'password') {

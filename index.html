@@ -6,6 +6,7 @@
 	<title>Adam Elements</title>
 	<link rel="stylesheet" href="./css/style.css">
 	<script src="./components/input/input.js" type="module"></script>
+	<script src="./components/select/select.js" type="module"></script>
 </head>
 <body>
 	<main>
@@ -17,6 +18,7 @@
 		<adam-input label="Required" required></adam-input>
 		<adam-input label="Read only" readonly value="TEST"></adam-input>
 		<adam-input label="Disabled" disabled></adam-input>
+		<adam-input label="Wrong Disabled" disabled type="email" value="wrong disabled"></adam-input>
 		<adam-input label="Invalid" type="email" value="wrong">
 			<div slot="helper-text">
 				Enter a valid email
@@ -27,6 +29,44 @@
 		<adam-input label="Tel" type="tel"></adam-input>
 		<adam-input label="URL" type="url"></adam-input>
 		<adam-input label="Search" type="search"></adam-input>
+		<adam-select label="Select">
+			<div slot="helper-text">
+				TEST HELP TEXT
+			</div>
+			<span>FOO</span>
+			<optgroup label="Group">
+				<input type="text"/>
+				<option>Group 1</option>
+				<option>Group 2</option>
+				<option>Group 3</option>
+			</optgroup>
+			<option data-attr="bar">Test</option>
+			<option value="foo">Test 2</option>
+			<option disabled>Test disabled</option>
+		</adam-select>
+		<adam-select label="Select Multiple" multiple size="5">
+			<div slot="helper-text">
+				TEST HELP TEXT
+			</div>
+			<optgroup label="Group">
+				<input type="text"/>
+				<option>Group 1</option>
+				<option>Group 2</option>
+				<option>Group 3</option>
+			</optgroup>
+			<option data-attr="bar">Test</option>
+			<option value="foo">Test 2</option>
+			<option disabled>Test disabled</option>
+		</adam-select>
+		<adam-select label="Select Required" required>
+			<option>Test</option>
+		</adam-select>
+		<adam-select label="Select Disabled" disabled>
+			<option>Test</option>
+		</adam-select>
+		<adam-select label="Select Placeholder" placeholder="FOO">
+			<option>Test</option>
+		</adam-select>
 	</main>
 </body>
 </html>

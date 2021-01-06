@@ -47,6 +47,7 @@ class AdamInput extends AdamElement {
 						id="{id}"
 						name="{id}"
 						placeholder="{label}"
+						aria-describedby="error-text"
 					/>
 					<div id="outer-border"></div>
 					<div id="attention-marker"></div>
@@ -55,7 +56,7 @@ class AdamInput extends AdamElement {
 						<small id="required-text">(required)</small>
 					</label>
 					<div id="info-box">
-						<div id="info-text">
+						<div id="info-text" tabindex="0">
 							<slot name="helper-text"></slot>
 						</div>
 						<div id="error-text"></div>

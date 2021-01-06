@@ -1,3 +1,4 @@
+/* TODO: Update variables to be set on :host and use names without prefixes */
 /* Font */
 @property --adam-font-family {
 	syntax: '<custom-ident> | <string>';

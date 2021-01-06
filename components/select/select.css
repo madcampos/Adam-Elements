@@ -302,6 +302,10 @@ option:disabled {
 	color: var(--adam-disabled-text);
 }
 
+option:checked {
+	color: var(--adam-valid-text);
+	background: var(--adam-valid-bg);
+}
 select[multiple] optgroup,
 select[multiple] option:not(:hover) {
 	background: transparent;

@@ -198,8 +198,8 @@ select:not(:required) ~ label > #required-text {
 }
 
 /* Invalid */
-select:not(:focus):not(:hover):invalid,
-select:not(:focus):not(:hover):invalid ~ * {
+select:not(:focus):not(:hover):required:invalid,
+select:not(:focus):not(:hover):required:invalid ~ * {
 	--adam-bg-color: var(--adam-invalid-bg);
 	--adam-text-color: var(--adam-invalid-text);
 	--adam-inner-border-color: var(--adam-invalid-inner-border);
@@ -210,20 +210,20 @@ select:not(:focus):not(:hover):invalid ~ * {
 	--adam-outer-border-block-style: var(--adam-invalid-outer-border-block-style);
 }
 
-select:not(:focus):invalid ~ #info-box #error-text {
+select:not(:focus):required:invalid ~ #info-box #error-text {
 	transform: none;
 	opacity: 1;
 
 	border-color: var(--adam-inner-border-color);
 }
 
-select:not(:focus):invalid ~ #info-box #info-text {
+select:not(:focus):required:invalid ~ #info-box #info-text {
 	opacity: 0;
 }
 
 /* Valid */
-select:not(:focus):not(:hover):valid,
-select:not(:focus):not(:hover):valid ~ * {
+select:not(:focus):not(:hover):required:valid,
+select:not(:focus):not(:hover):required:valid ~ * {
 	--adam-bg-color: var(--adam-valid-bg);
 	--adam-text-color: var(--adam-valid-text);
 	--adam-inner-border-color: var(--adam-valid-inner-border);
@@ -234,12 +234,12 @@ select:not(:focus):not(:hover):valid ~ * {
 	--adam-outer-border-block-style: var(--adam-valid-outer-border-block-style);
 }
 
-select:not(:focus):valid ~ #info-box #info-text {
+select:not(:focus):required:valid ~ #info-box #info-text {
 	opacity: 0;
 }
 
-select:not(:focus):invalid ~ #attention-marker,
-select:not(:focus):valid ~ #attention-marker {
+select:not(:focus):required:invalid ~ #attention-marker,
+select:not(:focus):required:valid ~ #attention-marker {
 	scale: 1;
 	opacity: 1;
 }
@@ -306,6 +306,7 @@ option:checked {
 	color: var(--adam-valid-text);
 	background: var(--adam-valid-bg);
 }
+
 select[multiple] optgroup,
 select[multiple] option:not(:hover) {
 	background: transparent;

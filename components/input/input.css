@@ -139,6 +139,8 @@ input:focus { outline: none; }
 	opacity: 0.2;
 }
 
+#info-text:focus { outline: none; }
+
 #error-text {
 	margin-block-start: calc(var(--adam-border-spacing) * 2 + var(--adam-border-width));
 	opacity: 0;
@@ -268,8 +270,7 @@ input:hover ~ * {
 }
 
 /* Focus */
-input:focus,
-input:focus ~ * {
+:host(:focus-within) {
 	--adam-bg-color: var(--adam-focus-bg);
 	--adam-text-color: var(--adam-focus-text);
 	--adam-inner-border-color: var(--adam-focus-inner-border);
@@ -280,7 +281,7 @@ input:focus ~ * {
 	--adam-outer-border-block-style: var(--adam-focus-outer-border-block-style);
 }
 
-input:focus ~ label,
+:host(:focus-within) label,
 input:not(:placeholder-shown) ~ label {
 	pointer-events: all;
 
@@ -295,10 +296,9 @@ input:not(:placeholder-shown) ~ label {
 	font-weight: var(--adam-font-bold);
 }
 
-input:focus ~ #info-box #info-text {
+:host(:focus-within) #info-text {
 	opacity: 1;
 	transform: none;
-	pointer-events: all;
 }
 
 /* Disabled */

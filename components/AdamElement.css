@@ -1,536 +1,536 @@
 /* TODO: Update variables to be set on :host and use names without prefixes */
 /* Font */
-@property --adam-font-family {
+@property --font-family {
 	syntax: '<custom-ident> | <string>';
 	inherits: false;
 	initial-value: 0.5rem;
 }
 
-@property --adam-label-scale {
+@property --label-scale {
 	syntax: '<number>';
 	inherits: false;
 	initial-value: 0.8;
 }
 
-@property --adam-font-size {
+@property --font-size {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 1rem;
 }
 
-@property --adam-font-normal {
+@property --font-normal {
 	syntax: '<integer>';
 	inherits: false;
 	initial-value: 500;
 }
 
-@property --adam-font-bold {
+@property --font-bold {
 	syntax: '<integer>';
 	inherits: false;
 	initial-value: 900;
 }
 
 /* Transition */
-@property --adam-transition-function {
+@property --transition-function {
 	syntax: '<custom-ident>';
 	inherits: false;
 	initial-value: ease-in-out;
 }
 
-@property --adam-transition-time {
+@property --transition-time {
 	syntax: '<time>';
 	inherits: false;
 	initial-value: 0.2s;
 }
 
 /* Borders */
-@property --adam-border-inner-radius {
+@property --border-inner-radius {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 0.5rem;
 }
 
-@property --adam-border-outer-radius {
+@property --border-outer-radius {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 0.8rem;
 }
 
-@property --adam-border-spacing {
+@property --border-spacing {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 0.2rem;
 }
 
-@property --adam-border-width {
+@property --border-width {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 0.15rem;
 }
 
-@property --adam-border-full {
+@property --border-full {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 0.35rem;
 }
 
 /* Padding */
-@property --adam-padding-inline {
+@property --padding-inline {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 0.6rem;
 }
 
-@property --adam-padding-block {
+@property --padding-block {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 0.2rem;
 }
 
 /* Margin */
-@property --adam-margin-inline {
+@property --margin-inline {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 0.95rem;
 }
 
-@property --adam-margin-block {
+@property --margin-block {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 0.55rem;
 }
 
 /* Sizes */
-@property --adam-label-top-space {
+@property --label-top-space {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 2.2rem;
 }
 
-@property --adam-icon-size {
+@property --icon-size {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 1.5rem;
 }
 
-@property --adam-info-box-max-size {
+@property --info-box-max-size {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 7rem;
 }
 
 /* Input base */
-@property --adam-input-min-size {
+@property --input-min-size {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 7rem;
 }
 
-@property --adam-input-max-size {
+@property --input-max-size {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 15rem;
 }
 
-@property --adam-input-bg {
+@property --input-bg {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(0, 0, 0, 0.1);
 }
 
-@property --adam-input-text {
+@property --input-text {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(255, 255, 255, 0.5);
 }
 
-@property --adam-input-inner-border {
+@property --input-inner-border {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(169, 169, 169, 0.6);
 }
 
-@property --adam-input-outer-border {
+@property --input-outer-border {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: white;
 }
 
-@property --adam-input-inner-border-inline-style {
+@property --input-inner-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: dashed;
 }
 
-@property --adam-input-inner-border-block-style {
+@property --input-inner-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: dashed;
 }
 
-@property --adam-input-outer-border-inline-style {
+@property --input-outer-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: solid;
 }
 
-@property --adam-input-outer-border-block-style {
+@property --input-outer-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: solid;
 }
 
 /* Input Hover */
-@property --adam-hover-bg {
+@property --hover-bg {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(0, 0, 0, 0.1);
 }
 
-@property --adam-hover-text {
+@property --hover-text {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(255, 255, 255, 0.5);
 }
 
-@property --adam-hover-inner-border {
+@property --hover-inner-border {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(169, 169, 169, 0.6);
 }
 
-@property --adam-hover-outer-border {
+@property --hover-outer-border {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: white;
 }
 
-@property --adam-hover-inner-border-inline-style {
+@property --hover-inner-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: dashed;
 }
 
-@property --adam-hover-inner-border-block-style {
+@property --hover-inner-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: dashed;
 }
 
-@property --adam-hover-outer-border-inline-style {
+@property --hover-outer-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: solid;
 }
 
-@property --adam-hover-outer-border-block-style {
+@property --hover-outer-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: solid;
 }
 
 /* Input Focus */
-@property --adam-focus-bg {
+@property --focus-bg {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(0, 0, 0, 0.1);
 }
 
-@property --adam-focus-text {
+@property --focus-text {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(255, 255, 255, 0.5);
 }
 
-@property --adam-focus-inner-border {
+@property --focus-inner-border {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(169, 169, 169, 0.6);
 }
 
-@property --adam-focus-outer-border {
+@property --focus-outer-border {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: white;
 }
 
-@property --adam-focus-inner-border-inline-style {
+@property --focus-inner-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: dashed;
 }
 
-@property --adam-focus-inner-border-block-style {
+@property --focus-inner-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: dashed;
 }
 
-@property --adam-focus-outer-border-inline-style {
+@property --focus-outer-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: solid;
 }
 
-@property --adam-focus-outer-border-block-style {
+@property --focus-outer-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: solid;
 }
 
 /* Input Disabled */
-@property --adam-disabled-bg {
+@property --disabled-bg {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(0, 0, 0, 0.1);
 }
 
-@property --adam-disabled-text {
+@property --disabled-text {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(255, 255, 255, 0.5);
 }
 
-@property --adam-disabled-inner-border {
+@property --disabled-inner-border {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(169, 169, 169, 0.6);
 }
 
-@property --adam-disabled-outer-border {
+@property --disabled-outer-border {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: white;
 }
 
-@property --adam-disabled-inner-border-inline-style {
+@property --disabled-inner-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: dashed;
 }
 
-@property --adam-disabled-inner-border-block-style {
+@property --disabled-inner-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: dashed;
 }
 
-@property --adam-disabled-outer-border-inline-style {
+@property --disabled-outer-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: solid;
 }
 
-@property --adam-disabled-outer-border-block-style {
+@property --disabled-outer-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: solid;
 }
 
 /* Input Required */
-@property --adam-required-bg {
+@property --required-bg {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(0, 0, 0, 0.1);
 }
 
-@property --adam-required-text {
+@property --required-text {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(255, 255, 255, 0.5);
 }
 
-@property --adam-required-inner-border {
+@property --required-inner-border {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(169, 169, 169, 0.6);
 }
 
-@property --adam-required-outer-border {
+@property --required-outer-border {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: white;
 }
 
-@property --adam-required-inner-border-inline-style {
+@property --required-inner-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: dashed;
 }
 
-@property --adam-required-inner-border-block-style {
+@property --required-inner-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: dashed;
 }
 
-@property --adam-required-outer-border-inline-style {
+@property --required-outer-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: solid;
 }
 
-@property --adam-required-outer-border-block-style {
+@property --required-outer-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: solid;
 }
 
 /* Input Invalid */
-@property --adam-invalid-bg {
+@property --invalid-bg {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(0, 0, 0, 0.1);
 }
 
-@property --adam-invalid-text {
+@property --invalid-text {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(255, 255, 255, 0.5);
 }
 
-@property --adam-invalid-inner-border {
+@property --invalid-inner-border {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(169, 169, 169, 0.6);
 }
 
-@property --adam-invalid-outer-border {
+@property --invalid-outer-border {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: white;
 }
 
-@property --adam-invalid-inner-border-inline-style {
+@property --invalid-inner-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: dashed;
 }
 
-@property --adam-invalid-inner-border-block-style {
+@property --invalid-inner-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: dashed;
 }
 
-@property --adam-invalid-outer-border-inline-style {
+@property --invalid-outer-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: solid;
 }
 
-@property --adam-invalid-outer-border-block-style {
+@property --invalid-outer-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: solid;
 }
 
 /* Input Valid */
-@property --adam-valid-bg {
+@property --valid-bg {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(0, 0, 0, 0.1);
 }
 
-@property --adam-valid-text {
+@property --valid-text {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(255, 255, 255, 0.5);
 }
 
-@property --adam-valid-inner-border {
+@property --valid-inner-border {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(169, 169, 169, 0.6);
 }
 
-@property --adam-valid-outer-border {
+@property --valid-outer-border {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: white;
 }
 
-@property --adam-valid-inner-border-inline-style {
+@property --valid-inner-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: dashed;
 }
 
-@property --adam-valid-inner-border-block-style {
+@property --valid-inner-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: dashed;
 }
 
-@property --adam-valid-outer-border-inline-style {
+@property --valid-outer-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: solid;
 }
 
-@property --adam-valid-outer-border-block-style {
+@property --valid-outer-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: false;
 	initial-value: solid;
 }
 
 /* Select/options style */
-@property --adam-option-group-text {
+@property --option-group-text {
 	syntax: '<color>';
 	inherits: false;
 	initial-value: rgba(255, 255, 255, 0.5);
 }
 
 /* Dynamic styles */
-@property --adam-bg-color {
+@property --bg-color {
 	syntax: '<color>';
 	inherits: true;
 	initial-value: rgba(0, 0, 0, 0.1);
 }
 
-@property --adam-text-color {
+@property --text-color {
 	syntax: '<color>';
 	inherits: true;
 	initial-value: rgba(255, 255, 255, 0.5);
 }
 
-@property --adam-icon-spacing {
+@property --icon-spacing {
 	syntax: '<length>';
 	inherits: false;
 	initial-value: 0px;
 }
 
-@property --adam-inner-border-color {
+@property --inner-border-color {
 	syntax: '<color>';
 	inherits: true;
 	initial-value: rgba(169, 169, 169, 0.6);
 }
 
-@property --adam-outer-border-color {
+@property --outer-border-color {
 	syntax: '<color>';
 	inherits: true;
 	initial-value: white;
 }
 
-@property --adam-inner-border-inline-style {
+@property --inner-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: true;
 	initial-value: dashed;
 }
 
-@property --adam-inner-border-block-style {
+@property --inner-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: true;
 	initial-value: dashed;
 }
 
-@property --adam-outer-border-inline-style {
+@property --outer-border-inline-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: true;
 	initial-value: solid;
 }
 
-@property --adam-outer-border-block-style {
+@property --outer-border-block-style {
 	syntax: 'solid | dotted | dashed';
 	inherits: true;
 	initial-value: solid;
@@ -538,146 +538,146 @@
 
 :host {
 	/* Font */
-	--adam-font-family: 'Oxanium', sans-serif;
-	--adam-label-scale: 0.8;
-	--adam-font-size: 1rem;
-	--adam-font-normal: 500;
-	--adam-font-bold: 900;
+	--font-family: 'Oxanium', sans-serif;
+	--label-scale: 0.8;
+	--font-size: 1rem;
+	--font-normal: 500;
+	--font-bold: 900;
 
 	/* Transition */
-	--adam-transition-function: ease-in-out;
-	--adam-transition-time: 0.2s;
+	--transition-function: ease-in-out;
+	--transition-time: 0.2s;
 
 	/* Border */
-	--adam-border-inner-radius: 0.5rem;
-	--adam-border-outer-radius: 0.8rem;
-	--adam-border-spacing: 0.2rem;
-	--adam-border-width: 0.15rem;
-	--adam-border-full: calc(var(--adam-border-width) + var(--adam-border-spacing));
+	--border-outer-radius: 0.8rem;
+	--border-inner-radius: calc(var(--border-outer-radius) + (var(--border-width) + var(--border-spacing)) / 2);
+	--border-spacing: 0.2rem;
+	--border-width: 0.15rem;
+	--border-full: calc(var(--border-width) + var(--border-spacing));
 
 	/* Padding */
-	--adam-padding-inline: 0.6rem;
-	--adam-padding-block: 0.2rem;
+	--padding-inline: 0.6rem;
+	--padding-block: 0.2rem;
 
 	/* Margin */
-	--adam-margin-inline: calc(var(--adam-padding-inline) + var(--adam-border-full));
-	--adam-margin-block: calc(var(--adam-padding-block) + var(--adam-border-full));
+	--margin-inline: calc(var(--padding-inline) + var(--border-full));
+	--margin-block: calc(var(--padding-block) + var(--border-full));
 
 	/* Sizes */
-	--adam-label-top-space: calc(var(--adam-border-spacing) + (var(--adam-label-scale) * var(--adam-font-size)) + (var(--adam-padding-block) * 2));
-	--adam-icon-size: calc(var(--adam-font-size) * 1.5);
-	--adam-info-box-max-size: 7rem;
+	--label-top-space: calc(var(--border-spacing) + (var(--label-scale) * var(--font-size)) + (var(--padding-block) * 2));
+	--icon-size: calc(var(--font-size) * 1.5);
+	--info-box-max-size: 7rem;
 
 	/* Input base */
-	--adam-input-min-size: 7rem;
-	--adam-input-max-size: 15rem;
+	--input-min-size: 7rem;
+	--input-max-size: 15rem;
 
-	--adam-input-bg: rgba(0, 0, 0, 0.1);
-	--adam-input-text: rgba(255, 255, 255, 0.5);
-	--adam-input-inner-border: rgba(169, 169, 169, 0.6);
-	--adam-input-outer-border: white;
+	--input-bg: rgba(0, 0, 0, 0.1);
+	--input-text: rgba(255, 255, 255, 0.5);
+	--input-inner-border: rgba(169, 169, 169, 0.6);
+	--input-outer-border: white;
 
-	--adam-input-inner-border-inline-style: dashed;
-	--adam-input-inner-border-block-style: dashed;
-	--adam-input-outer-border-inline-style: solid;
-	--adam-input-outer-border-block-style: solid;
+	--input-inner-border-inline-style: dashed;
+	--input-inner-border-block-style: dashed;
+	--input-outer-border-inline-style: solid;
+	--input-outer-border-block-style: solid;
 
 	/* Input hover */
-	--adam-hover-bg: rgba(0, 0, 0, 0.2);
-	--adam-hover-text: white;
-	--adam-hover-inner-border: white;
-	--adam-hover-outer-border: rgba(169, 169, 169, 0.6);
+	--hover-bg: rgba(0, 0, 0, 0.2);
+	--hover-text: white;
+	--hover-inner-border: white;
+	--hover-outer-border: rgba(169, 169, 169, 0.6);
 
-	--adam-hover-inner-border-inline-style: dotted;
-	--adam-hover-inner-border-block-style: dashed;
-	--adam-hover-outer-border-inline-style: dashed;
-	--adam-hover-outer-border-block-style: solid;
+	--hover-inner-border-inline-style: dotted;
+	--hover-inner-border-block-style: dashed;
+	--hover-outer-border-inline-style: dashed;
+	--hover-outer-border-block-style: solid;
 
 	/* Input focus */
-	--adam-focus-bg: rgba(0, 0, 0, 0.3);
-	--adam-focus-text: white;
-	--adam-focus-inner-border: #9aff00;
-	--adam-focus-outer-border: rgba(169, 169, 169, 0.4);
+	--focus-bg: rgba(0, 0, 0, 0.3);
+	--focus-text: white;
+	--focus-inner-border: #9aff00;
+	--focus-outer-border: rgba(169, 169, 169, 0.4);
 
-	--adam-focus-inner-border-inline-style: solid;
-	--adam-focus-inner-border-block-style: dashed;
-	--adam-focus-outer-border-inline-style: solid;
-	--adam-focus-outer-border-block-style: dashed;
+	--focus-inner-border-inline-style: solid;
+	--focus-inner-border-block-style: dashed;
+	--focus-outer-border-inline-style: solid;
+	--focus-outer-border-block-style: dashed;
 
 	/* Input disabled */
-	--adam-disabled-bg: rgba(0, 0, 0, 0.2);
-	--adam-disabled-text: rgba(255, 255, 255, 0.4);
-	--adam-disabled-inner-border: rgba(169, 169, 169, 0.3);
-	--adam-disabled-outer-border: rgba(255, 255, 255, 0.2);
+	--disabled-bg: rgba(0, 0, 0, 0.2);
+	--disabled-text: rgba(255, 255, 255, 0.4);
+	--disabled-inner-border: rgba(169, 169, 169, 0.3);
+	--disabled-outer-border: rgba(255, 255, 255, 0.2);
 
-	--adam-disabled-inner-border-inline-style: dotted;
-	--adam-disabled-inner-border-block-style: dotted;
-	--adam-disabled-outer-border-inline-style: dotted;
-	--adam-disabled-outer-border-block-style: dotted;
+	--disabled-inner-border-inline-style: dotted;
+	--disabled-inner-border-block-style: dotted;
+	--disabled-outer-border-inline-style: dotted;
+	--disabled-outer-border-block-style: dotted;
 
 	/* Input requried */
-	--adam-required-bg: rgba(0, 0, 0, 0.2);
-	--adam-required-text: rgba(255, 255, 255, 0.5);
-	--adam-required-inner-border: #E3FF00;
-	--adam-required-outer-border: rgba(169, 169, 169, 1);
+	--required-bg: rgba(0, 0, 0, 0.2);
+	--required-text: rgba(255, 255, 255, 0.5);
+	--required-inner-border: #E3FF00;
+	--required-outer-border: rgba(169, 169, 169, 1);
 
-	--adam-required-inner-border-inline-style: dashed;
-	--adam-required-inner-border-block-style: dashed;
-	--adam-required-outer-border-inline-style: solid;
-	--adam-required-outer-border-block-style: solid;
+	--required-inner-border-inline-style: dashed;
+	--required-inner-border-block-style: dashed;
+	--required-outer-border-inline-style: solid;
+	--required-outer-border-block-style: solid;
 
 	/* Input invalid */
-	--adam-invalid-bg: rgba(0, 0, 0, 0.2);
-	--adam-invalid-text: tomato;
-	--adam-invalid-inner-border: crimson;
-	--adam-invalid-outer-border: sienna;
+	--invalid-bg: rgba(0, 0, 0, 0.2);
+	--invalid-text: tomato;
+	--invalid-inner-border: crimson;
+	--invalid-outer-border: sienna;
 
-	--adam-invalid-inner-border-inline-style: dashed;
-	--adam-invalid-inner-border-block-style: dashed;
-	--adam-invalid-outer-border-inline-style: dashed;
-	--adam-invalid-outer-border-block-style: dashed;
+	--invalid-inner-border-inline-style: dashed;
+	--invalid-inner-border-block-style: dashed;
+	--invalid-outer-border-inline-style: dashed;
+	--invalid-outer-border-block-style: dashed;
 
 	/* Input valid */
-	--adam-valid-bg: rgba(0, 0, 0, 0.2);
-	--adam-valid-text: lightskyblue;
-	--adam-valid-inner-border: dodgerblue;
-	--adam-valid-outer-border: white;
+	--valid-bg: rgba(0, 0, 0, 0.2);
+	--valid-text: lightskyblue;
+	--valid-inner-border: dodgerblue;
+	--valid-outer-border: white;
 
-	--adam-valid-inner-border-inline-style: dashed;
-	--adam-valid-inner-border-block-style: dashed;
-	--adam-valid-outer-border-inline-style: solid;
-	--adam-valid-outer-border-block-style: solid;
+	--valid-inner-border-inline-style: dashed;
+	--valid-inner-border-block-style: dashed;
+	--valid-outer-border-inline-style: solid;
+	--valid-outer-border-block-style: solid;
 
 	/* Selecto/option style */
-	--adam-option-group-text: rgba(225, 255, 255, 0.5);
+	--option-group-text: rgba(225, 255, 255, 0.5);
 
 	/* Dynamic values */
 
 	/* Text and background */
-	--adam-text-color: var(--adam-input-text);
-	--adam-bg-color: var(--adam-input-bg);
+	--text-color: var(--input-text);
+	--bg-color: var(--input-bg);
 
 	/* Icon */
-	--adam-icon-spacing: 0px;
+	--icon-spacing: 0px;
 
 	/* Borders */
-	--adam-inner-border-color: var(--adam-input-inner-border);
-	--adam-outer-border-color: var(--adam-input-outer-border);
-	--adam-inner-border-inline-style: var(--adam-input-inner-border-inline-style);
-	--adam-inner-border-block-style: var(--adam-input-inner-border-block-style);
-	--adam-outer-border-inline-style: var(--adam-input-outer-border-inline-style);
-	--adam-outer-border-block-style: var(--adam-input-outer-border-block-style);
+	--inner-border-color: var(--input-inner-border);
+	--outer-border-color: var(--input-outer-border);
+	--inner-border-inline-style: var(--input-inner-border-inline-style);
+	--inner-border-block-style: var(--input-inner-border-block-style);
+	--outer-border-inline-style: var(--input-outer-border-inline-style);
+	--outer-border-block-style: var(--input-outer-border-block-style);
 
 	/* Base styles */
-	font-family: var(--adam-font-family);
-	font-size: var(--adam-font-size);
-	color: var(--adam-text-color);
-	font-weight: var(--adam-font-normal);
+	font-family: var(--font-family);
+	font-size: var(--font-size);
+	color: var(--text-color);
+	font-weight: var(--font-normal);
 	font-variant: proportional-nums slashed-zero;
 	letter-spacing: 0.04rem;
 	line-height: 1;
 
-	transition: all var(--adam-transition-time) var(--adam-transition-function);
+	transition: all var(--transition-time) var(--transition-function);
 	box-sizing: border-box;
 }
 
@@ -690,7 +690,7 @@
 }
 
 @media (prefers-reduced-motion) {
-	:host { --adam-transition-time: 0; }
+	:host { --transition-time: 0; }
 }
 
 @media (prefers-color-scheme: light) {

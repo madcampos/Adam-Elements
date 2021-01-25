@@ -1,6 +1,6 @@
 :host > div {
-	margin: var(--adam-margin-block);
-	width: var(--adam-input-max-size);
+	margin: var(--margin-block);
+	width: var(--input-max-size);
 	display: grid;
 	grid-template-areas:
 		'label label label'
@@ -8,8 +8,8 @@
 		'select select select'
 		'. message .';
 
-	grid-template-rows: var(--adam-label-top-space) var(--adam-border-full) auto auto;
-	grid-template-columns: var(--adam-border-full) minmax(var(--adam-input-min-size), var(--adam-input-max-size)) var(--adam-border-full);
+	grid-template-rows: var(--label-top-space) var(--border-full) auto auto;
+	grid-template-columns: var(--border-full) minmax(var(--input-min-size), var(--input-max-size)) var(--border-full);
 
 	align-content: start;
 	align-items: stretch;
@@ -21,11 +21,11 @@
 	justify-content: flex-end;
 	align-items: center;
 
-	padding-inline-start: var(--adam-padding-inline);
+	padding-inline-start: var(--padding-inline);
 
-	border: var(--adam-outer-border-block-style) var(--adam-border-width) var(--adam-outer-border-color);
-	border-inline-style: var(--adam-inner-border-inline-style);
-	border-radius: var(--adam-border-outer-radius);
+	border: var(--outer-border-block-style) var(--border-width) var(--outer-border-color);
+	border-inline-style: var(--inner-border-inline-style);
+	border-radius: var(--border-outer-radius);
 
 	pointer-events: none;
 
@@ -33,9 +33,9 @@
 }
 
 label {
-	margin-inline-start: calc(var(--adam-margin-inline) + var(--adam-icon-spacing));
+	margin-inline-start: calc(var(--margin-inline) + var(--icon-spacing));
 
-	color: var(--adam-text-color);
+	color: var(--text-color);
 
 	transform-origin: left top;
 	transform: none;
@@ -55,32 +55,32 @@ select {
 	-webkit-appearance: none;
 	appearance: none;
 
-	background-color: var(--adam-bg-color);
-	color: var(--adam-text-color);
+	background-color: var(--bg-color);
+	color: var(--text-color);
 	font-size: 100%;
 
 	display: block;
 
-	margin: var(--adam-border-full);
-	padding-block: var(--adam-padding-block);
-	padding-inline: var(--adam-padding-inline);
-	padding-inline-end: var(--adam-icon-size);
-	padding-inline-start: calc(var(--adam-padding-inline) + var(--adam-icon-spacing));
+	margin: var(--border-full);
+	padding-block: var(--padding-block);
+	padding-inline: var(--padding-inline);
+	padding-inline-end: var(--icon-size);
+	padding-inline-start: calc(var(--padding-inline) + var(--icon-spacing));
 
-	border: var(--adam-inner-border-block-style) var(--adam-inner-border-color) var(--adam-border-width);
-	border-inline-style: var(--adam-inner-border-inline-style);
-	border-radius: var(--adam-border-inner-radius);
+	border: var(--inner-border-block-style) var(--inner-border-color) var(--border-width);
+	border-inline-style: var(--inner-border-inline-style);
+	border-radius: var(--border-inner-radius);
 
-	height: calc(var(--adam-font-size) + var(--adam-padding-inline) + var(--adam-border-full) * 2);
+	height: calc(var(--font-size) + var(--padding-inline) + var(--border-full) * 2);
 	grid-area: select;
 }
 
 #outer-border::after {
-	color: var(--adam-inner-border-color);
+	color: var(--inner-border-color);
 	cursor: pointer;
 	content: '🛆\FE0E';
 	display: inline-block;
-	margin: var(--adam-padding-inline);
+	margin: var(--padding-inline);
 	rotate: 180deg;
 }
 
@@ -107,31 +107,31 @@ select:focus { outline: none; }
 #info-text, #error-text {
 	grid-row: 1;
 	grid-column: 1;
-	margin-inline: var(--adam-margin-inline);
-	max-height: var(--adam-info-box-max-size);
+	margin-inline: var(--margin-inline);
+	max-height: var(--info-box-max-size);
 	overflow: auto;
 
-	padding-block: var(--adam-padding-block);
-	padding-inline: var(--adam-padding-inline);
+	padding-block: var(--padding-block);
+	padding-inline: var(--padding-inline);
 	display: block;
 
-	font-size: calc(var(--adam-label-scale) * 1rem);
-	color: var(--adam-text-color);
+	font-size: calc(var(--label-scale) * 1rem);
+	color: var(--text-color);
 
-	border: var(--adam-inner-border-block-style) var(--adam-border-width) var(--adam-outer-border-color);
+	border: var(--inner-border-block-style) var(--border-width) var(--outer-border-color);
 	border-block-start-color: transparent;
-	border-radius: var(--adam-border-inner-radius);
+	border-radius: var(--border-inner-radius);
 
-	background: var(--adam-bg-color);
+	background: var(--bg-color);
 	background-clip: padding-box;
 
-	transform: scale(var(--adam-label-scale));
+	transform: scale(var(--label-scale));
 	transform-origin: center top;
 	opacity: 0.2;
 }
 
 #error-text {
-	margin-block-start: calc(var(--adam-border-spacing) * 2 + var(--adam-border-width));
+	margin-block-start: calc(var(--border-spacing) * 2 + var(--border-width));
 	opacity: 0;
 	transform: translateY(-100%);
 }
@@ -141,16 +141,16 @@ select:focus { outline: none; }
 }
 
 #attention-marker {
-	border: var(--adam-outer-border-block-style) var(--adam-inner-border-color) var(--adam-border-width);
+	border: var(--outer-border-block-style) var(--inner-border-color) var(--border-width);
 	z-index: 1;
 
-	padding: calc(var(--adam-border-spacing) * 0.5);
-	width: calc(var(--adam-border-full) * 3);
-	height: calc(var(--adam-border-full) * 3);
+	padding: calc(var(--border-spacing) * 0.5);
+	width: calc(var(--border-full) * 3);
+	height: calc(var(--border-full) * 3);
 
-	margin-inline: calc(var(--adam-border-full) * -1);
+	margin-inline: calc(var(--border-full) * -1);
 
-	border-radius: calc(var(--adam-border-width) * 6);
+	border-radius: calc(var(--border-width) * 6);
 
 	transform-origin: center;
 	scale: 0;
@@ -165,23 +165,23 @@ select:focus { outline: none; }
 	width: 100%;
 	height: 100%;
 	border-radius: inherit;
-	background-color: var(--adam-outer-border-color);
+	background-color: var(--outer-border-color);
 }
 
 #required-text {
-	color: var(--adam-required-inner-border);
+	color: var(--required-inner-border);
 }
 
 select:required,
 input:required ~ * {
-	--adam-bg-color: var(--adam-required-bg);
-	--adam-text-color: var(--adam-required-text);
-	--adam-inner-border-color: var(--adam-required-inner-border);
-	--adam-outer-border-color: var(--adam-required-outer-border);
-	--adam-inner-border-inline-style: var(--adam-required-inner-border-inline-style);
-	--adam-inner-border-block-style: var(--adam-required-inner-border-block-style);
-	--adam-outer-border-inline-style: var(--adam-required-outer-border-inline-style);
-	--adam-outer-border-block-style: var(--adam-required-outer-border-block-style);
+	--bg-color: var(--required-bg);
+	--text-color: var(--required-text);
+	--inner-border-color: var(--required-inner-border);
+	--outer-border-color: var(--required-outer-border);
+	--inner-border-inline-style: var(--required-inner-border-inline-style);
+	--inner-border-block-style: var(--required-inner-border-block-style);
+	--outer-border-inline-style: var(--required-outer-border-inline-style);
+	--outer-border-block-style: var(--required-outer-border-block-style);
 }
 
 select:required ~ #attention-marker {
@@ -190,7 +190,7 @@ select:required ~ #attention-marker {
 }
 
 select:required:not(:focus) {
-	--adam-inner-border-color: var(--adam-input-inner-border);
+	--inner-border-color: var(--input-inner-border);
 }
 
 select:not(:required) ~ label > #required-text {
@@ -200,21 +200,21 @@ select:not(:required) ~ label > #required-text {
 /* Invalid */
 select:not(:focus):not(:hover):required:invalid,
 select:not(:focus):not(:hover):required:invalid ~ * {
-	--adam-bg-color: var(--adam-invalid-bg);
-	--adam-text-color: var(--adam-invalid-text);
-	--adam-inner-border-color: var(--adam-invalid-inner-border);
-	--adam-outer-border-color: var(--adam-invalid-outer-border);
-	--adam-inner-border-inline-style: var(--adam-invalid-inner-border-inline-style);
-	--adam-inner-border-block-style: var(--adam-invalid-inner-border-block-style);
-	--adam-outer-border-inline-style: var(--adam-invalid-outer-border-inline-style);
-	--adam-outer-border-block-style: var(--adam-invalid-outer-border-block-style);
+	--bg-color: var(--invalid-bg);
+	--text-color: var(--invalid-text);
+	--inner-border-color: var(--invalid-inner-border);
+	--outer-border-color: var(--invalid-outer-border);
+	--inner-border-inline-style: var(--invalid-inner-border-inline-style);
+	--inner-border-block-style: var(--invalid-inner-border-block-style);
+	--outer-border-inline-style: var(--invalid-outer-border-inline-style);
+	--outer-border-block-style: var(--invalid-outer-border-block-style);
 }
 
 select:not(:focus):required:invalid ~ #info-box #error-text {
 	transform: none;
 	opacity: 1;
 
-	border-color: var(--adam-inner-border-color);
+	border-color: var(--inner-border-color);
 }
 
 select:not(:focus):required:invalid ~ #info-box #info-text {
@@ -224,14 +224,14 @@ select:not(:focus):required:invalid ~ #info-box #info-text {
 /* Valid */
 select:not(:focus):not(:hover):required:valid,
 select:not(:focus):not(:hover):required:valid ~ * {
-	--adam-bg-color: var(--adam-valid-bg);
-	--adam-text-color: var(--adam-valid-text);
-	--adam-inner-border-color: var(--adam-valid-inner-border);
-	--adam-outer-border-color: var(--adam-valid-outer-border);
-	--adam-inner-border-inline-style: var(--adam-valid-inner-border-inline-style);
-	--adam-inner-border-block-style: var(--adam-valid-inner-border-block-style);
-	--adam-outer-border-inline-style: var(--adam-valid-outer-border-inline-style);
-	--adam-outer-border-block-style: var(--adam-valid-outer-border-block-style);
+	--bg-color: var(--valid-bg);
+	--text-color: var(--valid-text);
+	--inner-border-color: var(--valid-inner-border);
+	--outer-border-color: var(--valid-outer-border);
+	--inner-border-inline-style: var(--valid-inner-border-inline-style);
+	--inner-border-block-style: var(--valid-inner-border-block-style);
+	--outer-border-inline-style: var(--valid-outer-border-inline-style);
+	--outer-border-block-style: var(--valid-outer-border-block-style);
 }
 
 select:not(:focus):required:valid ~ #info-box #info-text {
@@ -247,27 +247,27 @@ select:not(:focus):required:valid ~ #attention-marker {
 /* Hover */
 select:hover,
 select:hover ~ * {
-	--adam-bg-color: var(--adam-hover-bg);
-	--adam-text-color: var(--adam-hover-text);
-	--adam-inner-border-color: var(--adam-hover-inner-border);
-	--adam-outer-border-color: var(--adam-hover-outer-border);
-	--adam-inner-border-inline-style: var(--adam-hover-inner-border-inline-style);
-	--adam-inner-border-block-style: var(--adam-hover-inner-border-block-style);
-	--adam-outer-border-inline-style: var(--adam-hover-outer-border-inline-style);
-	--adam-outer-border-block-style: var(--adam-hover-outer-border-block-style);
+	--bg-color: var(--hover-bg);
+	--text-color: var(--hover-text);
+	--inner-border-color: var(--hover-inner-border);
+	--outer-border-color: var(--hover-outer-border);
+	--inner-border-inline-style: var(--hover-inner-border-inline-style);
+	--inner-border-block-style: var(--hover-inner-border-block-style);
+	--outer-border-inline-style: var(--hover-outer-border-inline-style);
+	--outer-border-block-style: var(--hover-outer-border-block-style);
 }
 
 /* Focus */
 select:focus,
 select:focus ~ * {
-	--adam-bg-color: var(--adam-focus-bg);
-	--adam-text-color: var(--adam-focus-text);
-	--adam-inner-border-color: var(--adam-focus-inner-border);
-	--adam-outer-border-color: var(--adam-focus-outer-border);
-	--adam-inner-border-inline-style: var(--adam-focus-inner-border-inline-style);
-	--adam-inner-border-block-style: var(--adam-focus-inner-border-block-style);
-	--adam-outer-border-inline-style: var(--adam-focus-outer-border-inline-style);
-	--adam-outer-border-block-style: var(--adam-focus-outer-border-block-style);
+	--bg-color: var(--focus-bg);
+	--text-color: var(--focus-text);
+	--inner-border-color: var(--focus-inner-border);
+	--outer-border-color: var(--focus-outer-border);
+	--inner-border-inline-style: var(--focus-inner-border-inline-style);
+	--inner-border-block-style: var(--focus-inner-border-block-style);
+	--outer-border-inline-style: var(--focus-outer-border-inline-style);
+	--outer-border-block-style: var(--focus-outer-border-block-style);
 }
 
 select:focus ~ #outer-border::after {
@@ -284,27 +284,27 @@ option {
 }
 
 :host optgroup {
-	font-weight: var(--adam-font-bold);
-	color: var(--adam-option-group-text);
+	font-weight: var(--font-bold);
+	color: var(--option-group-text);
 }
 
 :host optgroup option {
-	color: var(--adam-text-color);
-	font-weight: var(--adam-font-normal);
+	color: var(--text-color);
+	font-weight: var(--font-normal);
 }
 
 :host option:hover {
-	color: var(--adam-focus-inner-border);
-	background: var(--adam-hover-bg)
+	color: var(--focus-inner-border);
+	background: var(--hover-bg)
 }
 
 option:disabled {
-	color: var(--adam-disabled-text);
+	color: var(--disabled-text);
 }
 
 option:checked {
-	color: var(--adam-valid-text);
-	background: var(--adam-valid-bg);
+	color: var(--valid-text);
+	background: var(--valid-bg);
 }
 
 select[multiple] optgroup,

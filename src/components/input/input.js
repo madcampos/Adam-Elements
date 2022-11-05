@@ -71,16 +71,16 @@ class AdamInput extends AdamElement {
 	}
 
 	mounted() {
-		this.#input = this.root.querySelector('input');
+		this.#input = this.#root.querySelector('input');
 
 		if (!this.#input.checkValidity()) {
-			this.root.querySelector('#error-text').innerText = this.#input.validationMessage;
+			this.#root.querySelector('#error-text').innerText = this.#input.validationMessage;
 		}
 
 		this.#input.addEventListener('change', (evt) => {
 			evt.target.checkValidity();
 
-			this.internals.setFormValue(this.#input.value);
+			this.#internals.setFormValue(this.#input.value);
 			this.dispatchEvent(new CustomEvent('change', { bubbles: true, composed: true }));
 		});
 
@@ -88,14 +88,14 @@ class AdamInput extends AdamElement {
 			evt.preventDefault();
 			evt.stopPropagation();
 
-			this.root.querySelector('#error-text').innerText = evt.target.validationMessage;
+			this.#root.querySelector('#error-text').innerText = evt.target.validationMessage;
 
-			this.internals.setValidity(this.#input.validity);
+			this.#internals.setValidity(this.#input.validity);
 			this.dispatchEvent(new CustomEvent('invalid', { bubbles: true, composed: true }));
 		});
 
 		if (this.#input.type === 'password') {
-			this.root.addEventListener('click', (evt) => {
+			this.#root.addEventListener('click', (evt) => {
 				if (evt.target.matches('#outer-border')) {
 					if (this.#input.hasAttribute('show-password')) {
 						this.#input.removeAttribute('show-password');
@@ -109,7 +109,7 @@ class AdamInput extends AdamElement {
 		}
 
 		if (['tel', 'url', 'email'].includes(this.#input.type)) {
-			this.root.addEventListener('click', (evt) => {
+			this.#root.addEventListener('click', (evt) => {
 				if (evt.target.matches('#outer-border')) {
 					const hasValue = evt.target.parentElement.querySelector('input').value !== '';
 					const isValid = evt.target.parentElement.querySelector('input').checkValidity();

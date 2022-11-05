@@ -1,15 +1,68 @@
 {
-  "name": "adam-elements",
-  "version": "1.0.0",
-  "description": "Adam elements implemented as web components",
-  "main": "index.html",
-  "scripts": {},
-  "author": "madcampos",
-  "license": "MIT",
-  "devDependencies": {
-    "@typescript-eslint/parser": "^4.8.1",
-    "eslint": "^7.13.0",
-    "eslint-plugin-jsdoc": "^30.7.8",
-    "typescript": "^4.0.5"
-  }
+	"name": "adam-elements",
+	"private": true,
+	"version": "1.0.0",
+	"description": "Adam elements implemented as web components",
+	"homepage": "https://madcampos.github.io/adam-elements/",
+	"author": {
+		"name": "madcampos",
+		"email": "madcampos@outlook.com"
+	},
+	"license": "MIT",
+	"browser": "./dist/index.html",
+	"type": "module",
+	"scripts": {
+		"postinstall": "husky install",
+		"start": "vite",
+		"start:sw": "vite",
+		"typecheck": "tsc --noEmit",
+		"lint": "npm run typecheck && npm run lint:js && npm run lint:css",
+		"lint:js": "eslint src --ext .js,.mjs,.ts,.mts --fix --ignore-path .gitignore",
+		"lint:css": "stylelint **/*.css --fix",
+		"lint-staged": "lint-staged",
+		"prebuild:app": "npm run lint",
+		"build:app": "vite build",
+		"prepreview": "npm run build:app",
+		"preview": "vite preview --port 3000",
+		"test": "vitest",
+		"test:coverage": "vitest run --coverage"
+	},
+	"devDependencies": {
+		"@types/node": "^18.11.9",
+		"@commitlint/cli": "^17.2.0",
+		"@commitlint/config-conventional": "^17.2.0",
+		"@typescript-eslint/eslint-plugin": "^5.42.0",
+		"@typescript-eslint/parser": "^5.42.0",
+		"c8": "^7.12.0",
+		"eslint": "^8.26.0",
+		"husky": "^8.0.1",
+		"lint-staged": "^13.0.3",
+		"stylelint": "^14.14.1",
+		"typescript": "^4.8.4",
+		"vite": "^3.2.2",
+		"vite-plugin-chunk-split": "^0.4.3",
+		"vitest": "^0.24.5"
+	},
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"lint-staged": {
+		"*.ts": [
+			"eslint --ext .ts --fix",
+			"vitest related"
+		],
+		"*.js": [
+			"eslint --ext .js --fix",
+			"vitest related"
+		],
+		"*.css": "stylelint --fix"
+	},
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
+		]
+	},
+	"volta": {
+		"node": "18.12.0"
+	}
 }

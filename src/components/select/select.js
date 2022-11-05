@@ -58,7 +58,7 @@ class AdamSelect extends AdamElement {
 			this.placeholder = '...';
 		}
 
-		this.root.addEventListener('slotchange', (evt) => {
+		this.#root.addEventListener('slotchange', (evt) => {
 			if (!evt.target.name) {
 				const optionList = [...evt.target.assignedElements()].filter((el) => el instanceof HTMLOptGroupElement || el instanceof HTMLOptionElement);
 
@@ -70,16 +70,16 @@ class AdamSelect extends AdamElement {
 	}
 
 	mounted() {
-		this.#select = this.root.querySelector('select');
+		this.#select = this.#root.querySelector('select');
 
 		if (!this.#select.checkValidity()) {
-			this.root.querySelector('#error-text').innerText = this.#select.validationMessage;
+			this.#root.querySelector('#error-text').innerText = this.#select.validationMessage;
 		}
 
 		this.#select.addEventListener('change', (evt) => {
 			evt.target.checkValidity();
 
-			this.internals.setFormValue(this.#select.value);
+			this.#internals.setFormValue(this.#select.value);
 			this.dispatchEvent(new CustomEvent('change', { bubbles: true, composed: true }));
 		});
 
@@ -87,9 +87,9 @@ class AdamSelect extends AdamElement {
 			evt.preventDefault();
 			evt.stopPropagation();
 
-			this.root.querySelector('#error-text').innerText = evt.target.validationMessage;
+			this.#root.querySelector('#error-text').innerText = evt.target.validationMessage;
 
-			this.internals.setValidity(this.#select.validity);
+			this.#internals.setValidity(this.#select.validity);
 			this.dispatchEvent(new CustomEvent('invalid', { bubbles: true, composed: true }));
 		});
 	}

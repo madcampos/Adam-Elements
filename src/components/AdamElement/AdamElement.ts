@@ -12,43 +12,26 @@ interface WatchedPropDefinition<T extends PropTypeNames = PropTypeNames> {
 	prop: string,
 	type: T,
 	validate?: PropValidationHandler<T>,
-	defaultValue?: PropTypes<T>,
+	defaultValue: PropTypes<T>,
 	attributeName?: string,
 	selector?: string
 }
 
-type PropBindingType = 'element' | 'attribute';
-
-interface PropbindingBase<T extends PropBindingType> {
+interface PropBinding {
 	propName: string,
-	type: T,
-	boundElement: HTMLElement
+	boundElement: HTMLElement,
+	boundAttribute?: string
 }
 
-type PropBindingToElement = PropbindingBase<'element'>;
-
-type PropbindingToattribute = PropbindingBase<'attribute'> & {
-	attributeName: string
-};
-
-type PropBinding<T extends PropBindingType> = T extends 'element'
-	? PropBindingToElement
-	: PropbindingToattribute;
-
-interface WatchedPropBase <T extends PropTypeNames> {
+interface WatchedProp<T extends PropTypeNames> {
 	propName: string,
+	value: PropTypes<T>,
 	propType: T,
 	validate?: PropValidationHandler<T>,
-	defaultValue?: PropTypes<T>,
-	attributeName?: string
+	attributeName?: string,
+	boundAttributes: Record<string, HTMLElement>,
+	boundElements: HTMLElement[]
 }
-
-type WatchedProp<T extends PropTypeNames, U extends PropBindingType | undefined> = U extends PropBindingType
-	? WatchedPropBase<T> & {
-		bindingType: U,
-		boundElement: HTMLElement
-	}
-	: WatchedPropBase<T>;
 
 type WatchedSlotHandler = (evt: Event) => void;
 
@@ -70,8 +53,9 @@ interface AdamElementConstructor {
 
 export class AdamElement extends HTMLElement {
 	#watchedSlots: WatchedSlots = {};
-	#watchedProps: WatchedProp<PropTypeNames, PropBindingType | undefined>[] = [];
-	#root: DocumentFragment;
+	#watchedProps = new Map<string, WatchedProp<PropTypeNames>>();
+	#watchedAttributes = new Map<string, string>();
+	#root: ShadowRoot;
 	#internals: ElementInternals;
 	#elementId = 'NO ID';
 
@@ -97,24 +81,26 @@ export class AdamElement extends HTMLElement {
 
 		this.#root.appendChild(parsedTemplate.content.cloneNode(true));
 
+		for (const prop of watchedProps ?? []) {
+			this.watchProp(prop);
+		}
+
 		for (const prop of props) {
-			if (!watchedProps?.find((watchedProp) => watchedProp.prop === prop.propName)) {
+			if (!this.#watchedProps.has(prop.propName)) {
 				throw new Error(`Prop "${prop.propName}" is not defined in watched props`);
 			}
 
-			// TODO: watch prop
+			if (!prop.boundAttribute) {
+				this.#bindPropToInternalElement(prop.propName, prop.boundElement);
+			} else {
+				this.#bindPropToInternalAttribute(prop.propName, prop.boundAttribute, prop.boundElement);
+			}
 		}
 
 		for (const attribute of watchedAttributes ?? []) {
-			if (!watchedProps?.find(({ prop }) => prop === attribute)) {
+			if (!this.#watchedAttributes.has(attribute)) {
 				throw new Error(`Attribute "${attribute}" is not defined in props`);
 			}
-
-			// TODO: watch prop
-		}
-
-		for (const prop of watchedProps ?? []) {
-			this.watchProp(prop);
 		}
 
 		if (watchedSlots) {
@@ -134,6 +120,18 @@ export class AdamElement extends HTMLElement {
 		return `adam-${Math.trunc(Math.random() * 10000000).toString(16)}`;
 	}
 
+	get elementId() {
+		return this.#elementId;
+	}
+
+	get root() {
+		return this.#root;
+	}
+
+	get internals() {
+		return this.#internals;
+	}
+
 	#parseTemplate(template?: ElementTemplate) {
 		const tempTemplate = document.createElement('template');
 
@@ -145,13 +143,7 @@ export class AdamElement extends HTMLElement {
 			throw new TypeError('Template must be a string or HTMLTemplateElement');
 		}
 
-		const parsedProps: PropBinding<PropBindingType>[] = [];
-		const templateMatches = tempTemplate.innerHTML.matchAll(/\{([a-z][a-z0-9]+?)\}/giu);
-
-		for (const match of templateMatches) {
-			// TODO: parse props and push them to the parsed props array.
-			// TODO: add special case for form elements
-		}
+		const parsedProps = AdamElement.templateParser(tempTemplate);
 
 		return {
 			template: tempTemplate,
@@ -200,51 +192,114 @@ export class AdamElement extends HTMLElement {
 	}
 
 	#getPropValue(prop: string) {
-		// TODO: implement
+		if (!this.#watchedProps.has(prop)) {
+			throw new Error(`Prop "${prop}" is not defined in watched props`);
+		}
+
+		return this.#watchedProps.get(prop)?.value;
 	}
 
-	#updateProp<T extends PropTypeNames>(prop: string, value: T, attributeName?: string, validate?: PropValidationHandler<T>) {
-		// TODO: implement
+	#updateProp<T extends PropTypeNames>(propName: string, value: PropTypes<T>, forceUpdate = false) {
+		if (this.#watchedProps.has(propName)) {
+			const prop = this.#watchedProps.get(propName) as WatchedProp<T>;
+
+			if (prop.value !== value || forceUpdate) {
+				prop.validate?.(value);
+
+				prop.value = value;
+
+				// TODO: Update attribute, if exists
+				// TODO: Update internal element, if exists
+			}
+		}
 	}
 
 	#renderTemplate() {
-		// TODO: render template based on prop changes.
-		// let tempTemplate = document.createElement('template');
-
-		// if (typeof this.#template === 'string') {
-		// 	const interpolatedTemplate = this.#template.replaceAll(/\{([a-z0-9]+?)\}/giu, (_match, prop) => this[prop] ?? '');
-
-		// 	tempTemplate.innerHTML = interpolatedTemplate;
-		// } else if (document.querySelector(this.#template)?.content) {
-		// 	tempTemplate = document.querySelector(this.#template);
-		// }
-
-		// const newTemplate = tempTemplate.content.cloneNode(true);
-
-		// newTemplate.id = this.#templateId;
-
-		// if (this.#root.querySelector(`#${this.#templateId}`)) {
-		// 	this.#root.removeChild(this.#root.querySelector(`#${this.#templateId}`));
-		// }
-
-		// this.#root.appendChild(newTemplate);
+		// TODO: render template based on prop changes?
 	}
 
-	#bindPropToAttribute<T extends PropTypeNames>(prop: string, attributeName: string) {
-		// TODO: implement
+	#bindPropToInternalAttribute(prop: string, attributeName: string, element: HTMLElement) {
+		if (!this.#watchedProps.has(prop)) {
+			throw new Error(`Prop "${prop}" is not defined in watched props`);
+		}
+
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		this.#watchedProps.get(prop)!.boundAttributes[attributeName] = element;
 	}
 
-	#bindPropToElement<T extends PropTypeNames>(prop: string, selector: string) {
-		// TODO: implement
+	#bindPropToInternalElement(prop: string, element: HTMLElement) {
+		if (!this.#watchedProps.has(prop)) {
+			throw new Error(`Prop "${prop}" is not defined in watched props`);
+		}
+
+		this.#watchedProps.get(prop)?.boundElements.push(element);
 	}
 
-	get elementId() {
-		return this.#elementId;
+	static templateParser(template: HTMLTemplateElement) {
+		const props: PropBinding[] = [];
+
+		const processNode = (node: Node) => {
+			if (node.nodeType === Node.ELEMENT_NODE) {
+				const { attributes } = node as Element;
+
+				for (const attribute of attributes) {
+					if ((/^(?:a-on:|a-bind:|@|:)/giu).test(attribute.name)) {
+						const attributeName = attribute.name.replace(/^(?:a-on:|a-bind:|@|:)/giu, '');
+						const prop = attribute.value;
+
+						props.push({
+							propName: prop,
+							boundElement: node as HTMLElement,
+							boundAttribute: attributeName
+						});
+					}
+				}
+			}
+
+			if (node.nodeType === Node.TEXT_NODE) {
+				const propMatch = node.textContent?.matchAll(/\{\{([a-z][a-z0-9]+?)\}\}/giu) ?? [];
+
+				for (const [, prop] of propMatch) {
+					props.push({
+						propName: prop,
+						boundElement: node.parentElement as HTMLElement
+					});
+				}
+			}
+
+			if (node.hasChildNodes()) {
+				node.childNodes.forEach((childNode) => {
+					processNode(childNode);
+				});
+			}
+		};
+
+		processNode(template.content);
+
+		return props;
 	}
 
-	watchProp({ prop, type, defaultValue, attributeName, validate }: WatchedPropDefinition) {
+	watchProp({ prop, type, defaultValue, attributeName, validate, selector }: WatchedPropDefinition) {
 		if (!(prop in this)) {
-			this.#watchedProps.push({ propName: prop, attributeName, propType: type, validate });
+			this.#watchedProps.set(prop, {
+				propName: prop,
+				value: defaultValue,
+				boundAttributes: [],
+				boundElements: [],
+				propType: type,
+				validate,
+				attributeName
+			});
+
+			if (attributeName) {
+				this.#watchedAttributes.set(attributeName, prop);
+			}
+
+			if (selector) {
+				this.#root.querySelectorAll<HTMLElement>(selector).forEach((element) => {
+					this.#bindPropToInternalElement(prop, element);
+				});
+			}
 
 			Object.defineProperty(this, prop, {
 				configurable: false,
@@ -253,46 +308,42 @@ export class AdamElement extends HTMLElement {
 					return this.#getPropValue(prop);
 				},
 				set(value: PropTypes<typeof type>) {
-					this.#updateProp(prop, value, attributeName, validate);
+					this.#updateProp(prop, value);
 				}
 			});
-
-			if (defaultValue !== undefined) {
-				this[prop] = defaultValue;
-			}
 		}
 	}
 
 	addStyleURL(url: string) {
-		// TODO: implement
+		const stylesheet = document.createElement('link');
+
+		stylesheet.rel = 'stylesheet';
+		stylesheet.href = url;
+
+		this.#root.insertBefore(stylesheet, this.#root.firstChild);
 	}
 
-	addStyle(styleOrScriptURL) {
-		// const baseURL = new URL(styleOrScriptURL);
+	addStyle(style: string | CSSStyleSheet) {
+		if (typeof style === 'string') {
+			const stylesheet = document.createElement('style');
 
-		// const pathParts = baseURL.pathname.split('/');
-		// const file = pathParts.pop();
+			stylesheet.innerHTML = style;
 
-		// const [fileName] = file.split('.');
-
-		// const newFileURL = [...pathParts, `${fileName}.css`].join('/');
-
-		// const style = document.createElement('style');
-
-		// style.textContent = ':host { display: none; }';
-		// this.#root.insertBefore(style, this.#root.firstChild);
-
-		// void fetch(newFileURL).then((res) => res.text()).then((cssText) => {
-		// 	style.textContent = cssText;
-		// });
+			this.#root.insertBefore(stylesheet, this.#root.firstChild);
+		} else {
+			this.#root.adoptedStyleSheets = [...this.#root.adoptedStyleSheets, style];
+		}
 	}
 
 	attributeChangedCallback(name: string, oldValue: string, newValue: string) {
 		if (oldValue !== newValue) {
-			const prop = this.#watchedProps.find((watchedProp) => watchedProp.attributeName === name);
+			const propName = this.#watchedAttributes.get(name) ?? '';
+			const prop = this.#watchedProps.get(propName);
 
 			if (prop) {
-				this[prop.propName] = this.#parseValue(newValue, prop.propType);
+				const propValue = this.#parseValue(newValue, prop.propType);
+
+				this.#updateProp(prop.propName, propValue);
 			}
 		}
 	}

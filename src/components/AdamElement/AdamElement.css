@@ -1,5 +1,6 @@
-/* TODO: Update variables to be set on :host and use names without prefixes */
+/* TODO Update variables to be set on :host and use names without prefixes */
 /* Font */
+
 @property --font-family {
 	syntax: '<custom-ident> | <string>';
 	inherits: false;
@@ -31,6 +32,7 @@
 }
 
 /* Transition */
+
 @property --transition-function {
 	syntax: '<custom-ident>';
 	inherits: false;
@@ -44,6 +46,7 @@
 }
 
 /* Borders */
+
 @property --border-inner-radius {
 	syntax: '<length>';
 	inherits: false;
@@ -75,6 +78,7 @@
 }
 
 /* Padding */
+
 @property --padding-inline {
 	syntax: '<length>';
 	inherits: false;
@@ -88,6 +92,7 @@
 }
 
 /* Margin */
+
 @property --margin-inline {
 	syntax: '<length>';
 	inherits: false;
@@ -101,6 +106,7 @@
 }
 
 /* Sizes */
+
 @property --label-top-space {
 	syntax: '<length>';
 	inherits: false;
@@ -120,6 +126,7 @@
 }
 
 /* Input base */
+
 @property --input-min-size {
 	syntax: '<length>';
 	inherits: false;
@@ -181,6 +188,7 @@
 }
 
 /* Input Hover */
+
 @property --hover-bg {
 	syntax: '<color>';
 	inherits: false;
@@ -230,6 +238,7 @@
 }
 
 /* Input Focus */
+
 @property --focus-bg {
 	syntax: '<color>';
 	inherits: false;
@@ -279,6 +288,7 @@
 }
 
 /* Input Disabled */
+
 @property --disabled-bg {
 	syntax: '<color>';
 	inherits: false;
@@ -328,6 +338,7 @@
 }
 
 /* Input Required */
+
 @property --required-bg {
 	syntax: '<color>';
 	inherits: false;
@@ -377,6 +388,7 @@
 }
 
 /* Input Invalid */
+
 @property --invalid-bg {
 	syntax: '<color>';
 	inherits: false;
@@ -426,6 +438,7 @@
 }
 
 /* Input Valid */
+
 @property --valid-bg {
 	syntax: '<color>';
 	inherits: false;
@@ -475,6 +488,7 @@
 }
 
 /* Select/options style */
+
 @property --option-group-text {
 	syntax: '<color>';
 	inherits: false;
@@ -482,6 +496,7 @@
 }
 
 /* Dynamic styles */
+
 @property --bg-color {
 	syntax: '<color>';
 	inherits: true;
@@ -497,7 +512,7 @@
 @property --icon-spacing {
 	syntax: '<length>';
 	inherits: false;
-	initial-value: 0px;
+	initial-value: 0;
 }
 
 @property --inner-border-color {
@@ -618,8 +633,8 @@
 	/* Input requried */
 	--required-bg: rgba(0, 0, 0, 0.2);
 	--required-text: rgba(255, 255, 255, 0.5);
-	--required-inner-border: #E3FF00;
-	--required-outer-border: rgba(169, 169, 169, 1);
+	--required-inner-border: #e3ff00;
+	--required-outer-border: darkgray;
 
 	--required-inner-border-inline-style: dashed;
 	--required-inner-border-block-style: dashed;

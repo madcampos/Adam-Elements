@@ -1,3 +1,5 @@
+/* stylelint-disable no-descending-specificity */
+
 :host > div {
 	margin: var(--margin-block);
 	width: var(--input-max-size);
@@ -52,7 +54,6 @@ label {
 }
 
 input {
-	-webkit-appearance: none;
 	appearance: none;
 
 	background-color: var(--bg-color);
@@ -74,27 +75,27 @@ input {
 	grid-area: input;
 }
 
-input[type="search"]::-webkit-search-cancel-button { display: none; }
-input[type="password"]::-ms-reveal { display: none; }
+input[type='search']::-webkit-search-cancel-button { display: none; }
+input[type='password']::-ms-reveal { display: none; }
 
-input:is([type="tel"], [type="url"], [type="email"], [type="search"], [type="password"], [show-password]),
-input:is([type="tel"], [type="url"], [type="email"], [type="search"], [type="password"], [show-password]) ~ label {
+input:is([type='tel'], [type='url'], [type='email'], [type='search'], [type='password'], [show-password]),
+input:is([type='tel'], [type='url'], [type='email'], [type='search'], [type='password'], [show-password]) ~ label {
 	--icon-spacing: var(--icon-size);
 }
 
-input:is([type="tel"], [type="url"], [type="email"], [type="search"], [type="password"], [show-password]) ~ #outer-border::before {
+input:is([type='tel'], [type='url'], [type='email'], [type='search'], [type='password'], [show-password]) ~ #outer-border::before {
 	color: var(--inner-border-color);
 	content: var(--input-icon);
 	cursor: pointer;
 	pointer-events: all;
 }
 
-input[type="tel"] ~ #outer-border { --input-icon: '📞\FE0E'; }
-input[type="url"] ~ #outer-border { --input-icon: '🔗\FE0E'; }
-input[type="email"] ~ #outer-border { --input-icon: '📧\FE0E'; }
-input[type="search"] ~ #outer-border { --input-icon: '🔎\FE0E'; }
-input[type="password"] ~ #outer-border { --input-icon: '🔒\FE0E'; }
-input[type="text"][show-password] ~ #outer-border { --input-icon: '🔓\FE0E'; }
+input[type='tel'] ~ #outer-border { --input-icon: '📞\FE0E'; }
+input[type='url'] ~ #outer-border { --input-icon: '🔗\FE0E'; }
+input[type='email'] ~ #outer-border { --input-icon: '📧\FE0E'; }
+input[type='search'] ~ #outer-border { --input-icon: '🔎\FE0E'; }
+input[type='password'] ~ #outer-border { --input-icon: '🔒\FE0E'; }
+input[type='text'][show-password] ~ #outer-border { --input-icon: '🔓\FE0E'; }
 
 input::placeholder {
 	color: transparent;
@@ -184,6 +185,7 @@ input:focus { outline: none; }
 }
 
 /* Required */
+
 input:required,
 input:required ~ * {
 	--bg-color: var(--required-bg);
@@ -210,6 +212,7 @@ input:not(:required) ~ label > #required-text {
 }
 
 /* Invalid */
+
 input:not(:focus):not(:placeholder-shown):not(:hover):invalid,
 input:not(:focus):not(:placeholder-shown):not(:hover):invalid ~ * {
 	--bg-color: var(--invalid-bg);
@@ -234,6 +237,7 @@ input:not(:focus):not(:placeholder-shown):invalid ~ #info-box #info-text {
 }
 
 /* Valid */
+
 input:not(:focus):not(:placeholder-shown):not(:hover):valid,
 input:not(:focus):not(:placeholder-shown):not(:hover):valid ~ * {
 	--bg-color: var(--valid-bg);
@@ -257,6 +261,7 @@ input:not(:focus):not(:placeholder-shown):valid ~ #attention-marker {
 }
 
 /* Hover */
+
 input:hover,
 input:hover ~ * {
 	--bg-color: var(--hover-bg);
@@ -270,6 +275,7 @@ input:hover ~ * {
 }
 
 /* Focus */
+
 :host(:focus-within) {
 	--bg-color: var(--focus-bg);
 	--text-color: var(--focus-text);
@@ -288,8 +294,7 @@ input:not(:placeholder-shown) ~ label {
 	transform:
 		translateY(calc(-100% + (var(--margin-block) * -2)))
 		translateX(calc((var(--margin-inline) + var(--icon-spacing)) * -1))
-		scale(var(--label-scale))
-	;
+		scale(var(--label-scale));
 
 	/* margin-inline-start: 0; */
 
@@ -302,6 +307,7 @@ input:not(:placeholder-shown) ~ label {
 }
 
 /* Disabled */
+
 input:disabled,
 input:disabled ~ * {
 	--bg-color: var(--disabled-bg);

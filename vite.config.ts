@@ -2,8 +2,8 @@
 // eslint-env node
 import { readFileSync } from 'fs';
 
-import { defineConfig } from 'vitest/config';
-import { loadEnv } from 'vite';
+import { defineConfig, type UserConfig } from 'vitest/config';
+import { loadEnv, type PluginOption } from 'vite';
 import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
 
 const sslOptions = {
@@ -19,10 +19,8 @@ export default defineConfig(({ mode }) => {
 		...loadEnv(mode, process.cwd(), 'APP_')
 	};
 
-	return {
-		plugins: [
-			chunkSplitPlugin({ strategy: 'unbundle' }),
-		],
+	const config: UserConfig = {
+		plugins: [chunkSplitPlugin({ strategy: 'unbundle' }) as PluginOption],
 		envPrefix: 'APP_',
 		envDir: '../',
 		root: 'src',
@@ -67,4 +65,6 @@ export default defineConfig(({ mode }) => {
 			}
 		}
 	};
+
+	return config;
 });

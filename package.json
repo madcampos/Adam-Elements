@@ -28,11 +28,12 @@
 		"test:coverage": "vitest run --coverage"
 	},
 	"devDependencies": {
-		"@types/node": "^18.11.9",
 		"@commitlint/cli": "^17.2.0",
 		"@commitlint/config-conventional": "^17.2.0",
+		"@types/node": "^18.11.9",
 		"@typescript-eslint/eslint-plugin": "^5.43.0",
 		"@typescript-eslint/parser": "^5.43.0",
+		"@vitest/coverage-c8": "^0.25.2",
 		"c8": "^7.12.0",
 		"eslint": "^8.27.0",
 		"husky": "^8.0.2",

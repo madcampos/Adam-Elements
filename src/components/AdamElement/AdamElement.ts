@@ -172,21 +172,21 @@ export class AdamElement extends HTMLElement {
 		return parsedValue;
 	}
 
-	#serializePropToAttribute<T extends PropTypeNames>(attr: string, type: T, value: PropTypes<T>) {
+	#serializePropToAttribute<T extends PropTypeNames>(attr: string, element: HTMLElement, type: T, value: PropTypes<T>) {
 		switch (type) {
 			case 'boolean':
 				if (value === true) {
-					this.setAttribute(attr, '');
+					element.setAttribute(attr, '');
 				} else {
-					this.removeAttribute(attr);
+					element.removeAttribute(attr);
 				}
 				break;
 			case 'object':
-				this.setAttribute(attr, JSON.stringify(value));
+				element.setAttribute(attr, JSON.stringify(value));
 				break;
 			default:
 				// eslint-disable-next-line @typescript-eslint/no-base-to-string
-				this.setAttribute(attr, value.toString());
+				element.setAttribute(attr, value.toString());
 				break;
 		}
 	}
@@ -208,8 +208,21 @@ export class AdamElement extends HTMLElement {
 
 				prop.value = value;
 
-				// TODO: Update attribute, if exists
-				// TODO: Update internal element, if exists
+				Object.entries(prop.boundAttributes).forEach(([attr, boundElement]) => {
+					this.#serializePropToAttribute(attr, boundElement, prop.propType, value);
+				});
+
+				prop.boundElements.forEach((boundElement) => {
+					if (typeof prop.value === 'object') {
+						boundElement.textContent = JSON.stringify(prop.value);
+					} else {
+						boundElement.textContent = prop.value.toString();
+					}
+				});
+
+				if (prop.attributeName) {
+					this.#serializePropToAttribute(prop.attributeName, this, prop.propType, value);
+				}
 			}
 		}
 	}
@@ -284,7 +297,7 @@ export class AdamElement extends HTMLElement {
 			this.#watchedProps.set(prop, {
 				propName: prop,
 				value: defaultValue,
-				boundAttributes: [],
+				boundAttributes: {},
 				boundElements: [],
 				propType: type,
 				validate,

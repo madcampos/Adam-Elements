@@ -1,0 +1,8 @@
+:root {
+	--inner-border-size: 1rem;
+	--outer-border-size: 1rem;
+
+	--border-gap: 1.5rem;
+	--outer-border-radius: 2rem;
+	--inner-border-radius: calc(var(--outer-border-radius) - var(--border-gap));
+}

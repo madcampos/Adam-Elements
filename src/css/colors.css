@@ -1,0 +1,55 @@
+/* Ref: https://randoma11y.com/ */
+
+:root {
+	/* Combination one */
+	--color1-primary: #029ad6;
+	--color1-secondary: #032336;
+
+	/* Combination two */
+	--color2-primary: springgreen;
+	--color2-secondary: #394c51;
+
+	/* Combination three */
+	--color3-primary: teal;
+	--color3-secondary: #fefe9d;
+
+	/* Combination four */
+	--color4-primary: #17f97f;
+	--color4-secondary: #322110;
+
+	/* Combination five */
+	--color5-primary: #ec15cb;
+	--color5-secondary: #1d0225;
+
+	/* Combination six */
+	--color6-primary: #c70397;
+	--color6-secondary: #d5f8e1;
+
+	/* Combination seven */
+	--color7-primary: #505278;
+	--color7-secondary: #f4dcfc;
+
+	/* Combination eight */
+	--color8-primary: #e445ae;
+	--color8-secondary: #3e0007;
+
+	/* Combination nine */
+	--color9-primary: #f08ee3;
+	--color9-secondary: #154564;
+
+	/* Combination ten */
+	--color10-primary: orangered;
+	--color10-secondary: #1d1720;
+
+	/* Combination eleven */
+	--color11-primary: white;
+	--color11-secondary: #55605e;
+
+	/* Combination twelve */
+	--color12-primary: #9aff00;
+	--color12-secondary: #1964c1;
+
+	/* Combination thirteen */
+	--color13-primary: #9aff00;
+	--color13-secondary: #07305b;
+}

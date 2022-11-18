@@ -32,7 +32,7 @@ type WatchedSlotEvent = Event & { target: HTMLSlotElement };
 
 type WatchedSlotHandler = (evt: WatchedSlotEvent) => void;
 
-type WatchedSlots = Record<string, WatchedSlotHandler>;
+type WatchedSlots = Record<string, WatchedSlotHandler | undefined>;
 
 type ElementTemplate = string | HTMLTemplateElement;
 
@@ -57,6 +57,8 @@ interface AdamElementConstructor {
 }
 
 export class AdamElement extends HTMLElement implements CustomElementInterface {
+	static formAssociated = true;
+
 	#watchedSlots: WatchedSlots = {};
 	#props = new Map<string, Prop<PropTypes>>();
 	#watchedAttributes = new Map<string, string>();
@@ -82,10 +84,9 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 		}
 
 		this.#root.addEventListener('slotchange', (evt) => {
-			if (evt.target instanceof HTMLSlotElement) {
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-				this.#watchedSlots[evt.target.name]?.(evt as WatchedSlotEvent);
-			}
+			const slot = (evt.target as HTMLSlotElement).name || 'default';
+
+			this.#watchedSlots[slot]?.(evt as WatchedSlotEvent);
 		});
 
 		this.#root.appendChild(parsedTemplate);
@@ -341,6 +342,9 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 					enumerable: true,
 					get(): typeof value {
 						return this.#getComputedPropValue(name);
+					},
+					set(newValue: typeof value) {
+						this.#updateProp(name, newValue);
 					}
 				});
 			} else {

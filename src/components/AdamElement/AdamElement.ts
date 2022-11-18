@@ -1,41 +1,38 @@
-type PropTypeNames = 'boolean' | 'string' | 'number' | 'object';
+import { templateParser, type TemplateParser } from './serialization';
 
-type PropTypes<T extends PropTypeNames> =
-	T extends 'boolean' ? boolean
-	: T extends 'string' ? string
-	: T extends 'number' ? number
-	: Object;
+type PropPrimitiveTypes = boolean | string | number | object;
 
-type PropValidationHandler<T extends PropTypeNames> = (value: PropTypes<T>) => boolean;
+type ComputedPropHandler<T extends PropPrimitiveTypes> = (newValue?: T) => T | Promise<T>;
 
-interface WatchedPropDefinition<T extends PropTypeNames = PropTypeNames> {
-	prop: string,
-	type: T,
+type PropTypes = PropPrimitiveTypes | ComputedPropHandler<PropPrimitiveTypes>;
+
+export interface ComputedProp<T extends PropPrimitiveTypes> {
+	update(newValue?: T): void,
+	set(handler: ComputedPropHandler<T>): void
+}
+
+export type PropValidationHandler<T extends PropTypes> = (value: T) => boolean;
+
+interface PropDefinition<T extends PropTypes> {
+	name: string,
+	value: T,
 	validate?: PropValidationHandler<T>,
-	defaultValue: PropTypes<T>,
 	attributeName?: string,
 	selector?: string
 }
 
-interface PropBinding {
-	propName: string,
-	boundElement: HTMLElement,
-	boundAttribute?: string
-}
+type EventHandler = (evt: Event) => void | Promise<void>;
 
-interface WatchedProp<T extends PropTypeNames> {
-	propName: string,
-	value: PropTypes<T>,
-	propType: T,
-	validate?: PropValidationHandler<T>,
-	attributeName?: string,
+type Prop<T extends PropTypes> = Omit<PropDefinition<T>, 'selector'> & {
 	boundAttributes: Record<string, HTMLElement>,
 	boundElements: HTMLElement[]
-}
+};
 
-type WatchedSlotHandler = (evt: Event) => void;
+export type WatchedSlotEvent = Event & { target: HTMLSlotElement };
 
-type WatchedSlots = Record<string, WatchedSlotHandler>;
+export type WatchedSlotHandler = (evt: WatchedSlotEvent) => void;
+
+export type WatchedSlots = Record<string, WatchedSlotHandler>;
 
 type ElementTemplate = string | HTMLTemplateElement;
 
@@ -44,49 +41,69 @@ type ElementStyle = string | CSSStyleSheet;
 interface AdamElementConstructor {
 	name: string,
 	watchedSlots?: WatchedSlots,
-	watchedProps?: WatchedPropDefinition[],
+	props?: PropDefinition<PropTypes>[],
 	watchedAttributes?: string[],
 	template?: ElementTemplate,
 	style?: ElementStyle,
-	styleUrls?: string[]
+	handlers?: Record<string, EventHandler>
 }
 
 export class AdamElement extends HTMLElement {
 	#watchedSlots: WatchedSlots = {};
-	#watchedProps = new Map<string, WatchedProp<PropTypeNames>>();
+	#props = new Map<string, Prop<PropTypes>>();
 	#watchedAttributes = new Map<string, string>();
 	#root: ShadowRoot;
 	#internals: ElementInternals;
 	#elementId = 'NO ID';
 
+	handlers: Record<string, EventHandler | undefined> = {};
 	name = 'NO NAME';
 
-	constructor({ name, template, watchedSlots, watchedAttributes, watchedProps, style, styleUrls }: AdamElementConstructor) {
+	constructor({ name, template, watchedSlots, props, watchedAttributes, style, handlers }: AdamElementConstructor) {
 		super();
 
 		this.name = name;
-		this.#elementId = AdamElement.uniqueID;
+		this.#elementId = `${this.name}-${AdamElement.uniqueID}`;
 		this.#root = this.attachShadow({ mode: 'closed', delegatesFocus: true });
 		this.#internals = this.attachInternals();
 
-		const { props, template: parsedTemplate } = this.#parseTemplate(template);
-
-		if (styleUrls) {
-			styleUrls.forEach((styleUrl) => this.addStyleURL(styleUrl));
-		}
+		const { props: parsedProps, template: parsedTemplate, handlers: parsedHandlers } = this.#parseTemplate(template);
 
 		if ((typeof style === 'string' && style !== '') || style instanceof CSSStyleSheet) {
 			this.addStyle(style);
 		}
 
-		this.#root.appendChild(parsedTemplate.content.cloneNode(true));
+		this.#root.addEventListener('slotchange', (evt) => {
+			if (evt.target instanceof HTMLSlotElement) {
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+				this.#watchedSlots[evt.target.name]?.(evt as WatchedSlotEvent);
+			}
+		});
 
-		for (const prop of watchedProps ?? []) {
+		this.#root.appendChild(parsedTemplate);
+
+		if (handlers) {
+			Object.entries(handlers).forEach(([handlerName, handler]) => {
+				this.handlers[handlerName] = handler.bind(this);
+			});
+		}
+
+		for (const handler of parsedHandlers) {
+			if (this.handlers[handler.handlerName] === undefined) {
+				throw new Error(`Handler "${handler.handlerName}" is not defined in watched handlers`);
+			}
+
+			handler.boundElement.addEventListener(handler.eventName, (evt) => {
+				void this.handlers[handler.handlerName]?.(evt);
+			});
+		}
+
+		for (const prop of props ?? []) {
 			this.watchProp(prop);
 		}
 
-		for (const prop of props) {
-			if (!this.#watchedProps.has(prop.propName)) {
+		for (const prop of parsedProps) {
+			if (!this.#props.has(prop.propName)) {
 				throw new Error(`Prop "${prop.propName}" is not defined in watched props`);
 			}
 
@@ -107,17 +124,14 @@ export class AdamElement extends HTMLElement {
 			this.#watchedSlots = watchedSlots;
 		}
 
-		this.#root.addEventListener('slotchange', (evt) => {
-			if (evt.target instanceof HTMLSlotElement) {
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-				this.#watchedSlots[evt.target.name]?.(evt);
-			}
+		this.#props.forEach((prop) => {
+			this.#updateProp(prop.name, prop.value, true);
 		});
 	}
 
 	static get uniqueID() {
 		// eslint-disable-next-line @typescript-eslint/no-magic-numbers
-		return `adam-${Math.trunc(Math.random() * 10000000).toString(16)}`;
+		return Math.trunc(Math.random() * 10000000).toString(16);
 	}
 
 	get elementId() {
@@ -143,16 +157,34 @@ export class AdamElement extends HTMLElement {
 			throw new TypeError('Template must be a string or HTMLTemplateElement');
 		}
 
-		const parsedProps = AdamElement.templateParser(tempTemplate);
+		if (tempTemplate.content.children.length === 0) {
+			throw new Error('Template is empty');
+		}
+
+		if (tempTemplate.content.children[0] instanceof HTMLTemplateElement) {
+			// eslint-disable-next-line prefer-destructuring
+			const wrappedTemplate = tempTemplate.content.children[0];
+
+			tempTemplate.content.removeChild(wrappedTemplate);
+
+			[...wrappedTemplate.content.children].forEach((child) => {
+				tempTemplate.content.appendChild(child);
+			});
+		}
+
+		const domTree = tempTemplate.content.cloneNode(true) as DocumentFragment;
+
+		const { props, handlers } = AdamElement.templateParser(domTree);
 
 		return {
-			template: tempTemplate,
-			props: parsedProps
+			template: domTree,
+			props,
+			handlers
 		};
 	}
 
-	#parseValue(value: string | null, type: PropTypeNames) {
-		let parsedValue: PropTypes<PropTypeNames>;
+	#parseValue(value: string | null, type: PropTypes) {
+		let parsedValue: PropTypes;
 
 		switch (type) {
 			case 'number':
@@ -172,10 +204,10 @@ export class AdamElement extends HTMLElement {
 		return parsedValue;
 	}
 
-	#serializePropToAttribute<T extends PropTypeNames>(attr: string, element: HTMLElement, type: T, value: PropTypes<T>) {
-		switch (type) {
+	#serializePropToAttribute(attr: string, element: HTMLElement, value: PropTypes) {
+		switch (typeof value) {
 			case 'boolean':
-				if (value === true) {
+				if (value) {
 					element.setAttribute(attr, '');
 				} else {
 					element.removeAttribute(attr);
@@ -184,156 +216,138 @@ export class AdamElement extends HTMLElement {
 			case 'object':
 				element.setAttribute(attr, JSON.stringify(value));
 				break;
+			case 'function':
+				element.setAttribute(attr, '[function]');
+				break;
 			default:
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				element.setAttribute(attr, value.toString());
 				break;
 		}
 	}
 
 	#getPropValue(prop: string) {
-		if (!this.#watchedProps.has(prop)) {
+		if (!this.#props.has(prop)) {
 			throw new Error(`Prop "${prop}" is not defined in watched props`);
 		}
 
-		return this.#watchedProps.get(prop)?.value;
+		return this.#props.get(prop)?.value as PropPrimitiveTypes;
 	}
 
-	#updateProp<T extends PropTypeNames>(propName: string, value: PropTypes<T>, forceUpdate = false) {
-		if (this.#watchedProps.has(propName)) {
-			const prop = this.#watchedProps.get(propName) as WatchedProp<T>;
+	#getComputedPropValue<T extends PropPrimitiveTypes>(prop: string): ComputedProp<T> {
+		if (!this.#props.has(prop)) {
+			throw new Error(`Prop "${prop}" is not defined in watched props`);
+		}
 
-			if (prop.value !== value || forceUpdate) {
-				prop.validate?.(value);
+		return {
+			update: (newValue: T) => this.#updateProp(prop, newValue),
+			set: (handler: ComputedPropHandler<T>) => {
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				this.#props.get(prop)!.value = handler;
+			}
+		};
+	}
+
+	#propagatePropUpdates<T extends PropTypes>(prop: Prop<T>, newValue: T) {
+		prop.validate?.(newValue);
+
+		Object.entries(prop.boundAttributes).forEach(([attr, boundElement]) => {
+			this.#serializePropToAttribute(attr, boundElement, newValue);
+		});
+
+		prop.boundElements.forEach((boundElement) => {
+			if (typeof newValue === 'object') {
+				boundElement.textContent = JSON.stringify(newValue);
+			} else if (typeof newValue === 'function') {
+				boundElement.textContent = '[function]';
+			} else {
+				boundElement.textContent = newValue.toString();
+			}
+		});
+
+		if (prop.attributeName) {
+			this.#serializePropToAttribute(prop.attributeName, this, newValue);
+		}
+	}
+
+	#updateProp(propName: string, value: PropTypes, forceUpdate = false) {
+		if (this.#props.has(propName)) {
+			const prop = this.#props.get(propName) as Prop<typeof value>;
+
+			if (typeof prop.value === 'function') {
+				(async () => {
+					const computedValue = await (prop.value as ComputedPropHandler<typeof value>)(value);
+
+					this.#propagatePropUpdates(prop, computedValue);
+				})();
+			} else if (prop.value !== value || forceUpdate) {
+				this.#propagatePropUpdates(prop, value);
 
 				prop.value = value;
-
-				Object.entries(prop.boundAttributes).forEach(([attr, boundElement]) => {
-					this.#serializePropToAttribute(attr, boundElement, prop.propType, value);
-				});
-
-				prop.boundElements.forEach((boundElement) => {
-					if (typeof prop.value === 'object') {
-						boundElement.textContent = JSON.stringify(prop.value);
-					} else {
-						boundElement.textContent = prop.value.toString();
-					}
-				});
-
-				if (prop.attributeName) {
-					this.#serializePropToAttribute(prop.attributeName, this, prop.propType, value);
-				}
 			}
 		}
 	}
 
-	#renderTemplate() {
-		// TODO: render template based on prop changes?
-	}
-
 	#bindPropToInternalAttribute(prop: string, attributeName: string, element: HTMLElement) {
-		if (!this.#watchedProps.has(prop)) {
+		if (!this.#props.has(prop)) {
 			throw new Error(`Prop "${prop}" is not defined in watched props`);
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		this.#watchedProps.get(prop)!.boundAttributes[attributeName] = element;
+		this.#props.get(prop)!.boundAttributes[attributeName] = element;
 	}
 
 	#bindPropToInternalElement(prop: string, element: HTMLElement) {
-		if (!this.#watchedProps.has(prop)) {
+		if (!this.#props.has(prop)) {
 			throw new Error(`Prop "${prop}" is not defined in watched props`);
 		}
 
-		this.#watchedProps.get(prop)?.boundElements.push(element);
+		this.#props.get(prop)?.boundElements.push(element);
 	}
 
-	static templateParser(template: HTMLTemplateElement) {
-		const props: PropBinding[] = [];
+	static templateParser: TemplateParser = (template) => templateParser(template);
 
-		const processNode = (node: Node) => {
-			if (node.nodeType === Node.ELEMENT_NODE) {
-				const { attributes } = node as Element;
-
-				for (const attribute of attributes) {
-					if ((/^(?:a-on:|a-bind:|@|:)/giu).test(attribute.name)) {
-						const attributeName = attribute.name.replace(/^(?:a-on:|a-bind:|@|:)/giu, '');
-						const prop = attribute.value;
-
-						props.push({
-							propName: prop,
-							boundElement: node as HTMLElement,
-							boundAttribute: attributeName
-						});
-					}
-				}
-			}
-
-			if (node.nodeType === Node.TEXT_NODE) {
-				const propMatch = node.textContent?.matchAll(/\{\{([a-z][a-z0-9]+?)\}\}/giu) ?? [];
-
-				for (const [, prop] of propMatch) {
-					props.push({
-						propName: prop,
-						boundElement: node.parentElement as HTMLElement
-					});
-				}
-			}
-
-			if (node.hasChildNodes()) {
-				node.childNodes.forEach((childNode) => {
-					processNode(childNode);
-				});
-			}
-		};
-
-		processNode(template.content);
-
-		return props;
-	}
-
-	watchProp({ prop, type, defaultValue, attributeName, validate, selector }: WatchedPropDefinition) {
-		if (!(prop in this)) {
-			this.#watchedProps.set(prop, {
-				propName: prop,
-				value: defaultValue,
+	watchProp({ name, value, attributeName, validate, selector }: PropDefinition<PropTypes>) {
+		if (!(name in this)) {
+			this.#props.set(name, {
+				name,
+				value,
 				boundAttributes: {},
 				boundElements: [],
-				propType: type,
 				validate,
 				attributeName
 			});
 
 			if (attributeName) {
-				this.#watchedAttributes.set(attributeName, prop);
+				this.#watchedAttributes.set(attributeName, name);
 			}
 
 			if (selector) {
 				this.#root.querySelectorAll<HTMLElement>(selector).forEach((element) => {
-					this.#bindPropToInternalElement(prop, element);
+					this.#bindPropToInternalElement(name, element);
 				});
 			}
 
-			Object.defineProperty(this, prop, {
-				configurable: false,
-				enumerable: true,
-				get(): PropTypes<typeof type> {
-					return this.#getPropValue(prop);
-				},
-				set(value: PropTypes<typeof type>) {
-					this.#updateProp(prop, value);
-				}
-			});
+			if (typeof value === 'function') {
+				Object.defineProperty(this, name, {
+					configurable: false,
+					enumerable: true,
+					get(): typeof value {
+						return this.#getComputedPropValue(name);
+					}
+				});
+			} else {
+				Object.defineProperty(this, name, {
+					configurable: false,
+					enumerable: true,
+					get(): typeof value {
+						return this.#getPropValue(name);
+					},
+					set(newValue: typeof value) {
+						this.#updateProp(name, newValue);
+					}
+				});
+			}
 		}
-	}
-
-	addStyleURL(url: string) {
-		const stylesheet = document.createElement('link');
-
-		stylesheet.rel = 'stylesheet';
-		stylesheet.href = url;
-
-		this.#root.insertBefore(stylesheet, this.#root.firstChild);
 	}
 
 	addStyle(style: string | CSSStyleSheet) {
@@ -351,18 +365,13 @@ export class AdamElement extends HTMLElement {
 	attributeChangedCallback(name: string, oldValue: string, newValue: string) {
 		if (oldValue !== newValue) {
 			const propName = this.#watchedAttributes.get(name) ?? '';
-			const prop = this.#watchedProps.get(propName);
+			const prop = this.#props.get(propName);
 
 			if (prop) {
-				const propValue = this.#parseValue(newValue, prop.propType);
+				const propValue = this.#parseValue(newValue, typeof prop.value);
 
-				this.#updateProp(prop.propName, propValue);
+				this.#updateProp(prop.name, propValue);
 			}
 		}
-	}
-
-	connectedCallback() {
-		// TODO: update all props
-		this.#renderTemplate();
 	}
 }

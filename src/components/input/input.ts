@@ -1,28 +1,59 @@
 import { AdamElement } from '../AdamElement/AdamElement';
 
+import inputTemplate from './template.html?raw';
+import inputStyle from './style.css?raw';
+
+const watchedAttributes = ['label', 'required', 'readonly', 'disabled', 'value', 'autocomplete', 'pattern', 'maxlength', 'minlength', 'inputmode', 'type'];
+
+interface AdamInput {
+	required: boolean,
+	readonly: boolean,
+	disabled: boolean,
+	minlength: number,
+	maxlength: number,
+	pattern: string,
+	autocomplete: string,
+	inputmode: string,
+	type: string,
+	value: string
+}
+
 class AdamInput extends AdamElement {
-	// eslint-disable-next-line @typescript-eslint/class-literal-property-style
-	static get formAssociated() { return true; }
-	static get observedAttributes() { return ['label', 'required', 'readonly', 'disabled', 'value', 'autocomplete', 'pattern', 'maxlength', 'minlength', 'inputmode', 'type']; }
+	static observedAttributes = watchedAttributes;
 	#input: HTMLInputElement;
 
 	constructor() {
 		super({
 			name: 'adam-input',
-			watchedProps: [
-				{ prop: 'required', type: 'boolean', defaultValue: false },
-				{ prop: 'readOnly', type: 'boolean', defaultValue: false },
-				{ prop: 'disabled', type: 'boolean', defaultValue: false },
-				{ prop: 'minLength', type: 'number', defaultValue: 0 },
-				{ prop: 'maxLength', type: 'number', defaultValue: 524288 },
-				{ prop: 'value', type: 'string', defaultValue: '' },
-				{ prop: 'autocomplete', type: 'string', defaultValue: 'off' },
-				{ prop: 'pattern', type: 'string', defaultValue: '' },
-				{ prop: 'inputmode', type: 'string', defaultValue: '' },
+			props: [
+				{ name: 'required', value: false },
+				{ name: 'readonly', value: false },
+				{ name: 'disabled', value: false },
+				{ name: 'minlength', value: 0 },
+				{ name: 'maxlength', value: 524288 },
+				{ name: 'autocomplete', value: 'off' },
+				{ name: 'pattern', value: '' },
+				{ name: 'inputmode', value: '' },
 				{
-					prop: 'type',
-					type: 'string',
-					defaultValue: 'text',
+					name: 'value',
+					value: (value?: string) => {
+						this.#input.value = value ?? '';
+
+						if (!this.#input.checkValidity()) {
+							// @ts-expect-error
+							this.root.querySelector('#error-text')?.innerText = this.#input.validationMessage;
+						}
+
+						return this.#input.value;
+					}
+				},
+				{
+					name: 'type',
+					value: (value?: string) => {
+						this.#input.type = value ?? 'text';
+
+						return this.#input.type;
+					},
 					validate: (value) => {
 						if (!['text', 'email', 'url', 'tel', 'search', 'password'].includes(value as string)) {
 							return true;
@@ -32,104 +63,66 @@ class AdamInput extends AdamElement {
 					}
 				}
 			],
-			style: import.meta.url,
-			template: `
-				<div>
-					<input
-						type="text"
-						id="{id}"
-						name="{id}"
-						placeholder="{label}"
-						aria-describedby="error-text"
-					/>
-					<div id="outer-border"></div>
-					<div id="attention-marker"></div>
-					<label for="{id}">
-						{label}
-						<small id="required-text">(required)</small>
-					</label>
-					<div id="info-box">
-						<div id="info-text" tabindex="0">
-							<slot name="helper-text"></slot>
-						</div>
-						<div id="error-text"></div>
-					</div>
-				</div>
-			`
+			handlers: {
+				change: (evt: Event) => {
+					const target = evt.target as HTMLInputElement;
+
+					target.checkValidity();
+
+					this.internals.setFormValue(this.#input.value);
+					this.dispatchEvent(new CustomEvent('change', { bubbles: true, composed: true }));
+				},
+				invalid: (evt: Event) => {
+					evt.preventDefault();
+					evt.stopPropagation();
+
+					// @ts-expect-error
+					this.root.querySelector('#error-text').innerText = evt.target.validationMessage;
+
+					this.internals.setValidity(this.#input.validity);
+					this.dispatchEvent(new CustomEvent('invalid', { bubbles: true, composed: true }));
+				},
+				handleIcons: (evt: Event) => {
+					const target = evt.target as HTMLElement;
+
+					if (target.matches('#outer-border')) {
+						if (this.type === 'password') {
+								if (this.#input.hasAttribute('show-password')) {
+									this.#input.removeAttribute('show-password');
+									this.#input.type = 'password';
+								} else {
+									this.#input.setAttribute('show-password', '');
+									this.#input.type = 'text';
+								}
+						} else if (['tel', 'url', 'email'].includes(this.type)) {
+							const hasValue = this.value !== '';
+							const isValid = target.parentElement?.querySelector('input')?.checkValidity();
+
+							if (hasValue && isValid) {
+								let url = this.value;
+
+								switch (this.type) {
+									case 'tel':
+										url = `tel:${this.value}`;
+										break;
+									case 'email':
+										url = `mailto:${this.value}`;
+										break;
+									default:
+										url = this.#input.value;
+								}
+
+								window.open(url);
+							}
+						}
+					}
+				}
+			},
+			style: inputStyle,
+			template: inputTemplate
 		});
 
 		this.#input = this.root.querySelector('input') as HTMLInputElement;
-	}
-
-	mounted() {
-		if (!this.#input.checkValidity()) {
-			// @ts-expect-error
-			this.root.querySelector('#error-text')?.innerText = this.#input.validationMessage;
-		}
-
-		this.#input.addEventListener('change', (evt) => {
-			const target = evt.target as HTMLInputElement;
-
-			target.checkValidity();
-
-			this.internals.setFormValue(this.#input.value);
-			this.dispatchEvent(new CustomEvent('change', { bubbles: true, composed: true }));
-		});
-
-		this.#input.addEventListener('invalid', (evt) => {
-			evt.preventDefault();
-			evt.stopPropagation();
-
-			// @ts-expect-error
-			this.root.querySelector('#error-text')?.innerText = evt.target.validationMessage;
-
-			this.internals.setValidity(this.#input.validity);
-			this.dispatchEvent(new CustomEvent('invalid', { bubbles: true, composed: true }));
-		});
-
-		if (this.#input.type === 'password') {
-			this.root.addEventListener('click', (evt) => {
-				const target = evt.target as HTMLElement;
-
-				if (target.matches('#outer-border')) {
-					if (this.#input.hasAttribute('show-password')) {
-						this.#input.removeAttribute('show-password');
-						this.#input.type = 'password';
-					} else {
-						this.#input.setAttribute('show-password', '');
-						this.#input.type = 'text';
-					}
-				}
-			});
-		}
-
-		if (['tel', 'url', 'email'].includes(this.#input.type)) {
-			this.root.addEventListener('click', (evt) => {
-				const target = evt.target as HTMLElement;
-
-				if (target.matches('#outer-border')) {
-					const hasValue = target.parentElement?.querySelector('input')?.value !== '';
-					const isValid = target.parentElement?.querySelector('input')?.checkValidity();
-
-					if (hasValue && isValid) {
-						let url = this.#input.value;
-
-						switch (this.#input.type) {
-							case 'tel':
-								url = `tel:${this.#input.value}`;
-								break;
-							case 'email':
-								url = `mailto:${this.#input.value}`;
-								break;
-							default:
-								url = this.#input.value;
-						}
-
-						window.open(url);
-					}
-				}
-			});
-		}
 	}
 }
 

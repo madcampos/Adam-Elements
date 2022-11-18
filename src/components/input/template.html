@@ -1,0 +1,26 @@
+<template>
+	<div>
+		<input
+			type="text"
+			:id="id"
+			:name="id"
+			:placeholder="label"
+			:value="value"
+			aria-describedby="error-text"
+			@change="change"
+			@invalid="invalid"
+		/>
+		<div id="outer-border" @click="handleIcons"></div>
+		<div id="attention-marker"></div>
+		<label :for="id">
+			{{label}}
+			<small id="required-text">(required)</small>
+		</label>
+		<div id="info-box">
+			<div id="info-text" tabindex="0">
+				<slot name="helper-text"></slot>
+			</div>
+			<div id="error-text"></div>
+		</div>
+	</div>
+</template>

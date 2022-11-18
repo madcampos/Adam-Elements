@@ -28,15 +28,23 @@ type Prop<T extends PropTypes> = Omit<PropDefinition<T>, 'selector'> & {
 	boundElements: HTMLElement[]
 };
 
-export type WatchedSlotEvent = Event & { target: HTMLSlotElement };
+type WatchedSlotEvent = Event & { target: HTMLSlotElement };
 
-export type WatchedSlotHandler = (evt: WatchedSlotEvent) => void;
+type WatchedSlotHandler = (evt: WatchedSlotEvent) => void;
 
-export type WatchedSlots = Record<string, WatchedSlotHandler>;
+type WatchedSlots = Record<string, WatchedSlotHandler>;
 
 type ElementTemplate = string | HTMLTemplateElement;
 
 type ElementStyle = string | CSSStyleSheet;
+
+export interface CustomElementInterface {
+	observedAttributes?: string[],
+	connectedCallback?(): void | Promise<void>,
+	disconnectedCallback?(): void | Promise<void>,
+	adoptedCallback?(): void | Promise<void>,
+	attributeChangedCallback?(name: string, oldValue: string, newValue: string): void | Promise<void>
+}
 
 interface AdamElementConstructor {
 	name: string,
@@ -48,7 +56,7 @@ interface AdamElementConstructor {
 	handlers?: Record<string, EventHandler>
 }
 
-export class AdamElement extends HTMLElement {
+export class AdamElement extends HTMLElement implements CustomElementInterface {
 	#watchedSlots: WatchedSlots = {};
 	#props = new Map<string, Prop<PropTypes>>();
 	#watchedAttributes = new Map<string, string>();

@@ -1,0 +1,27 @@
+<template>
+	<div>
+		<select
+			:id="id"
+			:name="id"
+			@change="change",
+			@invalid="invalid"
+		>
+			<option selected disabled hidden>{{placeholder}}</option>
+		</select>
+		<div id="outer-border"></div>
+		<div id="attention-marker"></div>
+		<label :for="id">
+			{{label}}
+			<small id="required-text">(required)</small>
+		</label>
+		<div id="info-box">
+			<div id="info-text">
+				<slot name="helper-text"></slot>
+			</div>
+			<div id="error-text"></div>
+		</div>
+		<div hidden>
+			<slot></slot>
+		</div>
+	</div>
+</template>

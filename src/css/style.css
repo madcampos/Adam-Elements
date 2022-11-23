@@ -1,18 +1,52 @@
-@import url('/css/fonts/oxanium.css');
+@import url('./fonts/oxanium.css');
+
+:root {
+	font-family: Oxanium, sans-serif;
+	font-variant: proportional-nums slashed-zero;
+
+	letter-spacing: 0.04rem;
+	font-size: 1.2rem;
+	line-height: calc(1em + 0.5rem);
+
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizelegibility;
+
+	box-sizing: border-box;
+}
+
+*, *::before, *::after {
+	box-sizing: inherit;
+	font-family: inherit;
+}
+
+body, html {
+	margin: 0;
+	height: 100%;
+}
 
 body {
-	margin: 0;
-	padding: 0;
-	width: 100vw;
-	height: 100vh;
-	box-sizing: border-box;
-
 	background: linear-gradient(to bottom right, darkslategray, black);
 	background-repeat: no-repeat;
 	background-size: fill;
 }
 
+img, picture, video, canvas, svg {
+	display: block;
+	max-width: 100%;
+}
+
+button, input, select, textarea {
+	font-family: inherit;
+	font-size: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+	overflow-wrap: break-word;
+}
+
 main {
+	isolation: isolate;
 	overflow: auto;
 	height: 100%;
 	display: flex;

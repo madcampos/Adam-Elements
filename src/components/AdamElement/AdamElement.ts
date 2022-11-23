@@ -2,6 +2,8 @@
 
 import { templateParser, type TemplateParser } from './serialization';
 
+import baseStyle from './AdamElement.css?raw';
+
 const DEBUG_MODE = false as const as boolean;
 const DEBUG_HEADER = '%c[AdamElement]';
 const DEBUG_STYLE = 'color: #0080ff; font-weight: bold; background: #000000; border-radius: 5px; padding: 2px 5px;';
@@ -78,6 +80,7 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 		this.#elementId = `${this.name}-${AdamElement.uniqueID}`;
 		this.#root = this.attachShadow({ mode: 'closed', delegatesFocus: true });
 		this.#internals = this.attachInternals();
+		this.addStyle(baseStyle);
 
 		const { props: parsedProps, template: parsedTemplate, handlers: parsedHandlers } = this.#parseTemplate(template);
 

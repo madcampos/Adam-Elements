@@ -1,46 +1,24 @@
-/* stylelint-disable no-descending-specificity */
-
-:host > div {
-	margin: var(--margin-block);
-	width: var(--input-max-size);
+#root {
 	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 1fr 1fr;
 	grid-template-areas:
-		'label label label'
-		'. . marker'
-		'input input input'
-		'. message .';
-
-	grid-template-rows: var(--label-top-space) var(--border-full) auto auto;
-	grid-template-columns: var(--border-full) minmax(var(--input-min-size), var(--input-max-size)) var(--border-full);
-
-	align-content: start;
-	align-items: stretch;
-	justify-items: stretch;
-}
-
-#outer-border {
-	display: flex;
-	justify-content: flex-start;
+		'input'
+		'helper-text';
 	align-items: center;
 
-	padding-inline-start: var(--padding-inline);
+	max-width: min-content;
+	max-height: min-content;
 
-	border: var(--outer-border-block-style) var(--border-width) var(--outer-border-color);
-	border-inline-style: var(--inner-border-inline-style);
-	border-radius: var(--border-outer-radius);
+	padding: 0.5rem;
+	margin-top: 1rem;
 
-	pointer-events: none;
-
-	grid-area: input;
+	transition: all 0.2s ease-in-out;
 }
 
 label {
-	margin-inline-start: calc(var(--margin-inline) + var(--icon-spacing));
-
-	color: var(--text-color);
-
-	transform-origin: left top;
-	transform: none;
+	transform-origin: left bottom;
+	transform: translateY(-200%) scale(0.8);
 
 	pointer-events: none;
 	cursor: text;
@@ -48,54 +26,28 @@ label {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
+	margin-left: 1rem;
 
 	grid-area: input;
-	align-self: center;
 }
 
 input {
 	appearance: none;
+	/* stylelint-disable-next-line property-no-vendor-prefix */
+	-webkit-appearance: none;
 
-	background-color: var(--bg-color);
-	color: var(--text-color);
 	font-size: 100%;
 
 	display: block;
 
-	margin: var(--border-full);
-	padding-block: var(--padding-block);
-	padding-inline: var(--padding-inline);
-	padding-inline-start: calc(var(--padding-inline) + var(--icon-spacing));
-
-	border: var(--inner-border-block-style) var(--inner-border-color) var(--border-width);
-	border-inline-style: var(--inner-border-inline-style);
-	border-radius: var(--border-inner-radius);
-
-	height: calc(var(--font-size) + var(--padding-inline) + var(--border-full) * 2);
-	grid-area: input;
+	border: none;
+	border-radius: 0.2rem;
+	padding: 0.2rem;
+	background: rgba(0, 0, 0, 0.3);
 }
 
 input[type='search']::-webkit-search-cancel-button { display: none; }
 input[type='password']::-ms-reveal { display: none; }
-
-input:is([type='tel'], [type='url'], [type='email'], [type='search'], [type='password'], [show-password]),
-input:is([type='tel'], [type='url'], [type='email'], [type='search'], [type='password'], [show-password]) ~ label {
-	--icon-spacing: var(--icon-size);
-}
-
-input:is([type='tel'], [type='url'], [type='email'], [type='search'], [type='password'], [show-password]) ~ #outer-border::before {
-	color: var(--inner-border-color);
-	content: var(--input-icon);
-	cursor: pointer;
-	pointer-events: all;
-}
-
-input[type='tel'] ~ #outer-border { --input-icon: '📞\FE0E'; }
-input[type='url'] ~ #outer-border { --input-icon: '🔗\FE0E'; }
-input[type='email'] ~ #outer-border { --input-icon: '📧\FE0E'; }
-input[type='search'] ~ #outer-border { --input-icon: '🔎\FE0E'; }
-input[type='password'] ~ #outer-border { --input-icon: '🔒\FE0E'; }
-input[type='text'][show-password] ~ #outer-border { --input-icon: '🔓\FE0E'; }
 
 input::placeholder {
 	color: transparent;
@@ -104,222 +56,53 @@ input::placeholder {
 
 input:focus { outline: none; }
 
-#info-box {
-	display: grid;
-	grid-template: 1fr / 1fr;
-	align-items: start;
-
-	z-index: -1;
-
-	grid-area: message;
+.border {
+	border: medium solid;
+	padding: 0.2rem;
 }
 
-#info-text, #error-text {
-	grid-row: 1;
-	grid-column: 1;
-	margin-inline: var(--margin-inline);
-	max-height: var(--info-box-max-size);
-	overflow: auto;
+#outer-border {
+	border-color: white;
+	border-radius: 0.6rem;
 
-	padding-block: var(--padding-block);
-	padding-inline: var(--padding-inline);
-	display: block;
-
-	font-size: calc(var(--label-scale) * 1rem);
-	color: var(--text-color);
-
-	border: var(--inner-border-block-style) var(--border-width) var(--outer-border-color);
-	border-block-start-color: transparent;
-	border-radius: var(--border-inner-radius);
-
-	background: var(--bg-color);
-	background-clip: padding-box;
-
-	transform: scale(var(--label-scale));
-	transform-origin: center top;
-	opacity: 0.2;
+	grid-area: input;
 }
 
-#info-text:focus { outline: none; }
-
-#error-text {
-	margin-block-start: calc(var(--border-spacing) * 2 + var(--border-width));
-	opacity: 0;
-	transform: translateY(-100%);
+#inner-border {
+	border-color: limegreen;
+	border-radius: 0.4rem;
+	border-top-style: dashed;
+	border-bottom-style: dashed;
 }
 
-#info-text, #error-text:empty {
-	display: none;
+#root:has(input:placeholder-shown:not(:focus)) label {
+	transform: translateY(0);
 }
 
-#attention-marker {
-	border: var(--outer-border-block-style) var(--inner-border-color) var(--border-width);
-	z-index: 1;
-
-	padding: calc(var(--border-spacing) * 0.5);
-	width: calc(var(--border-full) * 3);
-	height: calc(var(--border-full) * 3);
-
-	margin-inline: calc(var(--border-full) * -1);
-
-	border-radius: calc(var(--border-width) * 6);
-
-	transform-origin: center;
-	scale: 0;
-	opacity: 0;
-
-	grid-area: marker;
+#root:has(input:invalid) :is(#outer-border, label) {
+	border-color: tomato;
+	color: tomato;
 }
 
-#attention-marker::before {
-	content: '';
-	display: block;
-	width: 100%;
-	height: 100%;
-	border-radius: inherit;
-	background-color: var(--outer-border-color);
+#root:has(input:invalid) #inner-border {
+	border-color: firebrick;
 }
 
-#required-text {
-	color: var(--required-inner-border);
+#root:has(input:valid:not(:placeholder-shown)) #inner-border {
+	border-color: dodgerblue;
 }
 
-/* Required */
-
-input:required,
-input:required ~ * {
-	--bg-color: var(--required-bg);
-	--text-color: var(--required-text);
-	--inner-border-color: var(--required-inner-border);
-	--outer-border-color: var(--required-outer-border);
-	--inner-border-inline-style: var(--required-inner-border-inline-style);
-	--inner-border-block-style: var(--required-inner-border-block-style);
-	--outer-border-inline-style: var(--required-outer-border-inline-style);
-	--outer-border-block-style: var(--required-outer-border-block-style);
+#root:has(input:read-only) :is(#inner-border, label) {
+	border-color: rgba(192, 192, 192, 0.3);
+	color: silver;
 }
 
-input:required ~ #attention-marker {
-	scale: 1;
-	opacity: 1;
+#root:has(input:disabled) :is(.border, label) {
+	border-color: rgba(192, 192, 192, 0.3);
+	color: rgba(192, 192, 192, 0.3);
 }
 
-input:not(:placeholder-shown):not(:focus):required {
-	--inner-border-color: var(--input-inner-border);
-}
-
-input:not(:required) ~ label > #required-text {
-	display: none;
-}
-
-/* Invalid */
-
-input:not(:focus):not(:placeholder-shown):not(:hover):invalid,
-input:not(:focus):not(:placeholder-shown):not(:hover):invalid ~ * {
-	--bg-color: var(--invalid-bg);
-	--text-color: var(--invalid-text);
-	--inner-border-color: var(--invalid-inner-border);
-	--outer-border-color: var(--invalid-outer-border);
-	--inner-border-inline-style: var(--invalid-inner-border-inline-style);
-	--inner-border-block-style: var(--invalid-inner-border-block-style);
-	--outer-border-inline-style: var(--invalid-outer-border-inline-style);
-	--outer-border-block-style: var(--invalid-outer-border-block-style);
-}
-
-input:not(:focus):not(:placeholder-shown):invalid ~ #info-box #error-text {
-	transform: none;
-	opacity: 1;
-
-	border-color: var(--inner-border-color);
-}
-
-input:not(:focus):not(:placeholder-shown):invalid ~ #info-box #info-text {
-	opacity: 0;
-}
-
-/* Valid */
-
-input:not(:focus):not(:placeholder-shown):not(:hover):valid,
-input:not(:focus):not(:placeholder-shown):not(:hover):valid ~ * {
-	--bg-color: var(--valid-bg);
-	--text-color: var(--valid-text);
-	--inner-border-color: var(--valid-inner-border);
-	--outer-border-color: var(--valid-outer-border);
-	--inner-border-inline-style: var(--valid-inner-border-inline-style);
-	--inner-border-block-style: var(--valid-inner-border-block-style);
-	--outer-border-inline-style: var(--valid-outer-border-inline-style);
-	--outer-border-block-style: var(--valid-outer-border-block-style);
-}
-
-input:not(:focus):not(:placeholder-shown):valid ~ #info-box #info-text {
-	opacity: 0;
-}
-
-input:not(:focus):not(:placeholder-shown):invalid ~ #attention-marker,
-input:not(:focus):not(:placeholder-shown):valid ~ #attention-marker {
-	scale: 1;
-	opacity: 1;
-}
-
-/* Hover */
-
-input:hover,
-input:hover ~ * {
-	--bg-color: var(--hover-bg);
-	--text-color: var(--hover-text);
-	--inner-border-color: var(--hover-inner-border);
-	--outer-border-color: var(--hover-outer-border);
-	--inner-border-inline-style: var(--hover-inner-border-inline-style);
-	--inner-border-block-style: var(--hover-inner-border-block-style);
-	--outer-border-inline-style: var(--hover-outer-border-inline-style);
-	--outer-border-block-style: var(--hover-outer-border-block-style);
-}
-
-/* Focus */
-
-:host(:focus-within) {
-	--bg-color: var(--focus-bg);
-	--text-color: var(--focus-text);
-	--inner-border-color: var(--focus-inner-border);
-	--outer-border-color: var(--focus-outer-border);
-	--inner-border-inline-style: var(--focus-inner-border-inline-style);
-	--inner-border-block-style: var(--focus-inner-border-block-style);
-	--outer-border-inline-style: var(--focus-outer-border-inline-style);
-	--outer-border-block-style: var(--focus-outer-border-block-style);
-}
-
-:host(:focus-within) label,
-input:not(:placeholder-shown) ~ label {
-	pointer-events: all;
-
-	transform:
-		translateY(calc(-100% + (var(--margin-block) * -2)))
-		translateX(calc((var(--margin-inline) + var(--icon-spacing)) * -1))
-		scale(var(--label-scale));
-
-	/* margin-inline-start: 0; */
-
-	font-weight: var(--font-bold);
-}
-
-:host(:focus-within) #info-text {
-	opacity: 1;
-	transform: none;
-}
-
-/* Disabled */
-
-input:disabled,
-input:disabled ~ * {
-	--bg-color: var(--disabled-bg);
-	--text-color: var(--disabled-text);
-	--inner-border-color: var(--disabled-inner-border);
-	--outer-border-color: var(--disabled-outer-border);
-	--inner-border-inline-style: var(--disabled-inner-border-inline-style);
-	--inner-border-block-style: var(--disabled-inner-border-block-style);
-	--outer-border-inline-style: var(--disabled-outer-border-inline-style);
-	--outer-border-block-style: var(--disabled-outer-border-block-style);
-}
-
-:matches(input:read-only, input:disabled) ~ :matches(#info-box, #attention-marker) {
-	display: none;
+#root:hover :is(label, .border) {
+	color: greenyellow;
+	border-color: greenyellow;
 }

@@ -12,12 +12,12 @@ type ComputedPropHandler<T extends PropPrimitiveTypes> = (newValue?: T) => T;
 
 type PropTypes = PropPrimitiveTypes | ComputedPropHandler<PropPrimitiveTypes>;
 
-export type PropValidationHandler<T extends PropTypes> = (value: T) => boolean;
+export type PropValidationHandler = (value: PropTypes) => void;
 
 interface PropDefinition<T extends PropTypes> {
 	name: string,
 	value: T,
-	validate?: PropValidationHandler<T>,
+	validate?: PropValidationHandler,
 	attributeName?: string,
 	selector?: string
 }

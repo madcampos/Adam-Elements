@@ -1,4 +1,10 @@
+/* eslint-disable no-console */
+
 import { templateParser, type TemplateParser } from './serialization';
+
+const DEBUG_MODE = false as const as boolean;
+const DEBUG_HEADER = '%c[AdamElement]';
+const DEBUG_STYLE = 'color: #0080ff; font-weight: bold; background: #000000; border-radius: 5px; padding: 2px 5px;';
 
 type PropPrimitiveTypes = boolean | string | number | object;
 
@@ -177,6 +183,16 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 
 		const { props, handlers } = AdamElement.templateParser(domTree);
 
+
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Parsed template`, DEBUG_STYLE);
+			console.log({
+				props,
+				handlers,
+				domTree
+			});
+		}
+
 		return {
 			template: domTree,
 			props,
@@ -202,10 +218,19 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 				break;
 		}
 
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Parsed value:`, DEBUG_STYLE);
+			console.log(parsedValue);
+		}
+
 		return parsedValue;
 	}
 
 	#serializePropToAttribute(attr: string, element: HTMLElement, value: PropTypes) {
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Serialize prop to attribute "${attr}": "${value instanceof Object ? JSON.stringify(value) : value.toString()}"`, DEBUG_STYLE);
+		}
+
 		switch (typeof value) {
 			case 'boolean':
 				if (value) {
@@ -231,12 +256,20 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 			throw new Error(`Prop "${name}" is not defined in watched props`);
 		}
 
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Get prop: "${name}"`, DEBUG_STYLE);
+		}
+
 		return this.#props.get(name)?.value as PropPrimitiveTypes;
 	}
 
 	#getComputedPropValue<T extends PropPrimitiveTypes>(name: string): T {
 		if (!this.#props.has(name)) {
 			throw new Error(`Prop "${name}" is not defined in watched props`);
+		}
+
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Get computed prop: "${name}"`, DEBUG_STYLE);
 		}
 
 		if (!this.#computedPropsCache.has(name)) {
@@ -272,6 +305,10 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 
 	#updateProp(propName: string, value: PropTypes, forceUpdate = false) {
 		if (this.#props.has(propName)) {
+			if (DEBUG_MODE) {
+				console.log(`${DEBUG_HEADER} Update prop "${propName}": "${value instanceof Object ? JSON.stringify(value) : value.toString()}"${forceUpdate ? ' (forced)' : ''}`, DEBUG_STYLE);
+			}
+
 			const prop = this.#props.get(propName) as Prop<typeof value>;
 
 			if (typeof prop.value === 'function') {
@@ -299,6 +336,11 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 			throw new Error(`Prop "${prop}" is not defined in watched props`);
 		}
 
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Binding prop "${prop}" to attirbute "${attributeName}":`, DEBUG_STYLE);
+			console.log(element);
+		}
+
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		this.#props.get(prop)!.boundAttributes[attributeName] = element;
 	}
@@ -308,12 +350,27 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 			throw new Error(`Prop "${prop}" is not defined in watched props`);
 		}
 
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Binding prop "${prop}" to element:`, DEBUG_STYLE);
+			console.log(element);
+		}
+
 		this.#props.get(prop)?.boundElements.push(element);
 	}
 
 	static templateParser: TemplateParser = (template) => templateParser(template);
 
 	watchProp({ name, value, attributeName, validate, selector }: PropDefinition<PropTypes>) {
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Watching prop "${name}":`, DEBUG_STYLE);
+			console.log({
+				value,
+				attributeName,
+				validate,
+				selector
+			});
+		}
+
 		this.#props.set(name, {
 			name,
 			value,
@@ -365,10 +422,19 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 			throw new Error(`"${name}" is not a computed prop`);
 		}
 
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Updating computed prop "${name}" with value: "${value instanceof Object ? JSON.stringify(value) : value.toString()}"`, DEBUG_STYLE);
+		}
+
 		this.#updateProp(name, value, true);
 	}
 
 	addStyle(style: string | CSSStyleSheet) {
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Adding style to ${this.constructor.name}`, DEBUG_STYLE);
+			console.log(style);
+		}
+
 		if (typeof style === 'string') {
 			const stylesheet = document.createElement('style');
 
@@ -381,6 +447,10 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 	}
 
 	connectedCallback() {
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Connected: ${this.constructor.name}`, DEBUG_STYLE);
+		}
+
 		// Props have to be updated after the component is initialized
 		this.#props.forEach((prop) => {
 			if (!prop.attributeName) {
@@ -389,8 +459,23 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 		});
 	}
 
+	adoptedCallback() {
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Adopted`, DEBUG_STYLE);
+		}
+	}
+
+	disconnectedCallback() {
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Disconected`, DEBUG_STYLE);
+		}
+	}
 
 	attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Attribute changed: "${name}": "${oldValue}" => "${newValue}"`, DEBUG_STYLE);
+		}
+
 		if (oldValue !== newValue) {
 			const propName = this.#watchedAttributes.get(name) ?? '';
 			const prop = this.#props.get(propName);

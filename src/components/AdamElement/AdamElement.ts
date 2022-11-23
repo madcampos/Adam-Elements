@@ -128,10 +128,6 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 		if (watchedSlots) {
 			this.#watchedSlots = watchedSlots;
 		}
-
-		this.#props.forEach((prop) => {
-			this.#updateProp(prop.name, prop.value, true);
-		});
 	}
 
 	static get uniqueID() {
@@ -383,6 +379,16 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 			this.#root.adoptedStyleSheets = [...this.#root.adoptedStyleSheets, style];
 		}
 	}
+
+	connectedCallback() {
+		// Props have to be updated after the component is initialized
+		this.#props.forEach((prop) => {
+			if (!prop.attributeName) {
+				this.#updateProp(prop.name, prop.value, true);
+			}
+		});
+	}
+
 
 	attributeChangedCallback(name: string, oldValue: string, newValue: string) {
 		if (oldValue !== newValue) {

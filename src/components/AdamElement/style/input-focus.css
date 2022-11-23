@@ -1,0 +1,59 @@
+@property --focus-bg {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: rgba(0, 0, 0, 0.1);
+}
+
+@property --focus-text {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: rgba(255, 255, 255, 0.5);
+}
+
+@property --focus-inner-border {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: rgba(169, 169, 169, 0.6);
+}
+
+@property --focus-outer-border {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: white;
+}
+
+@property --focus-inner-border-inline-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: dashed;
+}
+
+@property --focus-inner-border-block-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: dashed;
+}
+
+@property --focus-outer-border-inline-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: solid;
+}
+
+@property --focus-outer-border-block-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: solid;
+}
+
+:host {
+	--focus-bg: rgba(0, 0, 0, 0.3);
+	--focus-text: white;
+	--focus-inner-border: #9aff00;
+	--focus-outer-border: rgba(169, 169, 169, 0.4);
+
+	--focus-inner-border-inline-style: solid;
+	--focus-inner-border-block-style: dashed;
+	--focus-outer-border-inline-style: solid;
+	--focus-outer-border-block-style: dashed;
+}

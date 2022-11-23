@@ -1,0 +1,59 @@
+@property --disabled-bg {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: rgba(0, 0, 0, 0.1);
+}
+
+@property --disabled-text {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: rgba(255, 255, 255, 0.5);
+}
+
+@property --disabled-inner-border {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: rgba(169, 169, 169, 0.6);
+}
+
+@property --disabled-outer-border {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: white;
+}
+
+@property --disabled-inner-border-inline-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: dashed;
+}
+
+@property --disabled-inner-border-block-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: dashed;
+}
+
+@property --disabled-outer-border-inline-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: solid;
+}
+
+@property --disabled-outer-border-block-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: solid;
+}
+
+:host {
+	--disabled-bg: rgba(0, 0, 0, 0.2);
+	--disabled-text: rgba(255, 255, 255, 0.4);
+	--disabled-inner-border: rgba(169, 169, 169, 0.3);
+	--disabled-outer-border: rgba(255, 255, 255, 0.2);
+
+	--disabled-inner-border-inline-style: dotted;
+	--disabled-inner-border-block-style: dotted;
+	--disabled-outer-border-inline-style: dotted;
+	--disabled-outer-border-block-style: dotted;
+}

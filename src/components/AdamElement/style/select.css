@@ -1,0 +1,9 @@
+@property --option-group-text {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: rgba(255, 255, 255, 0.5);
+}
+
+:host {
+	--option-group-text: rgba(225, 255, 255, 0.5);
+}

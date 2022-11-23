@@ -1,0 +1,59 @@
+@property --invalid-bg {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: rgba(0, 0, 0, 0.1);
+}
+
+@property --invalid-text {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: rgba(255, 255, 255, 0.5);
+}
+
+@property --invalid-inner-border {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: rgba(169, 169, 169, 0.6);
+}
+
+@property --invalid-outer-border {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: white;
+}
+
+@property --invalid-inner-border-inline-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: dashed;
+}
+
+@property --invalid-inner-border-block-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: dashed;
+}
+
+@property --invalid-outer-border-inline-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: solid;
+}
+
+@property --invalid-outer-border-block-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: solid;
+}
+
+:host {
+	--invalid-bg: rgba(0, 0, 0, 0.2);
+	--invalid-text: tomato;
+	--invalid-inner-border: crimson;
+	--invalid-outer-border: sienna;
+
+	--invalid-inner-border-inline-style: dashed;
+	--invalid-inner-border-block-style: dashed;
+	--invalid-outer-border-inline-style: dashed;
+	--invalid-outer-border-block-style: dashed;
+}

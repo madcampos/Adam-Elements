@@ -1,0 +1,59 @@
+@property --hover-bg {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: rgba(0, 0, 0, 0.1);
+}
+
+@property --hover-text {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: rgba(255, 255, 255, 0.5);
+}
+
+@property --hover-inner-border {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: rgba(169, 169, 169, 0.6);
+}
+
+@property --hover-outer-border {
+	syntax: '<color>';
+	inherits: false;
+	initial-value: white;
+}
+
+@property --hover-inner-border-inline-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: dashed;
+}
+
+@property --hover-inner-border-block-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: dashed;
+}
+
+@property --hover-outer-border-inline-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: solid;
+}
+
+@property --hover-outer-border-block-style {
+	syntax: 'solid | dotted | dashed';
+	inherits: false;
+	initial-value: solid;
+}
+
+:host {
+	--hover-bg: rgba(0, 0, 0, 0.2);
+	--hover-text: white;
+	--hover-inner-border: white;
+	--hover-outer-border: rgba(169, 169, 169, 0.6);
+
+	--hover-inner-border-inline-style: dotted;
+	--hover-inner-border-block-style: dashed;
+	--hover-outer-border-inline-style: dashed;
+	--hover-outer-border-block-style: solid;
+}

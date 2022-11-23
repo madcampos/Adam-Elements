@@ -1,0 +1,16 @@
+@property --margin-inline {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 0.95rem;
+}
+
+@property --margin-block {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 0.55rem;
+}
+
+:host {
+	--margin-inline: calc(var(--padding-inline) + var(--border-full));
+	--margin-block: calc(var(--padding-block) + var(--border-full));
+}

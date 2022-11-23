@@ -1,0 +1,16 @@
+@property --padding-inline {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 0.6rem;
+}
+
+@property --padding-block {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 0.2rem;
+}
+
+:host {
+	--padding-inline: 0.6rem;
+	--padding-block: 0.2rem;
+}

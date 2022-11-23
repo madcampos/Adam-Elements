@@ -1,0 +1,23 @@
+@property --label-top-space {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 2.2rem;
+}
+
+@property --icon-size {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 1.5rem;
+}
+
+@property --info-box-max-size {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 7rem;
+}
+
+:host {
+	--label-top-space: calc(var(--border-spacing) + (var(--label-scale) * var(--font-size)) + (var(--padding-block) * 2));
+	--icon-size: calc(var(--font-size) * 1.5);
+	--info-box-max-size: 7rem;
+}

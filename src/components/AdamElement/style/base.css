@@ -1,0 +1,14 @@
+:host {
+	font-family: inherit;
+	box-sizing: border-box;
+}
+
+:host :has(button, input, select, textarea) {
+	font-size: inherit;
+	font-family: inherit;
+}
+
+*, *::before, *::after {
+	box-sizing: inherit;
+	font-family: inherit;
+}

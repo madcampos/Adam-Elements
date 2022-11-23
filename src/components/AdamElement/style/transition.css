@@ -1,0 +1,16 @@
+@property --transition-function {
+	syntax: '<custom-ident>';
+	inherits: false;
+	initial-value: ease-in-out;
+}
+
+@property --transition-time {
+	syntax: '<time>';
+	inherits: false;
+	initial-value: 0.2s;
+}
+
+:host {
+	--transition-function: ease-in-out;
+	--transition-time: 0.2s;
+}

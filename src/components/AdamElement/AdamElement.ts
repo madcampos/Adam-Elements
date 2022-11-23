@@ -2,14 +2,9 @@ import { templateParser, type TemplateParser } from './serialization';
 
 type PropPrimitiveTypes = boolean | string | number | object;
 
-type ComputedPropHandler<T extends PropPrimitiveTypes> = (newValue?: T) => T | Promise<T>;
+type ComputedPropHandler<T extends PropPrimitiveTypes> = (newValue?: T) => T;
 
 type PropTypes = PropPrimitiveTypes | ComputedPropHandler<PropPrimitiveTypes>;
-
-export interface ComputedProp<T extends PropPrimitiveTypes> {
-	update(newValue?: T): void,
-	set(handler: ComputedPropHandler<T>): void
-}
 
 export type PropValidationHandler<T extends PropTypes> = (value: T) => boolean;
 
@@ -61,6 +56,7 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 
 	#watchedSlots: WatchedSlots = {};
 	#props = new Map<string, Prop<PropTypes>>();
+	#computedPropsCache = new Map<string, PropPrimitiveTypes>();
 	#watchedAttributes = new Map<string, string>();
 	#root: ShadowRoot;
 	#internals: ElementInternals;
@@ -234,26 +230,26 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 		}
 	}
 
-	#getPropValue(prop: string) {
-		if (!this.#props.has(prop)) {
-			throw new Error(`Prop "${prop}" is not defined in watched props`);
+	#getPropValue(name: string) {
+		if (!this.#props.has(name)) {
+			throw new Error(`Prop "${name}" is not defined in watched props`);
 		}
 
-		return this.#props.get(prop)?.value as PropPrimitiveTypes;
+		return this.#props.get(name)?.value as PropPrimitiveTypes;
 	}
 
-	#getComputedPropValue<T extends PropPrimitiveTypes>(prop: string): ComputedProp<T> {
-		if (!this.#props.has(prop)) {
-			throw new Error(`Prop "${prop}" is not defined in watched props`);
+	#getComputedPropValue<T extends PropPrimitiveTypes>(name: string): T {
+		if (!this.#props.has(name)) {
+			throw new Error(`Prop "${name}" is not defined in watched props`);
 		}
 
-		return {
-			update: (newValue: T) => this.#updateProp(prop, newValue),
-			set: (handler: ComputedPropHandler<T>) => {
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-				this.#props.get(prop)!.value = handler;
-			}
-		};
+		if (!this.#computedPropsCache.has(name)) {
+			const prop = this.#props.get(name) as Prop<T>;
+
+			this.#updateProp(name, prop.value, true);
+		}
+
+		return this.#computedPropsCache.get(name) as T;
 	}
 
 	#propagatePropUpdates<T extends PropTypes>(prop: Prop<T>, newValue: T) {
@@ -283,11 +279,17 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 			const prop = this.#props.get(propName) as Prop<typeof value>;
 
 			if (typeof prop.value === 'function') {
-				(async () => {
-					const computedValue = await (prop.value as ComputedPropHandler<typeof value>)(value);
+				let tempValue = value;
 
-					this.#propagatePropUpdates(prop, computedValue);
-				})();
+				// Don't stringify functions, instead call it without any value
+				if (typeof tempValue === 'function') {
+					tempValue = undefined as unknown as typeof value;
+				}
+
+				const computedValue = (prop.value as ComputedPropHandler<typeof value>)(tempValue);
+
+				this.#computedPropsCache.set(propName, computedValue);
+				this.#propagatePropUpdates(prop, computedValue);
 			} else if (prop.value !== value || forceUpdate) {
 				this.#propagatePropUpdates(prop, value);
 
@@ -316,50 +318,58 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 	static templateParser: TemplateParser = (template) => templateParser(template);
 
 	watchProp({ name, value, attributeName, validate, selector }: PropDefinition<PropTypes>) {
-		if (!(name in this)) {
-			this.#props.set(name, {
-				name,
-				value,
-				boundAttributes: {},
-				boundElements: [],
-				validate,
-				attributeName
-			});
+		this.#props.set(name, {
+			name,
+			value,
+			boundAttributes: {},
+			boundElements: [],
+			validate,
+			attributeName
+		});
 
-			if (attributeName) {
-				this.#watchedAttributes.set(attributeName, name);
-			}
-
-			if (selector) {
-				this.#root.querySelectorAll<HTMLElement>(selector).forEach((element) => {
-					this.#bindPropToInternalElement(name, element);
-				});
-			}
-
-			if (typeof value === 'function') {
-				Object.defineProperty(this, name, {
-					configurable: false,
-					enumerable: true,
-					get(): typeof value {
-						return this.#getComputedPropValue(name);
-					},
-					set(newValue: typeof value) {
-						this.#updateProp(name, newValue);
-					}
-				});
-			} else {
-				Object.defineProperty(this, name, {
-					configurable: false,
-					enumerable: true,
-					get(): typeof value {
-						return this.#getPropValue(name);
-					},
-					set(newValue: typeof value) {
-						this.#updateProp(name, newValue);
-					}
-				});
-			}
+		if (attributeName) {
+			this.#watchedAttributes.set(attributeName, name);
 		}
+
+		if (selector) {
+			this.#root.querySelectorAll<HTMLElement>(selector).forEach((element) => {
+				this.#bindPropToInternalElement(name, element);
+			});
+		}
+
+		if (typeof value === 'function') {
+			Object.defineProperty(this, name, {
+				configurable: false,
+				enumerable: true,
+				get(): typeof value {
+					return this.#getComputedPropValue(name);
+				},
+				set(newValue: typeof value) {
+					this.#updateProp(name, newValue);
+				}
+			});
+		} else {
+			Object.defineProperty(this, name, {
+				configurable: false,
+				enumerable: true,
+				get(): typeof value {
+					return this.#getPropValue(name);
+				},
+				set(newValue: typeof value) {
+					this.#updateProp(name, newValue);
+				}
+			});
+		}
+	}
+
+	updateComputedProp(name: string, value: PropTypes) {
+		const prop = this.#props.get(name);
+
+		if (typeof prop?.value !== 'function') {
+			throw new Error(`"${name}" is not a computed prop`);
+		}
+
+		this.#updateProp(name, value, true);
 	}
 
 	addStyle(style: string | CSSStyleSheet) {

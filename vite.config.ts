@@ -33,13 +33,9 @@ export default defineConfig(({ mode }) => {
 			port: 3000
 		},
 		build: {
-			minify: true,
 			target: 'esnext',
-			assetsInlineLimit: 0,
 			emptyOutDir: true,
 			outDir: '../dist',
-			// TODO: check for support on removing preload as well
-			polyfillModulePreload: true,
 			rollupOptions: {
 				output: {
 					generatedCode: 'es5',
@@ -53,10 +49,7 @@ export default defineConfig(({ mode }) => {
 		},
 		test: {
 			include: ['**/*.test.ts'],
-			minThreads: 1,
-			maxThreads: 4,
 			passWithNoTests: true,
-			maxConcurrency: 4,
 			coverage: {
 				functions: 75,
 				branches: 75,

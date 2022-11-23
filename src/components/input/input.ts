@@ -3,9 +3,11 @@ import { AdamElement } from '../AdamElement/AdamElement';
 import inputTemplate from './template.html?raw';
 import inputStyle from './style.css?raw';
 
-const watchedAttributes = ['label', 'required', 'readonly', 'disabled', 'value', 'autocomplete', 'pattern', 'maxlength', 'minlength', 'inputmode', 'type'];
+const watchedAttributes = ['id', 'label', 'required', 'readonly', 'disabled', 'value', 'autocomplete', 'pattern', 'maxlength', 'minlength', 'inputmode', 'type'];
 
-interface AdamInput {
+export interface AdamInput {
+	id: string,
+	label: string,
 	required: boolean,
 	readonly: boolean,
 	disabled: boolean,
@@ -18,34 +20,39 @@ interface AdamInput {
 	value: string
 }
 
-class AdamInput extends AdamElement {
+export class AdamInput extends AdamElement {
 	static observedAttributes = watchedAttributes;
 	#input: HTMLInputElement;
 
 	constructor() {
 		super({
 			name: 'adam-input',
+			watchedAttributes,
 			props: [
-				{ name: 'required', value: false },
-				{ name: 'readonly', value: false },
-				{ name: 'disabled', value: false },
-				{ name: 'minlength', value: 0 },
-				{ name: 'maxlength', value: 524288 },
-				{ name: 'autocomplete', value: 'off' },
-				{ name: 'pattern', value: '' },
-				{ name: 'inputmode', value: '' },
+				{ name: 'id', value: `input-${AdamElement.uniqueID}`, attributeName: 'id' },
+				{ name: 'label', value: '', attributeName: 'label' },
+				{ name: 'required', value: false, attributeName: 'required' },
+				{ name: 'readOnly', value: false, attributeName: 'readonly' },
+				{ name: 'disabled', value: false, attributeName: 'disabled' },
+				{ name: 'minLength', value: 0, attributeName: 'minlength' },
+				{ name: 'maxLength', value: Number.MAX_SAFE_INTEGER, attributeName: 'maxlength' },
+				{ name: 'autoComplete', value: 'off', attributeName: 'autocomplete' },
+				{ name: 'pattern', value: '', attributeName: 'pattern' },
+				{ name: 'inputMode', value: '', attributeName: 'inputmode' },
 				{
 					name: 'value',
 					value: (value?: string) => {
 						this.#input.value = value ?? '';
 
 						if (!this.#input.checkValidity()) {
-							// @ts-expect-error
-							this.root.querySelector('#error-text')?.innerText = this.#input.validationMessage;
+							const errorText = this.root.querySelector('#error-text') as HTMLDivElement;
+
+							errorText.innerText = this.#input.validationMessage;
 						}
 
 						return this.#input.value;
-					}
+					},
+					attributeName: 'value'
 				},
 				{
 					name: 'type',
@@ -56,18 +63,15 @@ class AdamInput extends AdamElement {
 					},
 					validate: (value) => {
 						if (!['text', 'email', 'url', 'tel', 'search', 'password'].includes(value as string)) {
-							return true;
+							throw new Error('Invalid input type');
 						}
-
-						return false;
-					}
+					},
+					attributeName: 'type'
 				}
 			],
 			handlers: {
-				change: (evt: Event) => {
-					const target = evt.target as HTMLInputElement;
-
-					target.checkValidity();
+				change: () => {
+					this.#input.checkValidity();
 
 					this.internals.setFormValue(this.#input.value);
 					this.dispatchEvent(new CustomEvent('change', { bubbles: true, composed: true }));
@@ -76,10 +80,12 @@ class AdamInput extends AdamElement {
 					evt.preventDefault();
 					evt.stopPropagation();
 
-					// @ts-expect-error
-					this.root.querySelector('#error-text').innerText = evt.target.validationMessage;
+					const errorText = this.root.querySelector('#error-text') as HTMLDivElement;
 
-					this.internals.setValidity(this.#input.validity);
+					errorText.innerText = this.#input.validationMessage;
+
+					// TODO: fix
+					// This.internals.setValidity(this.#input.validity);
 					this.dispatchEvent(new CustomEvent('invalid', { bubbles: true, composed: true }));
 				},
 				handleIcons: (evt: Event) => {

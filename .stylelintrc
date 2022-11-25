@@ -47,7 +47,7 @@
 		"custom-property-pattern": "[a-z][-a-z0-9]+",
 		"property-allowed-list": null,
 		"property-disallowed-list": null,
-		"property-no-vendor-prefix": [true, { "ignoreProperties": ["box-orient"] }],
+		"property-no-vendor-prefix": [true, { "ignoreProperties": ["box-orient", "mask-image", "appearance"] }],
 		"declaration-block-no-redundant-longhand-properties": [true, { "ignoreShorthands": ["grid-template"]}],
 		"declaration-no-important": true,
 		"declaration-property-unit-allowed-list": null,

@@ -10,7 +10,9 @@ const DEBUG_STYLE = 'color: #0080ff; font-weight: bold; background: #000000; bor
 
 type PropPrimitiveTypes = boolean | string | number | object;
 
-type ComputedPropHandler<T extends PropPrimitiveTypes> = (newValue?: T) => T;
+export type ComputedPropValue<T extends PropPrimitiveTypes> = T | string;
+
+type ComputedPropHandler<T extends PropPrimitiveTypes> = (newValue?: ComputedPropValue<T>) => T;
 
 type PropTypes = PropPrimitiveTypes | ComputedPropHandler<PropPrimitiveTypes>;
 
@@ -488,9 +490,13 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 			const prop = this.#props.get(propName);
 
 			if (prop) {
-				const propValue = this.#parseValue(newValue, typeof prop.value);
+				if (typeof prop.value === 'function') {
+					this.#updateProp(propName, newValue, true);
+				} else {
+					const propValue = this.#parseValue(newValue, typeof prop.value);
 
-				this.#updateProp(prop.name, propValue);
+					this.#updateProp(prop.name, propValue);
+				}
 			}
 		}
 	}

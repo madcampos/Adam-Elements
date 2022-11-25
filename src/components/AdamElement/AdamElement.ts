@@ -67,7 +67,7 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 	#computedPropsCache = new Map<string, PropPrimitiveTypes>();
 	#watchedAttributes = new Map<string, string>();
 	#root: ShadowRoot;
-	#internals: ElementInternals;
+	#internals: ElementInternals | undefined = undefined;
 	#elementId = 'NO ID';
 
 	handlers: Record<string, EventHandler | undefined> = {};
@@ -79,7 +79,11 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 		this.name = name;
 		this.#elementId = `${this.name}-${AdamElement.uniqueID}`;
 		this.#root = this.attachShadow({ mode: 'closed', delegatesFocus: true });
-		this.#internals = this.attachInternals();
+
+		if ('attachInternals' in this) {
+			this.#internals = this.attachInternals();
+		}
+
 		this.addStyle(baseStyle);
 
 		const { props: parsedProps, template: parsedTemplate, handlers: parsedHandlers } = this.#parseTemplate(template);

@@ -388,6 +388,12 @@
 				"trailingUnderscore": "forbid"
 			},
 			{
+				"selector": "objectLiteralMethod",
+				"format": null,
+				"leadingUnderscore": "forbid",
+				"trailingUnderscore": "forbid"
+			},
+			{
 				"selector": "objectLiteralProperty",
 				"format": null,
 				"leadingUnderscore": "forbid",
@@ -406,6 +412,12 @@
 					"regex": "^(_id|__v)$",
 					"match": false
 				}
+			},
+			{
+				"selector": "typeMethod",
+				"format": null,
+				"leadingUnderscore": "forbid",
+				"trailingUnderscore": "forbid"
 			},
 			{
 				"selector": "typeLike",

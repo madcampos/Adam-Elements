@@ -1,7 +1,109 @@
+:host {
+	--label-color-normal: silver;
+	--label-color-focus: white;
+	--label-color-hover: white;
+	--label-color-disabled: darkgray;
+	--label-color-read-only: darkgray;
+	--label-color-valid: dodgerblue;
+	--label-color-invalid: orangered;
+
+	--inner-border-color-normal: silver;
+	--inner-border-color-focus: limegreen;
+	--inner-border-color-hover: greenyellow;
+	--inner-border-color-disabled: silver;
+	--inner-border-color-read-only: silver;
+	--inner-border-color-valid: dodgerblue;
+	--inner-border-color-invalid: orangered;
+
+	--inner-border-style-normal: dashed solid;
+	--inner-border-style-focus: dotted solid;
+	--inner-border-style-hover: dotted solid;
+	--inner-border-style-disabled: dotted solid;
+	--inner-border-style-read-only: dashed solid;
+	--inner-border-style-valid: dashed solid;
+	--inner-border-style-invalid: dotted;
+
+	--outer-border-color-normal: white;
+	--outer-border-color-focus: silver;
+	--outer-border-color-hover: white;
+	--outer-border-color-disabled: darkgray;
+	--outer-border-color-read-only: darkgray;
+	--outer-border-color-valid: slateblue;
+	--outer-border-color-invalid: firebrick;
+
+	--outer-border-style-normal: solid;
+	--outer-border-style-focus: dotted solid;
+	--outer-border-style-hover: dashed solid;
+	--outer-border-style-disabled: dotted solid;
+	--outer-border-style-read-only: dashed solid;
+	--outer-border-style-valid: solid;
+	--outer-border-style-invalid: solid;
+
+	--input-background-normal: rgba(0, 0, 0, 0.3);
+	--input-background-focus: rgba(169, 169, 169, 0.5);
+	--input-background-hover: rgba(169, 169, 169, 0.3);
+	--input-background-disabled: rgba(0, 0, 0, 0.1);
+	--input-background-read-only: rgba(0, 0, 0, 0.1);
+	--input-background-valid: rgba(71, 61, 139, 0.2);
+	--input-background-invalid: rgba(128, 0, 0, 0.2);
+
+	--input-color-normal: silver;
+	--input-color-focus: white;
+	--input-color-hover: white;
+	--input-color-disabled: darkgray;
+	--input-color-read-only: darkgray;
+	--input-color-valid: dodgerblue;
+	--input-color-invalid: orangered;
+
+	--marker-color-normal: white;
+	--marker-color-focus: limegreen;
+	--marker-color-hover: greenyellow;
+	--marker-color-disabled: silver;
+	--marker-color-read-only: silver;
+	--marker-color-valid: dodgerblue;
+	--marker-color-invalid: orangered;
+
+	--marker-border-normal: orangered;
+	--marker-border-focus: silver;
+	--marker-border-hover: white;
+	--marker-border-disabled: silver;
+	--marker-border-read-only: silver;
+	--marker-border-valid: slateblue;
+	--marker-border-invalid: firebrick;
+
+	--border-width: 0.12rem;
+	--border-radius: 0.2rem;
+	--border-spacing: 0.1rem;
+	--marker-size: 0.6rem;
+	--message-box-height: 5rem;
+	--padding: 0.5rem;
+	--transition-time: 0.2s;
+}
+
 #root {
-	display: grid;
+	--label-color: var(--label-color-normal);
+	--inner-border-color: var(--inner-border-color-normal);
+	--outer-border-color: var(--outer-border-color-normal);
+	--input-background: var(--input-background-normal);
+	--input-color: var(--input-color-normal);
+	--inner-border-style: var(--inner-border-style-normal);
+	--outer-border-style: var(--outer-border-style-normal);
+	--marker-color: var(--marker-color-normal);
+	--marker-border: var(--marker-border-normal);
+
+	--input-border-radius: var(--border-radius);
+	--inner-border-radius: calc(var(--border-radius) + var(--border-width) + var(--border-spacing));
+	--outer-border-radius: calc(var(--inner-border-radius) + var(--border-width) + var(--border-spacing));
+
+	--marker-scale: 0;
+
+	--message-box-display: none;
+	--error-text-display: none;
+	--helper-text-display: none;
+
+	display: inline-grid;
 	grid-template-columns: 1fr;
-	grid-template-rows: 1fr 1fr;
+	grid-template-rows: 1fr;
 	grid-template-areas:
 		'input'
 		'helper-text';
@@ -10,10 +112,16 @@
 	max-width: min-content;
 	max-height: min-content;
 
-	padding: 0.5rem;
+	padding: var(--padding);
 	margin-top: 1rem;
 
-	transition: all 0.2s ease-in-out;
+	position: relative;
+
+	transition: all var(--transition-time) ease-in-out;
+}
+
+#root * {
+	transition: all var(--transition-time) ease-in-out;
 }
 
 label {
@@ -29,80 +137,217 @@ label {
 	margin-left: 1rem;
 
 	grid-area: input;
+
+	color: var(--label-color);
 }
 
 input {
-	appearance: none;
-	/* stylelint-disable-next-line property-no-vendor-prefix */
 	-webkit-appearance: none;
+	appearance: none;
 
 	font-size: 100%;
 
 	display: block;
 
 	border: none;
-	border-radius: 0.2rem;
-	padding: 0.2rem;
-	background: rgba(0, 0, 0, 0.3);
+	border-radius: var(--input-border-radius);
+	padding: var(--border-spacing);
+	background: var(--input-background);
+	color: var(--input-color);
 }
 
 input[type='search']::-webkit-search-cancel-button { display: none; }
 input[type='password']::-ms-reveal { display: none; }
+
+input:focus { outline: none; }
 
 input::placeholder {
 	color: transparent;
 	font-size: 0;
 }
 
-input:focus { outline: none; }
-
 .border {
-	border: medium solid;
-	padding: 0.2rem;
+	border-width: var(--border-width);
+	padding: var(--border-spacing);
 }
 
 #outer-border {
-	border-color: white;
-	border-radius: 0.6rem;
+	--mask-size: calc((var(--marker-size) - var(--border-spacing)) * var(--marker-scale));
+	--mask:
+		radial-gradient(
+			circle at var(--border-spacing) var(--border-spacing),
+			transparent var(--mask-size),
+			black var(--mask-size)
+		);
+
+	-webkit-mask-image: var(--mask);
+	mask-image: var(--mask);
+
+	border-color: var(--outer-border-color);
+	border-style: var(--outer-border-style);
+	border-radius: var(--outer-border-radius);
 
 	grid-area: input;
 }
 
 #inner-border {
-	border-color: limegreen;
-	border-radius: 0.4rem;
-	border-top-style: dashed;
-	border-bottom-style: dashed;
+	border-color: var(--inner-border-color);
+	border-style: var(--inner-border-style);
+	border-radius: var(--inner-border-radius);
+}
+
+#attention-marker {
+	position: absolute;
+	width: var(--marker-size);
+	height: var(--marker-size);
+	top: calc(var(--padding) - var(--border-spacing));
+	left: calc(var(--padding) - var(--border-spacing));
+
+	border-radius: 100vmax;
+	border: var(--border-width) solid var(--marker-border);
+
+	padding: var(--border-spacing);
+	background-clip: content-box;
+	background-color: var(--marker-color);
+
+	transform: scale(var(--marker-scale));
+}
+
+#message-wrapper {
+	position: relative;
+	display: flex;
+	justify-content: center;
+}
+
+#outer-message-box {
+	display: var(--message-box-display);
+	position: absolute;
+	z-index: 1;
+
+	margin-inline: 1rem;
+	padding: var(--border-spacing);
+	padding-top: 0;
+
+	border-width: var(--border-width);
+	border-style: var(--outer-border-style);
+	border-top-style: none;
+	border-color: var(--outer-border-color);
+	border-radius: 0 0 var(--outer-border-radius) var(--outer-border-radius);
+
+	font-size: 0.8em;
+	color: var(--label-color);
+}
+
+#inner-message-box {
+	padding: var(--border-spacing);
+	padding-top: 0;
+
+	border-width: var(--border-width);
+	border-style: var(--inner-border-style);
+	border-top-style: none;
+	border-color: var(--inner-border-color);
+	border-radius: 0 0 var(--inner-border-radius) var(--inner-border-radius);
+}
+
+#message-box {
+	overflow: auto;
+	padding: 0 0.2rem;
+	max-height: var(--message-box-height);
+
+	background: var(--input-background);
+	border-radius: 0 0 var(--input-border-radius) var(--input-border-radius);
+}
+
+#error-text { display: var(--error-text-display); }
+#helper-text { display: var(--helper-text-display); }
+
+#root:hover {
+	--label-color: var(--label-color-hover);
+	--inner-border-color: var(--inner-border-color-hover);
+	--outer-border-color: var(--outer-border-color-hover);
+	--input-background: var(--input-background-hover);
+	--input-color: var(--input-color-hover);
+	--inner-border-style: var(--inner-border-style-hover);
+	--outer-border-style: var(--outer-border-style-hover);
+	--marker-color: var(--marker-color-hover);
+	--marker-border: var(--marker-border-hover);
+}
+
+#root:has(input:required) {
+	--marker-scale: 1;
+}
+
+#root:has(input:disabled) {
+	--label-color: var(--label-color-disabled);
+	--inner-border-color: var(--inner-border-color-disabled);
+	--outer-border-color: var(--outer-border-color-disabled);
+	--input-background: var(--input-background-disabled);
+	--input-color: var(--input-color-disabled);
+	--inner-border-style: var(--inner-border-style-disabled);
+	--outer-border-style: var(--outer-border-style-disabled);
+	--marker-color: var(--marker-color-disabled);
+	--marker-border: var(--marker-border-disabled);
+}
+
+#root:has(input:focus) {
+	--label-color: var(--label-color-focus);
+	--inner-border-color: var(--inner-border-color-focus);
+	--outer-border-color: var(--outer-border-color-focus);
+	--input-background: var(--input-background-focus);
+	--input-color: var(--input-color-focus);
+	--inner-border-style: var(--inner-border-style-focus);
+	--outer-border-style: var(--outer-border-style-focus);
+	--marker-color: var(--marker-color-focus);
+	--marker-border: var(--marker-border-focus);
+}
+
+#root.has-helper-text:has(input:focus) {
+	--message-box-display: block;
+	--helper-text-display: block;
+}
+
+#root:has(input:read-only:not(:hover)) {
+	--label-color: var(--label-color-read-only);
+	--inner-border-color: var(--inner-border-color-read-only);
+	--outer-border-color: var(--outer-border-color-read-only);
+	--input-background: var(--input-background-read-only);
+	--input-color: var(--input-color-read-only);
+	--inner-border-style: var(--inner-border-style-read-only);
+	--outer-border-style: var(--outer-border-style-read-only);
+	--marker-color: var(--marker-color-read-only);
+	--marker-border: var(--marker-border-read-only);
 }
 
 #root:has(input:placeholder-shown:not(:focus)) label {
 	transform: translateY(0);
 }
 
-#root:has(input:invalid) :is(#outer-border, label) {
-	border-color: tomato;
-	color: tomato;
+#root:has(input.has-validation:invalid:not(:is(:placeholder-shown, :focus))) {
+	--marker-scale: 1;
+	--message-box-display: block;
+	--error-text-display: block;
 }
 
-#root:has(input:invalid) #inner-border {
-	border-color: firebrick;
+#root:has(input.has-validation:invalid:not(:is(:placeholder-shown, :focus, :hover))) {
+	--label-color: var(--label-color-invalid);
+	--inner-border-color: var(--inner-border-color-invalid);
+	--outer-border-color: var(--outer-border-color-invalid);
+	--input-background: var(--input-background-invalid);
+	--input-color: var(--input-color-invalid);
+	--inner-border-style: var(--inner-border-style-invalid);
+	--outer-border-style: var(--outer-border-style-invalid);
+	--marker-color: var(--marker-color-invalid);
+	--marker-border: var(--marker-border-invalid);
 }
 
-#root:has(input:valid:not(:placeholder-shown)) #inner-border {
-	border-color: dodgerblue;
-}
-
-#root:has(input:read-only) :is(#inner-border, label) {
-	border-color: rgba(192, 192, 192, 0.3);
-	color: silver;
-}
-
-#root:has(input:disabled) :is(.border, label) {
-	border-color: rgba(192, 192, 192, 0.3);
-	color: rgba(192, 192, 192, 0.3);
-}
-
-#root:hover :is(label, .border) {
-	color: greenyellow;
-	border-color: greenyellow;
+#root:has(input.has-validation:valid:not(:is(:placeholder-shown, :focus, :hover))) {
+	--label-color: var(--label-color-valid);
+	--inner-border-color: var(--inner-border-color-valid);
+	--outer-border-color: var(--outer-border-color-valid);
+	--input-background: var(--input-background-valid);
+	--input-color: var(--input-color-valid);
+	--inner-border-style: var(--inner-border-style-valid);
+	--outer-border-style: var(--outer-border-style-valid);
+	--marker-color: var(--marker-color-valid);
+	--marker-border: var(--marker-border-valid);
 }

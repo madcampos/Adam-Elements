@@ -1,4 +1,4 @@
-import { AdamElement } from '../AdamElement/AdamElement';
+import { AdamElement, type ComputedPropValue } from '../AdamElement/AdamElement';
 
 import inputTemplate from './template.html?raw';
 import inputStyle from './style.css?raw';
@@ -31,17 +31,61 @@ export class AdamInput extends AdamElement {
 			props: [
 				{ name: 'id', value: `input-${AdamElement.uniqueID}`, attributeName: 'id' },
 				{ name: 'label', value: '', attributeName: 'label' },
-				{ name: 'required', value: false, attributeName: 'required' },
+				{
+					name: 'required',
+					value: (newValue?: ComputedPropValue<boolean>) => {
+						const value = typeof newValue === 'string' ? true : newValue ?? false;
+
+						this.#input.required = value;
+						this.#input.classList.toggle('has-validation', value);
+
+						return value;
+					},
+					attributeName: 'required'
+				},
 				{ name: 'readOnly', value: false, attributeName: 'readonly' },
 				{ name: 'disabled', value: false, attributeName: 'disabled' },
-				{ name: 'minLength', value: 0, attributeName: 'minlength' },
-				{ name: 'maxLength', value: Number.MAX_SAFE_INTEGER, attributeName: 'maxlength' },
+				{
+					name: 'minLength',
+					value: (newValue?: ComputedPropValue<number>) => {
+						const value = Number.parseInt((newValue ?? 0).toString());
+
+						this.#input.minLength = value;
+						this.#input.classList.toggle('has-validation', value > 0);
+
+						return value;
+					},
+					attributeName: 'minlength'
+				},
+				{
+					name: 'maxLength',
+					value: (newValue?: ComputedPropValue<number>) => {
+						const value = Number.parseInt((newValue ?? Number.MAX_SAFE_INTEGER).toString());
+
+						this.#input.maxLength = value;
+						this.#input.classList.toggle('has-validation', value < Number.MAX_SAFE_INTEGER);
+
+						return value;
+					},
+					attributeName: 'maxlength'
+				},
 				{ name: 'autoComplete', value: 'off', attributeName: 'autocomplete' },
-				{ name: 'pattern', value: '', attributeName: 'pattern' },
+				{
+					name: 'pattern',
+					value: (newValue?: ComputedPropValue<string>) => {
+						const value = newValue ?? '';
+
+						this.#input.pattern = value;
+						this.#input.classList.toggle('has-validation', value !== '');
+
+						return value;
+					},
+					attributeName: 'pattern'
+				},
 				{ name: 'inputMode', value: '', attributeName: 'inputmode' },
 				{
 					name: 'value',
-					value: (value?: string) => {
+					value: (value?: ComputedPropValue<string>) => {
 						this.#input.value = value ?? '';
 
 						if (!this.#input.checkValidity()) {
@@ -56,10 +100,13 @@ export class AdamInput extends AdamElement {
 				},
 				{
 					name: 'type',
-					value: (value?: string) => {
-						this.#input.type = value ?? 'text';
+					value: (newValue?: ComputedPropValue<string>) => {
+						const value = newValue ?? 'text';
 
-						return this.#input.type;
+						this.#input.type = value;
+						this.#input.classList.toggle('has-validation', value === 'email' || value === 'url');
+
+						return value;
 					},
 					validate: (value) => {
 						if (!['text', 'email', 'url', 'tel', 'search', 'password'].includes(value as string)) {
@@ -73,7 +120,7 @@ export class AdamInput extends AdamElement {
 				change: () => {
 					this.#input.checkValidity();
 
-					this.internals.setFormValue(this.#input.value);
+					this.internals?.setFormValue(this.#input.value);
 					this.dispatchEvent(new CustomEvent('change', { bubbles: true, composed: true }));
 				},
 				invalid: (evt: Event) => {
@@ -122,6 +169,13 @@ export class AdamInput extends AdamElement {
 							}
 						}
 					}
+				}
+			},
+			watchedSlots: {
+				'helper-text': (evt) => {
+					const elementsCount = evt.target.assignedElements().length;
+
+					this.root.querySelector('#root')?.classList.toggle('has-helper-text', elementsCount > 0);
 				}
 			},
 			style: inputStyle,

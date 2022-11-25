@@ -29,11 +29,17 @@
 			</div>
 		</div>
 		<div id="attention-marker"></div>
-		<div id="message-box">
-			<small id="info-text" tabindex="0">
-				<slot name="helper-text"></slot>
-			</small>
-			<small id="error-text"></small>
+		<div id="message-wrapper">
+			<div id="outer-message-box">
+				<div id="inner-message-box">
+					<div id="message-box">
+						<small id="helper-text" tabindex="0">
+							<slot name="helper-text"></slot>
+						</small>
+						<small id="error-text"></small>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>

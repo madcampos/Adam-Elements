@@ -71,6 +71,8 @@
 	--marker-border-valid: slateblue;
 	--marker-border-invalid: firebrick;
 
+	--icon-size: 1.5rem;
+
 	--border-width: 0.12rem;
 	--border-radius: 0.2rem;
 	--border-spacing: 0.1rem;
@@ -97,6 +99,8 @@
 
 	--marker-scale: 0;
 
+	--internal-icon-size: 0rem;
+
 	--message-box-display: none;
 	--error-text-display: none;
 	--helper-text-display: none;
@@ -113,7 +117,7 @@
 	max-height: min-content;
 
 	padding: var(--padding);
-	margin-top: 1rem;
+	margin-block-start: 1rem;
 
 	position: relative;
 
@@ -126,7 +130,7 @@
 
 label {
 	transform-origin: left bottom;
-	transform: translateY(-200%) scale(0.8);
+	transform: translateY(-200%) translateX(calc(var(--internal-icon-size) * -1)) scale(0.8);
 
 	pointer-events: none;
 	cursor: text;
@@ -134,7 +138,7 @@ label {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
-	margin-left: 1rem;
+	margin-inline-start: calc(var(--border-width) * 2 + var(--border-spacing) * 2 + var(--internal-icon-size));
 
 	grid-area: input;
 
@@ -152,6 +156,7 @@ input {
 	border: none;
 	border-radius: var(--input-border-radius);
 	padding: var(--border-spacing);
+	padding-inline-start: var(--internal-icon-size);
 	background: var(--input-background);
 	color: var(--input-color);
 }
@@ -196,12 +201,22 @@ input::placeholder {
 	border-radius: var(--inner-border-radius);
 }
 
+#icons {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: var(--internal-icon-size);
+	height: var(--internal-icon-size);
+}
+
+#icons > * { visibility: hidden; }
+
 #attention-marker {
 	position: absolute;
 	width: var(--marker-size);
 	height: var(--marker-size);
-	top: calc(var(--padding) - var(--border-spacing));
-	left: calc(var(--padding) - var(--border-spacing));
+	inset-block-start: calc(var(--padding) - var(--border-spacing));
+	inset-inline-start: calc(var(--padding) - var(--border-spacing));
 
 	border-radius: 100vmax;
 	border: var(--border-width) solid var(--marker-border);
@@ -224,13 +239,13 @@ input::placeholder {
 	position: absolute;
 	z-index: 1;
 
-	margin-inline: 1rem;
+	margin-inline: var(--outer-border-radius);
 	padding: var(--border-spacing);
-	padding-top: 0;
+	padding-block-start: 0;
 
 	border-width: var(--border-width);
 	border-style: var(--outer-border-style);
-	border-top-style: none;
+	border-block-start-style: none;
 	border-color: var(--outer-border-color);
 	border-radius: 0 0 var(--outer-border-radius) var(--outer-border-radius);
 
@@ -240,18 +255,18 @@ input::placeholder {
 
 #inner-message-box {
 	padding: var(--border-spacing);
-	padding-top: 0;
+	padding-block-start: 0;
 
 	border-width: var(--border-width);
 	border-style: var(--inner-border-style);
-	border-top-style: none;
+	border-block-start-style: none;
 	border-color: var(--inner-border-color);
 	border-radius: 0 0 var(--inner-border-radius) var(--inner-border-radius);
 }
 
 #message-box {
 	overflow: auto;
-	padding: 0 0.2rem;
+	padding: var(--border-spacing);
 	max-height: var(--message-box-height);
 
 	background: var(--input-background);
@@ -272,6 +287,17 @@ input::placeholder {
 	--marker-color: var(--marker-color-hover);
 	--marker-border: var(--marker-border-hover);
 }
+
+#root:has(input:is([type='email'], [type='url'], [type='tel'], [type='search'], [type='password'], [show-password])) {
+	--internal-icon-size: var(--icon-size);
+}
+
+#root:has(input[type='email']) #icon-email { visibility: visible; }
+#root:has(input[type='url']) #icon-url { visibility: visible; }
+#root:has(input[type='tel']) #icon-tel { visibility: visible; }
+#root:has(input[type='search']) #icon-search { visibility: visible; }
+#root:has(input[type='password']) #icon-show-password { visibility: visible; }
+#root:has(input[show-password]) #icon-hide-password { visibility: visible; }
 
 #root:has(input:required) {
 	--marker-scale: 1;

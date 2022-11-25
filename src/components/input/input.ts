@@ -135,38 +135,37 @@ export class AdamInput extends AdamElement {
 					// This.internals.setValidity(this.#input.validity);
 					this.dispatchEvent(new CustomEvent('invalid', { bubbles: true, composed: true }));
 				},
-				handleIcons: (evt: Event) => {
-					const target = evt.target as HTMLElement;
+				handleIcons: (evt) => {
+					evt.preventDefault();
+					evt.stopPropagation();
 
-					if (target.matches('#outer-border')) {
-						if (this.type === 'password') {
-								if (this.#input.hasAttribute('show-password')) {
-									this.#input.removeAttribute('show-password');
-									this.#input.type = 'password';
-								} else {
-									this.#input.setAttribute('show-password', '');
-									this.#input.type = 'text';
-								}
-						} else if (['tel', 'url', 'email'].includes(this.type)) {
-							const hasValue = this.value !== '';
-							const isValid = target.parentElement?.querySelector('input')?.checkValidity();
-
-							if (hasValue && isValid) {
-								let url = this.value;
-
-								switch (this.type) {
-									case 'tel':
-										url = `tel:${this.value}`;
-										break;
-									case 'email':
-										url = `mailto:${this.value}`;
-										break;
-									default:
-										url = this.#input.value;
-								}
-
-								window.open(url);
+					if (this.type === 'password') {
+							if (this.#input.hasAttribute('show-password')) {
+								this.#input.removeAttribute('show-password');
+								this.#input.type = 'password';
+							} else {
+								this.#input.setAttribute('show-password', '');
+								this.#input.type = 'text';
 							}
+					} else if (['tel', 'url', 'email'].includes(this.type)) {
+						const hasValue = this.#input.value !== '';
+						const isValid = this.#input.checkValidity();
+
+						if (hasValue && isValid) {
+							let url = this.#input.value;
+
+							switch (this.type) {
+								case 'tel':
+									url = `tel:${this.#input.value}`;
+									break;
+								case 'email':
+									url = `mailto:${this.#input.value}`;
+									break;
+								default:
+									url = this.#input.value;
+							}
+
+							window.open(url);
 						}
 					}
 				}

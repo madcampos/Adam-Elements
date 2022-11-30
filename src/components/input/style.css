@@ -15,13 +15,21 @@
 	--inner-border-color-valid: dodgerblue;
 	--inner-border-color-invalid: orangered;
 
-	--inner-border-style-normal: dashed solid;
-	--inner-border-style-focus: dotted solid;
-	--inner-border-style-hover: dotted solid;
-	--inner-border-style-disabled: dotted solid;
-	--inner-border-style-read-only: dashed solid;
-	--inner-border-style-valid: dashed solid;
-	--inner-border-style-invalid: dotted;
+	--inner-border-inline-style-normal: 1 0;
+	--inner-border-inline-style-focus: 1 0;
+	--inner-border-inline-style-hover: 1 0;
+	--inner-border-inline-style-disabled: 4 12;
+	--inner-border-inline-style-read-only: 12 12;
+	--inner-border-inline-style-valid: 1 0;
+	--inner-border-inline-style-invalid: 2 6;
+
+	--inner-border-block-style-normal: 12 12;
+	--inner-border-block-style-focus: 2 6;
+	--inner-border-block-style-hover: 12 6;
+	--inner-border-block-style-disabled: 6 12;
+	--inner-border-block-style-read-only: 12 12;
+	--inner-border-block-style-valid: 12 12;
+	--inner-border-block-style-invalid: 2 6;
 
 	--outer-border-color-normal: white;
 	--outer-border-color-focus: silver;
@@ -31,13 +39,21 @@
 	--outer-border-color-valid: slateblue;
 	--outer-border-color-invalid: firebrick;
 
-	--outer-border-style-normal: solid;
-	--outer-border-style-focus: dotted solid;
-	--outer-border-style-hover: dashed solid;
-	--outer-border-style-disabled: dotted solid;
-	--outer-border-style-read-only: dashed solid;
-	--outer-border-style-valid: solid;
-	--outer-border-style-invalid: solid;
+	--outer-border-inline-style-normal: 1 0;
+	--outer-border-inline-style-focus: 2 6;
+	--outer-border-inline-style-hover: 1 0;
+	--outer-border-inline-style-disabled: 4 12;
+	--outer-border-inline-style-read-only: 12 12;
+	--outer-border-inline-style-valid: 1 0;
+	--outer-border-inline-style-invalid: 2 6;
+
+	--outer-border-block-style-normal: 1 0;
+	--outer-border-block-style-focus: 1 0;
+	--outer-border-block-style-hover: 12 12;
+	--outer-border-block-style-disabled: 1 0;
+	--outer-border-block-style-read-only: 1 0;
+	--outer-border-block-style-valid: 1 0;
+	--outer-border-block-style-invalid: 2 6;
 
 	--input-background-normal: rgba(0, 0, 0, 0.3);
 	--input-background-focus: rgba(169, 169, 169, 0.5);
@@ -72,6 +88,7 @@
 	--marker-border-invalid: firebrick;
 
 	--icon-size: 1.5rem;
+	--label-size: 1rem;
 
 	--border-width: 0.12rem;
 	--border-radius: 0.2rem;
@@ -88,8 +105,10 @@
 	--outer-border-color: var(--outer-border-color-normal);
 	--input-background: var(--input-background-normal);
 	--input-color: var(--input-color-normal);
-	--inner-border-style: var(--inner-border-style-normal);
-	--outer-border-style: var(--outer-border-style-normal);
+	--inner-border-inline-style: var(--inner-border-inline-style-normal);
+	--inner-border-block-style: var(--inner-border-block-style-normal);
+	--outer-border-inline-style: var(--outer-border-inline-style-normal);
+	--outer-border-block-style: var(--outer-border-block-style-normal);
 	--marker-color: var(--marker-color-normal);
 	--marker-border: var(--marker-border-normal);
 
@@ -107,8 +126,9 @@
 
 	display: inline-grid;
 	grid-template-columns: 1fr;
-	grid-template-rows: 1fr;
+	grid-template-rows: var(--label-size) repeat(2, auto);
 	grid-template-areas:
+		'label'
 		'input'
 		'helper-text';
 	align-items: center;
@@ -134,6 +154,7 @@ label {
 
 	pointer-events: none;
 	cursor: text;
+	padding: var(--border-spacing);
 
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -154,11 +175,14 @@ input {
 	display: block;
 
 	border: none;
-	border-radius: var(--input-border-radius);
+
 	padding: var(--border-spacing);
 	padding-inline-start: var(--internal-icon-size);
-	background: var(--input-background);
+	margin: calc(var(--padding) + var(--border-width) + var(--border-spacing));
+	background: transparent;
 	color: var(--input-color);
+
+	grid-area: input;
 }
 
 input[type='search']::-webkit-search-cancel-button { display: none; }
@@ -171,34 +195,50 @@ input::placeholder {
 	font-size: 0;
 }
 
-.border {
-	border-width: var(--border-width);
-	padding: var(--border-spacing);
-}
-
-#outer-border {
-	--mask-size: calc((var(--marker-size) - var(--border-spacing)) * var(--marker-scale));
-	--mask:
-		radial-gradient(
-			circle at var(--border-spacing) var(--border-spacing),
-			transparent var(--mask-size),
-			black var(--mask-size)
-		);
-
-	-webkit-mask-image: var(--mask);
-	mask-image: var(--mask);
-
-	border-color: var(--outer-border-color);
-	border-style: var(--outer-border-style);
-	border-radius: var(--outer-border-radius);
+#borders-svg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	overflow: visible;
 
 	grid-area: input;
 }
 
-#inner-border {
-	border-color: var(--inner-border-color);
-	border-style: var(--inner-border-style);
-	border-radius: var(--inner-border-radius);
+/* This element is just for computing vars */
+
+#borders-svg::before {
+	border-style: solid;
+	border-width: var(--border-width);
+	border-radius: var(--border-radius);
+	margin: var(--border-spacing);
+}
+
+#borders-svg * {
+	fill: none;
+	stroke-width: var(--border-width);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+#borders-svg #input-background { fill: var(--input-background); }
+#borders-svg .inner-border { stroke: var(--inner-border-color); }
+#borders-svg .outer-border { stroke: var(--outer-border-color); }
+#borders-svg .inner-border.inline-border { stroke-dasharray: var(--inner-border-inline-style); }
+#borders-svg .inner-border.block-border { stroke-dasharray: var(--inner-border-block-style); }
+#borders-svg .outer-border.inline-border { stroke-dasharray: var(--outer-border-inline-style); }
+#borders-svg .outer-border.block-border { stroke-dasharray: var(--outer-border-block-style); }
+
+#borders-svg .marker {
+	stroke: var(--marker-border);
+	transform: scale(var(--marker-scale));
+}
+
+#borders-svg #inner-attention-marker {
+	stroke: none;
+	fill: var(--marker-color);
 }
 
 #icons {
@@ -211,27 +251,12 @@ input::placeholder {
 
 #icons > * { visibility: hidden; }
 
-#attention-marker {
-	position: absolute;
-	width: var(--marker-size);
-	height: var(--marker-size);
-	inset-block-start: calc(var(--padding) - var(--border-spacing));
-	inset-inline-start: calc(var(--padding) - var(--border-spacing));
-
-	border-radius: 100vmax;
-	border: var(--border-width) solid var(--marker-border);
-
-	padding: var(--border-spacing);
-	background-clip: content-box;
-	background-color: var(--marker-color);
-
-	transform: scale(var(--marker-scale));
-}
-
 #message-wrapper {
 	position: relative;
 	display: flex;
 	justify-content: center;
+
+	grid-area: helper-text;
 }
 
 #outer-message-box {
@@ -282,8 +307,10 @@ input::placeholder {
 	--outer-border-color: var(--outer-border-color-hover);
 	--input-background: var(--input-background-hover);
 	--input-color: var(--input-color-hover);
-	--inner-border-style: var(--inner-border-style-hover);
-	--outer-border-style: var(--outer-border-style-hover);
+	--inner-border-inline-style: var(--inner-border-inline-style-hover);
+	--inner-border-block-style: var(--inner-border-block-style-hover);
+	--outer-border-inline-style: var(--outer-border-inline-style-hover);
+	--outer-border-block-style: var(--outer-border-block-style-hover);
 	--marker-color: var(--marker-color-hover);
 	--marker-border: var(--marker-border-hover);
 }
@@ -309,8 +336,10 @@ input::placeholder {
 	--outer-border-color: var(--outer-border-color-disabled);
 	--input-background: var(--input-background-disabled);
 	--input-color: var(--input-color-disabled);
-	--inner-border-style: var(--inner-border-style-disabled);
-	--outer-border-style: var(--outer-border-style-disabled);
+	--inner-border-inline-style: var(--inner-border-inline-style-disabled);
+	--inner-border-block-style: var(--inner-border-block-style-disabled);
+	--outer-border-inline-style: var(--outer-border-inline-style-disabled);
+	--outer-border-block-style: var(--outer-border-block-style-disabled);
 	--marker-color: var(--marker-color-disabled);
 	--marker-border: var(--marker-border-disabled);
 }
@@ -321,8 +350,10 @@ input::placeholder {
 	--outer-border-color: var(--outer-border-color-focus);
 	--input-background: var(--input-background-focus);
 	--input-color: var(--input-color-focus);
-	--inner-border-style: var(--inner-border-style-focus);
-	--outer-border-style: var(--outer-border-style-focus);
+	--inner-border-inline-style: var(--inner-border-inline-style-focus);
+	--inner-border-block-style: var(--inner-border-block-style-focus);
+	--outer-border-inline-style: var(--outer-border-inline-style-focus);
+	--outer-border-block-style: var(--outer-border-block-style-focus);
 	--marker-color: var(--marker-color-focus);
 	--marker-border: var(--marker-border-focus);
 }
@@ -332,14 +363,16 @@ input::placeholder {
 	--helper-text-display: block;
 }
 
-#root:has(input:read-only:not(:hover)) {
+#root:has(input:read-only:not(:is(:hover, :disabled, :focus))) {
 	--label-color: var(--label-color-read-only);
 	--inner-border-color: var(--inner-border-color-read-only);
 	--outer-border-color: var(--outer-border-color-read-only);
 	--input-background: var(--input-background-read-only);
 	--input-color: var(--input-color-read-only);
-	--inner-border-style: var(--inner-border-style-read-only);
-	--outer-border-style: var(--outer-border-style-read-only);
+	--inner-border-inline-style: var(--inner-border-inline-style-read-only);
+	--inner-border-block-style: var(--inner-border-block-style-read-only);
+	--outer-border-inline-style: var(--outer-border-inline-style-read-only);
+	--outer-border-block-style: var(--outer-border-block-style-read-only);
 	--marker-color: var(--marker-color-read-only);
 	--marker-border: var(--marker-border-read-only);
 }
@@ -360,8 +393,10 @@ input::placeholder {
 	--outer-border-color: var(--outer-border-color-invalid);
 	--input-background: var(--input-background-invalid);
 	--input-color: var(--input-color-invalid);
-	--inner-border-style: var(--inner-border-style-invalid);
-	--outer-border-style: var(--outer-border-style-invalid);
+	--inner-border-inline-style: var(--inner-border-inline-style-invalid);
+	--inner-border-block-style: var(--inner-border-block-style-invalid);
+	--outer-border-inline-style: var(--outer-border-inline-style-invalid);
+	--outer-border-block-style: var(--outer-border-block-style-invalid);
 	--marker-color: var(--marker-color-invalid);
 	--marker-border: var(--marker-border-invalid);
 }
@@ -372,8 +407,10 @@ input::placeholder {
 	--outer-border-color: var(--outer-border-color-valid);
 	--input-background: var(--input-background-valid);
 	--input-color: var(--input-color-valid);
-	--inner-border-style: var(--inner-border-style-valid);
-	--outer-border-style: var(--outer-border-style-valid);
+	--inner-border-inline-style: var(--inner-border-inline-style-valid);
+	--inner-border-block-style: var(--inner-border-block-style-valid);
+	--outer-border-inline-style: var(--outer-border-inline-style-valid);
+	--outer-border-block-style: var(--outer-border-block-style-valid);
 	--marker-color: var(--marker-color-valid);
 	--marker-border: var(--marker-border-valid);
 }

@@ -1,37 +1,62 @@
 <template>
 	<div id="root">
+		<svg id="borders-svg" xmlns="http://www.w3.org/2000/svg">
+			<rect id="input-background"></rect>
+			<path class="border inner-border" id="inner-border-top-left" mask="url(#attention-marker-mask)"/>
+			<path class="border inner-border" id="inner-border-top-right"/>
+			<path class="border inner-border" id="inner-border-bottom-right"/>
+			<path class="border inner-border" id="inner-border-bottom-left"/>
+
+			<line class="border inner-border block-border" id="inner-border-top"/>
+			<line class="border inner-border inline-border" id="inner-border-right"/>
+			<line class="border inner-border block-border" id="inner-border-bottom"/>
+			<line class="border inner-border inline-border" id="inner-border-left"/>
+
+			<path class="border outer-border" id="outer-border-top-left" mask="url(#attention-marker-mask)"/>
+			<path class="border outer-border" id="outer-border-top-right"/>
+			<path class="border outer-border" id="outer-border-bottom-right"/>
+			<path class="border outer-border" id="outer-border-bottom-left"/>
+
+			<line class="border outer-border block-border" id="outer-border-top"/>
+			<line class="border outer-border inline-border" id="outer-border-right"/>
+			<line class="border outer-border block-border" id="outer-border-bottom"/>
+			<line class="border outer-border inline-border" id="outer-border-left"/>
+
+			<mask id="attention-marker-mask">
+				<rect x="0" y="0" width="100%" height="100%" fill="white" stroke="none"/>
+				<circle fill="black" stroke="none"/>
+			</mask>
+
+			<circle class="border inner-border marker" id="inner-attention-marker"/>
+			<circle class="border outer-border marker" id="outer-attention-marker"/>
+		</svg>
 		<label :for="id">
 			{{label}}
 			<small id="required-text">(required)</small>
 		</label>
-		<div class="border" id="outer-border">
-			<div class="border" id="inner-border">
-				<input
-					type="text"
-					:id="id"
-					:name="id"
-					:placeholder="label"
-					:value="value"
+		<input
+			type="text"
+			:id="id"
+			:name="id"
+			:placeholder="label"
+			:value="value"
 
-					:required="required"
-					:disabled="disabled"
-					:readonly="readOnly"
-					:maxlength="maxLength"
-					:minlength="minLength"
-					:pattern="pattern"
-					:autocomplete="autoComplete"
-					:inputmode="inputMode"
+			:required="required"
+			:disabled="disabled"
+			:readonly="readOnly"
+			:maxlength="maxLength"
+			:minlength="minLength"
+			:pattern="pattern"
+			:autocomplete="autoComplete"
+			:inputmode="inputMode"
 
-					aria-describedby="error-text"
-					@change="change"
-					@invalid="invalid"
-				/>
-				<svg id="icons" viewBox="0 0 100 100" @click="handleIcons">
-					<rect id="icon-tel" x="0" y="0" width="50" height="50" />
-				</svg>
-			</div>
-		</div>
-		<div id="attention-marker"></div>
+			aria-describedby="error-text"
+			@change="change"
+			@invalid="invalid"
+		/>
+		<svg id="icons" viewBox="0 0 100 100" @click="handleIcons">
+			<rect id="icon-tel" x="0" y="0" width="50" height="50" />
+		</svg>
 		<div id="message-wrapper">
 			<div id="outer-message-box">
 				<div id="inner-message-box">

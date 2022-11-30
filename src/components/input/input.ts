@@ -2,6 +2,7 @@ import { AdamElement, type ComputedPropValue } from '../AdamElement/AdamElement'
 
 import inputTemplate from './template.html?raw';
 import inputStyle from './style.css?raw';
+import { setBorders } from '../AdamElement/borders';
 
 const watchedAttributes = ['id', 'label', 'required', 'readonly', 'disabled', 'value', 'autocomplete', 'pattern', 'maxlength', 'minlength', 'inputmode', 'type'];
 
@@ -182,6 +183,19 @@ export class AdamInput extends AdamElement {
 		});
 
 		this.#input = this.root.querySelector('input') as HTMLInputElement;
+
+		const resizeObserver = new ResizeObserver((entries) => {
+			const rootStyle = getComputedStyle(this.root.querySelector('#borders-svg') as HTMLDivElement, '::before');
+			const { top, right, bottom, left } = entries[0].contentRect;
+
+			const radius = Number.parseFloat(rootStyle.getPropertyValue('border-radius'));
+			const stroke = Number.parseFloat(rootStyle.getPropertyValue('border-width'));
+			const spacing = Number.parseFloat(rootStyle.getPropertyValue('margin'));
+
+			setBorders(this.root, { top, right, bottom, left, stroke, radius, spacing });
+		});
+
+		resizeObserver.observe(this.root.querySelector('#borders-svg') as HTMLDivElement);
 	}
 }
 

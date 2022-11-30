@@ -58,7 +58,7 @@ class AdamSelect extends AdamElement {
 
 					target.checkValidity();
 
-					this.internals.setFormValue(target.value);
+					this.internals?.setFormValue(target.value);
 					this.dispatchEvent(new CustomEvent('change', { bubbles: true, composed: true }));
 				},
 				invalid: (evt: Event) => {
@@ -70,7 +70,7 @@ class AdamSelect extends AdamElement {
 
 					errorText.innerText = target.validationMessage;
 
-					this.internals.setValidity(this.#select.validity);
+					this.internals?.setValidity(this.#select.validity);
 					this.dispatchEvent(new CustomEvent('invalid', { bubbles: true, composed: true }));
 				}
 			}

@@ -196,16 +196,6 @@ input::placeholder {
 	font-size: 0;
 }
 
-#icons {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	width: var(--internal-icon-size);
-	height: var(--internal-icon-size);
-}
-
-#icons > * { visibility: hidden; }
-
 #borders-svg {
 	position: absolute;
 	top: 0;
@@ -265,6 +255,28 @@ input::placeholder {
 	fill: var(--marker-mask-color);
 	transform: scale(var(--marker-scale));
 }
+
+#icons {
+	width: var(--internal-icon-size);
+	height: var(--internal-icon-size);
+	margin-inline-start: calc((var(--padding) / 2) + var(--border-width) + var(--border-spacing));
+
+	grid-area: input;
+}
+
+#icons > g { visibility: hidden; }
+
+#icons g > * {
+	fill: none;
+	stroke-width: var(--border-width);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+#icons g > .inner-border { stroke: var(--inner-border-color); }
+#icons g > .outer-border { stroke: var(--outer-border-color); }
+#icons g > .inner-fill { fill: var(--inner-border-color); }
+#icons g > .outer-fill { fill: var(--outer-border-color); }
 
 #message-wrapper {
 	position: relative;

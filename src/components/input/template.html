@@ -1,6 +1,6 @@
 <template>
 	<div id="root">
-		<svg id="borders-svg" xmlns="http://www.w3.org/2000/svg">
+		<svg id="borders-svg">
 			<rect id="input-background"></rect>
 			<path class="border inner-border" id="inner-border-top-left" mask="url(#attention-marker-mask)"/>
 			<path class="border inner-border" id="inner-border-top-right"/>
@@ -55,7 +55,37 @@
 			@invalid="invalid"
 		/>
 		<svg id="icons" viewBox="0 0 100 100" @click="handleIcons">
-			<rect id="icon-tel" x="0" y="0" width="50" height="50" />
+			<g id="icon-show-password">
+				<path class="outer-border" d="M90,50.313c0,-5.692 -4.621,-10.313 -10.313,-10.313l-59.374,-0c-5.692,-0 -10.313,4.621 -10.313,10.313l0,29.374c0,5.692 4.621,10.313 10.313,10.313l59.374,-0c5.692,-0 10.313,-4.621 10.313,-10.313l0,-29.374Z" vector-effect="non-scaling-stroke"/>
+				<path class="inner-border" d="M74,65c0,-5.519 -4.481,-10 -10,-10l-28,0c-5.519,0 -10,4.481 -10,10c0,5.519 4.481,10 10,10l28,0c5.519,0 10,-4.481 10,-10Z" vector-effect="non-scaling-stroke"/>
+				<path class="outer-border" d="M82.463,30c-4.424,-14.212 -17.578,-23.893 -32.463,-23.893c-14.885,-0 -28.039,9.681 -32.463,23.893c4.424,-14.212 17.578,-23.893 32.463,-23.893c14.885,-0 28.039,9.681 32.463,23.893Z" vector-effect="non-scaling-stroke"/>
+			</g>
+			<g id="icon-hide-password">
+				<path class="outer-border" d="M90,50.313c0,-5.692 -4.621,-10.313 -10.313,-10.313l-59.374,-0c-5.692,-0 -10.313,4.621 -10.313,10.313l0,29.374c0,5.692 4.621,10.313 10.313,10.313l59.374,-0c5.692,-0 10.313,-4.621 10.313,-10.313l0,-29.374Z" vector-effect="non-scaling-stroke"/>
+				<path class="inner-border" d="M74,65c0,-5.519 -4.481,-10 -10,-10l-28,0c-5.519,0 -10,4.481 -10,10c0,5.519 4.481,10 10,10l28,0c5.519,0 10,-4.481 10,-10Z" vector-effect="non-scaling-stroke"/>
+				<path class="outer-border" d="M82.463,30c-4.424,-14.212 -17.578,-23.893 -32.463,-23.893c-3.427,-0 -6.834,0.518 -10.107,1.537c3.273,-1.019 6.68,-1.537 10.107,-1.537c14.885,-0 28.039,9.681 32.463,23.893Z" vector-effect="non-scaling-stroke"/>
+			</g>
+			<g id="icon-url">
+				<path class="outer-border" d="M68.339,44.995c-6.439,-6.439 -16.895,-6.439 -23.334,0l-20.506,20.506c-6.44,6.44 -6.44,16.896 -0,23.335c6.439,6.439 16.895,6.439 23.334,-0l20.506,-20.506c6.44,-6.439 6.44,-16.895 0,-23.335Z" vector-effect="non-scaling-stroke"/>
+				<path class="inner-border" d="M74.669,40l3.501,-3.501c6.44,-6.44 6.44,-16.896 0,-23.335c-6.439,-6.439 -16.895,-6.439 -23.334,0l-20.506,20.506c-3.899,3.899 -5.437,9.27 -4.615,14.33" vector-effect="non-scaling-stroke"/>
+				<path class="inner-border" d="M40,60.711c5.914,2.301 12.892,1.066 17.664,-3.706l5.336,-5.336" vector-effect="non-scaling-stroke"/>
+			</g>
+			<g id="icon-email">
+				<path class="inner-border" d="M60.19,35.193c-3.506,-2.718 -7.816,-4.193 -12.252,-4.193c-11.038,-0 -20,8.962 -20,20c-0,11.038 8.962,20 20,20c4.436,-0 8.746,-1.475 12.252,-4.193c-3.506,2.718 -7.816,4.193 -12.252,4.193c-11.038,-0 -20,-8.962 -20,-20c-0,-11.038 8.962,-20 20,-20c4.436,-0 8.746,1.475 12.252,4.193Z" vector-effect="non-scaling-stroke"/>
+				<path class="inner-border" d="M78,74l-4.134,-0c-1.556,0 -3.048,-0.618 -4.148,-1.718c-1.1,-1.1 -1.718,-2.592 -1.718,-4.148c-0,-11.766 -0,-37.134 -0,-37.134" vector-effect="non-scaling-stroke"/>
+				<path class="outer-border" d="M88.555,60.655c0.959,-3.471 1.445,-7.055 1.445,-10.655c-0,-22.077 -17.923,-40 -40,-40c-22.077,-0 -40,17.923 -40,40c0,22.077 17.923,40 40,40c3.6,-0 7.184,-0.486 10.655,-1.445c-3.471,0.959 -7.055,1.445 -10.655,1.445c-22.077,-0 -40,-17.923 -40,-40c0,-22.077 17.923,-40 40,-40c22.077,-0 40,17.923 40,40c-0,3.6 -0.486,7.184 -1.445,10.655Z" vector-effect="non-scaling-stroke"/>
+			</g>
+			<g id="icon-tel">
+				<circle class="inner-border" cx="50" cy="65" r="11.5" vector-effect="non-scaling-stroke"/>
+				<path class="outer-border" d="M86.223,80.559c0.849,2.121 0.59,4.524 -0.691,6.416c-1.281,1.892 -3.416,3.025 -5.701,3.025c-15.358,0 -44.304,0 -59.662,0c-2.285,0 -4.42,-1.133 -5.701,-3.025c-1.281,-1.892 -1.54,-4.295 -0.691,-6.416c4.342,-10.856 11.283,-28.208 14.492,-36.231c1.045,-2.614 3.577,-4.328 6.392,-4.328c7.698,0 22.98,0 30.678,0c2.815,-0 5.347,1.714 6.392,4.328c3.209,8.023 10.15,25.375 14.492,36.231Z" vector-effect="non-scaling-stroke"/>
+				<path class="outer-border" d="M90,32c0,-11.038 -17.923,-16 -40,-16c-22.077,0 -40,4.962 -40,16" vector-effect="non-scaling-stroke"/>
+			</g>
+			<g id="icon-search">
+				<circle class="outer-border" cx="34.5" cy="34.5" r="26.5" vector-effect="non-scaling-stroke"/>
+				<path class="inner-border" d="M34.5,18.443c-3.328,1.626 -6.537,3.855 -9.369,6.688c-2.832,2.832 -5.062,6.04 -6.688,9.368" vector-effect="non-scaling-stroke"/>
+				<path class="inner-border" d="M34.5,50.557c3.328,-1.626 6.537,-3.855 9.369,-6.688c2.832,-2.832 5.062,-6.04 6.688,-9.368" vector-effect="non-scaling-stroke"/>
+				<path class="outer-border" d="M60,60l30,30" vector-effect="non-scaling-stroke"/>
+			</g>
 		</svg>
 		<div id="message-wrapper">
 			<div id="outer-message-box">

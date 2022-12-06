@@ -117,6 +117,7 @@
 	--outer-border-radius: calc(var(--inner-border-radius) + var(--border-width) + var(--border-spacing));
 
 	--marker-scale: 0;
+	--marker-mask-color: white;
 
 	--internal-icon-size: 0rem;
 
@@ -195,6 +196,16 @@ input::placeholder {
 	font-size: 0;
 }
 
+#icons {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: var(--internal-icon-size);
+	height: var(--internal-icon-size);
+}
+
+#icons > * { visibility: hidden; }
+
 #borders-svg {
 	position: absolute;
 	top: 0;
@@ -241,15 +252,19 @@ input::placeholder {
 	fill: var(--marker-color);
 }
 
-#icons {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	width: var(--internal-icon-size);
-	height: var(--internal-icon-size);
+#borders-svg #attention-marker-mask * {
+	stroke: none;
+	stroke-width: 0;
 }
 
-#icons > * { visibility: hidden; }
+#borders-svg #attention-marker-mask rect {
+	fill: white;
+}
+
+#borders-svg #attention-marker-mask circle {
+	fill: var(--marker-mask-color);
+	transform: scale(var(--marker-scale));
+}
 
 #message-wrapper {
 	position: relative;
@@ -328,6 +343,7 @@ input::placeholder {
 
 #root:has(input:required) {
 	--marker-scale: 1;
+	--marker-mask-color: black;
 }
 
 #root:has(input:disabled) {
@@ -383,6 +399,7 @@ input::placeholder {
 
 #root:has(input.has-validation:invalid:not(:is(:placeholder-shown, :focus))) {
 	--marker-scale: 1;
+	--marker-mask-color: black;
 	--message-box-display: block;
 	--error-text-display: block;
 }

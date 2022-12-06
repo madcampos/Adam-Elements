@@ -126,6 +126,6 @@ export function setBorders(root: ShadowRoot, { top, right, bottom, left, stroke,
 
 	root.querySelector<SVGCircleElement>('#borders-svg #attention-marker-mask circle')?.setAttribute('cx', `${leftEnd - (padding * 2)}`);
 	root.querySelector<SVGCircleElement>('#borders-svg #attention-marker-mask circle')?.setAttribute('cy', `${topEnd - (padding * 2)}`);
-	root.querySelector<SVGCircleElement>('#borders-svg #attention-marker-mask circle')?.setAttribute('r', `${padding}`);
+	root.querySelector<SVGCircleElement>('#borders-svg #attention-marker-mask circle')?.setAttribute('r', `${padding * 2}`);
 	// #endregion
 }

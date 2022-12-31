@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* eslint-disable max-lines, no-console */
 
 import { templateParser, type TemplateParser } from './serialization';
 
@@ -260,6 +260,24 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 		}
 	}
 
+	#serializePropToElement(element: HTMLElement, value: PropTypes) {
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Serialize prop to element: "${value instanceof Object ? JSON.stringify(value) : value.toString()}"`, DEBUG_STYLE);
+		}
+
+		switch (typeof value) {
+			case 'object':
+				element.textContent = JSON.stringify(value);
+				break;
+			case 'function':
+				element.textContent = '[function]';
+				break;
+			default:
+				element.textContent = value.toString();
+				break;
+		}
+	}
+
 	#getPropValue(name: string) {
 		if (!this.#props.has(name)) {
 			throw new Error(`Prop "${name}" is not defined in watched props`);
@@ -350,8 +368,8 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 			console.log(element);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		this.#props.get(prop)!.boundAttributes[attributeName] = element;
+		this.#serializePropToAttribute(attributeName, element, this[prop]);
+		(this.#props.get(prop) as Prop<PropTypes>).boundAttributes[attributeName] = element;
 	}
 
 	#bindPropToInternalElement(prop: string, element: HTMLElement) {
@@ -364,6 +382,7 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 			console.log(element);
 		}
 
+		this.#serializePropToElement(element, this[prop]);
 		this.#props.get(prop)?.boundElements.push(element);
 	}
 

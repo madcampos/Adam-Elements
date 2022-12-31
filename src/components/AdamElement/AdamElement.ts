@@ -260,6 +260,16 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 		}
 	}
 
+	#deserializeAttributeToProp(attr: string, element: HTMLElement, type: PropTypes) {
+		const value = element.getAttribute(attr);
+
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Deserialize attribute "${attr}" to prop: "${value}"`, DEBUG_STYLE);
+		}
+
+		return this.#parseValue(value, type);
+	}
+
 	#serializePropToElement(element: HTMLElement, value: PropTypes) {
 		if (DEBUG_MODE) {
 			console.log(`${DEBUG_HEADER} Serialize prop to element: "${value instanceof Object ? JSON.stringify(value) : value.toString()}"`, DEBUG_STYLE);
@@ -295,17 +305,19 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 			throw new Error(`Prop "${name}" is not defined in watched props`);
 		}
 
-		if (DEBUG_MODE) {
-			console.log(`${DEBUG_HEADER} Get computed prop: "${name}"`, DEBUG_STYLE);
-		}
-
 		if (!this.#computedPropsCache.has(name)) {
 			const prop = this.#props.get(name) as Prop<T>;
 
 			this.#updateProp(name, prop.value, true);
 		}
 
-		return this.#computedPropsCache.get(name) as T;
+		const computedValue = this.#computedPropsCache.get(name) as T;
+
+		if (DEBUG_MODE) {
+			console.log(`${DEBUG_HEADER} Get computed prop "${name}": ${computedValue instanceof Object ? JSON.stringify(computedValue) : computedValue.toString()}`, DEBUG_STYLE);
+		}
+
+		return computedValue;
 	}
 
 	#propagatePropUpdates<T extends PropTypes>(prop: Prop<T>, newValue: T) {
@@ -369,6 +381,18 @@ export class AdamElement extends HTMLElement implements CustomElementInterface {
 		}
 
 		this.#serializePropToAttribute(attributeName, element, this[prop]);
+
+		new MutationObserver(([mutation]) => {
+			if (mutation.oldValue !== this[prop]) {
+				const value = this.#deserializeAttributeToProp(attributeName, element, typeof this[prop]);
+
+				this.#updateProp(prop, value);
+			}
+		}).observe(element, {
+			attributes: true,
+			attributeFilter: [attributeName]
+		});
+
 		(this.#props.get(prop) as Prop<PropTypes>).boundAttributes[attributeName] = element;
 	}
 
